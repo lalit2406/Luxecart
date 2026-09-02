@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /account
+Disallow: /account/
+Disallow: /checkout
+Disallow: /checkout/
+Disallow: /orders
+Disallow: /orders/
+Disallow: /api/
+
+Sitemap: https://luxecart.com/sitemap.xml

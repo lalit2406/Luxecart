@@ -42,4 +42,14 @@ export const adminMediaApi = {
   deleteMedia: async (productId, mediaId) => {
     return api.delete(`/admin/products/${productId}/media/${mediaId}`);
   },
+
+  /**
+   * Update media metadata (alt text, color association)
+   * @param {string} productId
+   * @param {string} mediaId
+   * @param {{ alt?: string, color?: string }} data
+   */
+  updateMediaMetadata: async (productId, mediaId, data) => {
+    return api.patch(`/admin/products/${productId}/media/${mediaId}`, data);
+  },
 };

@@ -63,6 +63,49 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Google OAuth Login handler
+  const googleLogin = async (credential) => {
+    setError(null);
+    try {
+      const res = await authApi.googleLogin(credential);
+      if (res?.data?.user) {
+        setUser(res.data.user);
+        return { success: true, user: res.data.user };
+      }
+      return { success: false, message: 'Invalid response from server' };
+    } catch (err) {
+      const msg = err.message || 'Google authentication failed';
+      setError(msg);
+      return { success: false, message: msg };
+    }
+  };
+
+  // Forgot password handler
+  const forgotPassword = async (email) => {
+    setError(null);
+    try {
+      const res = await authApi.forgotPassword(email);
+      return { success: true, message: res?.message || 'Password reset link sent.' };
+    } catch (err) {
+      const msg = err.message || 'Failed to request password reset';
+      setError(msg);
+      return { success: false, message: msg };
+    }
+  };
+
+  // Reset password handler
+  const resetPassword = async ({ token, password }) => {
+    setError(null);
+    try {
+      const res = await authApi.resetPassword({ token, password });
+      return { success: true, message: res?.message || 'Password reset successfully.' };
+    } catch (err) {
+      const msg = err.message || 'Failed to reset password';
+      setError(msg);
+      return { success: false, message: msg };
+    }
+  };
+
   // Logout handler
   const logout = async () => {
     try {
@@ -80,6 +123,9 @@ export const AuthProvider = ({ children }) => {
         error,
         login,
         register,
+        googleLogin,
+        forgotPassword,
+        resetPassword,
         logout,
         checkAuth,
         isAuthenticated: !!user,

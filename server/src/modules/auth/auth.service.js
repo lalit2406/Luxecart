@@ -5,8 +5,13 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
   hashToken,
+  generateResetToken,
 } from '../../utils/token.js';
 import { config } from '../../config/env.js';
+import emailService from '../../services/email.service.js';
+import { OAuth2Client } from 'google-auth-library';
+
+const googleClient = new OAuth2Client();
 
 class AuthService {
   /**
@@ -77,7 +82,7 @@ class AuthService {
       throw error;
     }
 
-    // 2. Verify password
+    // 2. Verify password (Google-only accounts without password will safely fail comparison)
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       const error = new Error('Invalid email or password');
@@ -120,6 +125,174 @@ class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  /**
+   * Authenticate or register user via Google Identity Services
+   * @param {string} credential Google ID Token
+   * @returns {Promise<{ user: object, accessToken: string, refreshToken: string }>}
+   */
+  async googleAuth(credential) {
+    if (!config.google.clientId) {
+      const error = new Error('Google Sign-In is not configured on the server (missing GOOGLE_CLIENT_ID)');
+      error.statusCode = 500;
+      error.code = 'GOOGLE_AUTH_UNCONFIGURED';
+      throw error;
+    }
+
+    let payload;
+    try {
+      const ticket = await googleClient.verifyIdToken({
+        idToken: credential,
+        audience: config.google.clientId,
+      });
+      payload = ticket.getPayload();
+    } catch (err) {
+      const error = new Error(`Google token verification failed: ${err.message || 'Invalid token'}`);
+      error.statusCode = 401;
+      error.code = 'INVALID_GOOGLE_TOKEN';
+      throw error;
+    }
+
+    if (!payload || !payload.sub || !payload.email) {
+      const error = new Error('Google ID token is missing required claims (sub, email)');
+      error.statusCode = 400;
+      error.code = 'INVALID_GOOGLE_PAYLOAD';
+      throw error;
+    }
+
+    const { sub: googleId, email: rawEmail, name, picture: avatar } = payload;
+    const email = rawEmail.trim().toLowerCase();
+
+    // 1. Check if user already exists by googleId
+    let user = await User.findOne({ googleId }).select('+refreshTokens');
+
+    // 2. If not found by googleId, check by normalized email
+    if (!user) {
+      user = await User.findOne({ email }).select('+refreshTokens');
+      if (user) {
+        // Link Google ID to existing account without elevating privileges
+        user.googleId = googleId;
+        if (!user.avatar && avatar) {
+          user.avatar = avatar;
+        }
+      }
+    }
+
+    // 3. If no existing user, create new CUSTOMER account
+    if (!user) {
+      user = new User({
+        name: name || 'LuxeCart Customer',
+        email,
+        googleId,
+        avatar: avatar || undefined,
+        role: 'CUSTOMER', // Always CUSTOMER
+        status: 'ACTIVE',
+        refreshTokens: [],
+      });
+    }
+
+    // 4. Verify account status
+    if (user.status !== 'ACTIVE') {
+      const error = new Error(`Account is ${user.status.toLowerCase()}`);
+      error.statusCode = 403;
+      error.code = 'ACCOUNT_INACTIVE';
+      throw error;
+    }
+
+    // 5. Generate session tokens
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    const now = new Date();
+    const activeTokens = (user.refreshTokens || []).filter((t) => t.expiresAt > now);
+    const refreshTokenHash = hashToken(refreshToken);
+    const expiresAt = new Date(Date.now() + config.jwt.refreshMaxAgeMs);
+
+    activeTokens.push({
+      tokenHash: refreshTokenHash,
+      createdAt: now,
+      expiresAt,
+    });
+
+    user.refreshTokens = activeTokens.slice(-5);
+    await user.save();
+
+    return {
+      user: user.toSafeObject(),
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  /**
+   * Request password reset token and send transactional email
+   * Returns a timing-safe generic response regardless of email existence
+   * @param {string} email
+   * @returns {Promise<{ message: string }>}
+   */
+  async forgotPassword(email) {
+    const genericMessage = 'If an account exists with this email address, we have sent a password reset link.';
+
+    const user = await User.findOne({ email }).select('+passwordHash');
+    if (!user || user.status !== 'ACTIVE') {
+      return { message: genericMessage };
+    }
+
+    // Generate secure random reset token
+    const { rawToken, tokenHash } = generateResetToken();
+    user.resetPasswordTokenHash = tokenHash;
+    user.resetPasswordExpires = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
+
+    await user.save();
+
+    // Construct reset URL for frontend
+    const resetUrl = `${config.clientUrl}/reset-password/${rawToken}`;
+
+    // Send transactional email via Resend
+    await emailService.sendPasswordResetEmail({
+      to: user.email,
+      name: user.name,
+      resetUrl,
+    });
+
+    return { message: genericMessage };
+  }
+
+  /**
+   * Reset user password using verified single-use reset token
+   * @param {{ token: string, password: string }} data
+   * @returns {Promise<{ message: string }>}
+   */
+  async resetPassword({ token, password }) {
+    const tokenHash = hashToken(token);
+
+    const user = await User.findOne({
+      resetPasswordTokenHash: tokenHash,
+      resetPasswordExpires: { $gt: new Date() },
+    }).select('+resetPasswordTokenHash +resetPasswordExpires +refreshTokens');
+
+    if (!user) {
+      const error = new Error('Password reset token is invalid or has expired');
+      error.statusCode = 400;
+      error.code = 'INVALID_RESET_TOKEN';
+      throw error;
+    }
+
+    // 1. Hash new password
+    const newPasswordHash = await hashPassword(password);
+    user.passwordHash = newPasswordHash;
+
+    // 2. Invalidate single-use reset token
+    user.resetPasswordTokenHash = undefined;
+    user.resetPasswordExpires = undefined;
+
+    // 3. Revoke existing refresh tokens/sessions for security
+    user.refreshTokens = [];
+
+    await user.save();
+
+    return { message: 'Password has been reset successfully. You may now log in with your new password.' };
   }
 
   /**

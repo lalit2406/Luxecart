@@ -38,4 +38,15 @@ export const config = {
     apiSecret: process.env.CLOUDINARY_API_SECRET || '',
     folder: process.env.CLOUDINARY_FOLDER || 'luxecart/products',
   },
+
+  // Google OAuth Configuration
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID || '',
+  },
+
+  // Email Configuration (Resend)
+  email: {
+    resendApiKey: process.env.RESEND_API_KEY || '',
+    from: process.env.EMAIL_FROM || 'LuxeCart <onboarding@resend.dev>',
+  },
 };

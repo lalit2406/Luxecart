@@ -34,6 +34,16 @@ export const hashToken = (token) => {
 };
 
 /**
+ * Generate a cryptographically secure random password reset token and its SHA-256 hash
+ * @returns {{ rawToken: string, tokenHash: string }}
+ */
+export const generateResetToken = () => {
+  const rawToken = crypto.randomBytes(32).toString('hex');
+  const tokenHash = hashToken(rawToken);
+  return { rawToken, tokenHash };
+};
+
+/**
  * Generate short-lived JWT Access Token
  * @param {object} user
  * @returns {string}

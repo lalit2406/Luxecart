@@ -4,6 +4,7 @@ import { useAuth } from '../features/auth/hooks/useAuth';
 import { Lock, Mail, AlertCircle, ArrowRight, RefreshCw } from 'lucide-react';
 import SkipToContent from '../components/common/SkipToContent';
 import Logo from '../components/common/Logo';
+import GoogleSignInButton from '../components/auth/GoogleSignInButton';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const { login } = useAuth();
+  const { login, googleLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,6 +29,19 @@ export default function LoginPage() {
 
     setSubmitting(true);
     const result = await login({ email, password });
+    setSubmitting(false);
+
+    if (result.success) {
+      navigate(from, { replace: true });
+    } else {
+      setErrorMessage(result.message);
+    }
+  };
+
+  const handleGoogleSuccess = async (credential) => {
+    setErrorMessage(null);
+    setSubmitting(true);
+    const result = await googleLogin(credential);
     setSubmitting(false);
 
     if (result.success) {
@@ -103,12 +117,20 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-1">
-                <label
-                  htmlFor="login-password"
-                  className="block text-xs font-semibold uppercase tracking-wider text-[#6F6963]"
-                >
-                  Password <span className="text-red-500">*</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="login-password"
+                    className="block text-xs font-semibold uppercase tracking-wider text-[#6F6963]"
+                  >
+                    Password <span className="text-red-500">*</span>
+                  </label>
+                  <Link
+                    to="/forgot-password"
+                    className="text-xs text-[#9A6A45] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9A6A45] rounded"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#6F6963]">
                     <Lock className="w-4 h-4" />
@@ -146,6 +168,24 @@ export default function LoginPage() {
                 )}
               </button>
             </form>
+
+            <div className="relative my-5">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-[#E7DED5]" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-[#FFFFFF] px-3 text-[#6F6963] font-medium tracking-wider">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <GoogleSignInButton
+              onSuccess={handleGoogleSuccess}
+              onError={(err) => setErrorMessage(err.message || 'Google sign-in failed')}
+              disabled={submitting}
+              text="signin_with"
+            />
 
             <div className="border-t border-[#E7DED5] pt-6 text-center text-xs text-[#6F6963]">
               Don't have an account?{' '}

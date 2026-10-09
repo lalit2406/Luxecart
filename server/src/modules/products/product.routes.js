@@ -16,6 +16,7 @@ import {
   setPrimaryProductMedia,
   reorderProductMedia,
   deleteProductMedia,
+  updateProductMediaMetadata,
 } from './product.controller.js';
 import { authenticate, requireRole } from '../../middlewares/auth.middleware.js';
 import { handleMediaUpload } from '../../middlewares/upload.middleware.js';
@@ -40,10 +41,11 @@ adminProductRouter.post('/:id/variants', addVariant);
 adminProductRouter.patch('/:id/variants/:variantId', updateVariant);
 adminProductRouter.delete('/:id/variants/:variantId', deleteVariant);
 
-// Media Management Routes (Phase 5B)
-adminProductRouter.post('/:id/media', handleMediaUpload('images', 10), uploadProductMedia);
-adminProductRouter.patch('/:id/media/:mediaId/primary', setPrimaryProductMedia);
+// Media Management Routes (Phase 5B & Media Infrastructure)
+adminProductRouter.post('/:id/media', handleMediaUpload('images', 30), uploadProductMedia);
 adminProductRouter.patch('/:id/media/order', reorderProductMedia);
+adminProductRouter.patch('/:id/media/:mediaId/primary', setPrimaryProductMedia);
+adminProductRouter.patch('/:id/media/:mediaId', updateProductMediaMetadata);
 adminProductRouter.delete('/:id/media/:mediaId', deleteProductMedia);
 
 export default router;

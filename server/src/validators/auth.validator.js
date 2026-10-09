@@ -74,3 +74,74 @@ export const validateLoginInput = (data = {}) => {
     },
   };
 };
+
+/**
+ * Validate Google authentication payload
+ * @param {object} data
+ * @returns {{ isValid: boolean, errors: string[], sanitized: object }}
+ */
+export const validateGoogleAuthInput = (data = {}) => {
+  const errors = [];
+  const { credential } = data || {};
+
+  if (!credential || typeof credential !== 'string' || credential.trim().length === 0) {
+    errors.push('Google ID credential token is required');
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    sanitized: {
+      credential: typeof credential === 'string' ? credential.trim() : '',
+    },
+  };
+};
+
+/**
+ * Validate forgot password request payload
+ * @param {object} data
+ * @returns {{ isValid: boolean, errors: string[], sanitized: object }}
+ */
+export const validateForgotPasswordInput = (data = {}) => {
+  const errors = [];
+  const { email } = data || {};
+
+  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
+    errors.push('Please provide a valid email address');
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    sanitized: {
+      email: typeof email === 'string' ? email.trim().toLowerCase() : '',
+    },
+  };
+};
+
+/**
+ * Validate reset password request payload
+ * @param {object} data
+ * @returns {{ isValid: boolean, errors: string[], sanitized: object }}
+ */
+export const validateResetPasswordInput = (data = {}) => {
+  const errors = [];
+  const { token, password } = data || {};
+
+  if (!token || typeof token !== 'string' || token.trim().length === 0) {
+    errors.push('Password reset token is required');
+  }
+
+  if (!password || typeof password !== 'string' || password.length < 8) {
+    errors.push('Password must be at least 8 characters long');
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    sanitized: {
+      token: typeof token === 'string' ? token.trim() : '',
+      password: typeof password === 'string' ? password : '',
+    },
+  };
+};

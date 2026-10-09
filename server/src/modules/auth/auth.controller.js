@@ -1,5 +1,11 @@
 import authService from './auth.service.js';
-import { validateRegisterInput, validateLoginInput } from '../../validators/auth.validator.js';
+import {
+  validateRegisterInput,
+  validateLoginInput,
+  validateGoogleAuthInput,
+  validateForgotPasswordInput,
+  validateResetPasswordInput,
+} from '../../validators/auth.validator.js';
 import { setAuthCookies, clearAuthCookies } from '../../utils/token.js';
 import { sendSuccess } from '../../utils/response.js';
 
@@ -50,6 +56,78 @@ export const login = async (req, res, next) => {
     setAuthCookies(res, accessToken, refreshToken);
 
     return sendSuccess(res, 200, 'Logged in successfully', { user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Sign in or sign up via Google Identity Services
+ */
+export const googleAuth = async (req, res, next) => {
+  try {
+    const { isValid, errors, sanitized } = validateGoogleAuthInput(req.body);
+
+    if (!isValid) {
+      const error = new Error(errors[0]);
+      error.statusCode = 400;
+      error.code = 'VALIDATION_ERROR';
+      error.details = errors;
+      throw error;
+    }
+
+    const { user, accessToken, refreshToken } = await authService.googleAuth(sanitized.credential);
+
+    // Set secure HTTP-only cookies
+    setAuthCookies(res, accessToken, refreshToken);
+
+    return sendSuccess(res, 200, 'Google sign-in successful', { user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Request password reset email
+ */
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const { isValid, errors, sanitized } = validateForgotPasswordInput(req.body);
+
+    if (!isValid) {
+      const error = new Error(errors[0]);
+      error.statusCode = 400;
+      error.code = 'VALIDATION_ERROR';
+      error.details = errors;
+      throw error;
+    }
+
+    const result = await authService.forgotPassword(sanitized.email);
+
+    return sendSuccess(res, 200, result.message, {});
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Reset password using single-use token
+ */
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { isValid, errors, sanitized } = validateResetPasswordInput(req.body);
+
+    if (!isValid) {
+      const error = new Error(errors[0]);
+      error.statusCode = 400;
+      error.code = 'VALIDATION_ERROR';
+      error.details = errors;
+      throw error;
+    }
+
+    const result = await authService.resetPassword(sanitized);
+
+    return sendSuccess(res, 200, result.message, {});
   } catch (error) {
     next(error);
   }

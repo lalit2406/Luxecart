@@ -44,8 +44,29 @@ const userSchema = new mongoose.Schema(
     },
     passwordHash: {
       type: String,
-      required: [true, 'Password hash is required'],
+      required: false,
       select: false, // Never return passwordHash by default
+    },
+    googleId: {
+      type: String,
+      sparse: true,
+      unique: true,
+      default: undefined,
+      index: true,
+    },
+    avatar: {
+      type: String,
+      default: undefined,
+    },
+    resetPasswordTokenHash: {
+      type: String,
+      select: false,
+      default: undefined,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      select: false,
+      default: undefined,
     },
     role: {
       type: String,
@@ -78,6 +99,8 @@ const userSchema = new mongoose.Schema(
         delete ret.__v;
         delete ret.passwordHash;
         delete ret.refreshTokens;
+        delete ret.resetPasswordTokenHash;
+        delete ret.resetPasswordExpires;
         return ret;
       },
     },
@@ -91,7 +114,7 @@ const userSchema = new mongoose.Schema(
  */
 userSchema.methods.comparePassword = async function (candidatePassword) {
   if (!this.passwordHash) {
-    throw new Error('Password hash not loaded for comparison');
+    return false;
   }
   return bcrypt.compare(candidatePassword, this.passwordHash);
 };
@@ -106,6 +129,8 @@ userSchema.methods.toSafeObject = function () {
     name: this.name,
     email: this.email,
     phone: this.phone,
+    avatar: this.avatar,
+    googleId: this.googleId,
     role: this.role,
     status: this.status,
     createdAt: this.createdAt,

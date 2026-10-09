@@ -20,7 +20,7 @@ export const upload = multer({
   storage,
   limits: {
     fileSize: MAX_FILE_SIZE,
-    files: 10,
+    files: 30,
   },
   fileFilter,
 });
@@ -28,7 +28,7 @@ export const upload = multer({
 /**
  * Express middleware wrapper to handle multer errors gracefully
  */
-export const handleMediaUpload = (fieldName = 'images', maxCount = 10) => {
+export const handleMediaUpload = (fieldName = 'images', maxCount = 30) => {
   const multerMiddleware = upload.array(fieldName, maxCount);
 
   return (req, res, next) => {

@@ -4,6 +4,7 @@ import { useAuth } from '../features/auth/hooks/useAuth';
 import { User, Mail, Lock, Phone, AlertCircle, ArrowRight, RefreshCw } from 'lucide-react';
 import SkipToContent from '../components/common/SkipToContent';
 import Logo from '../components/common/Logo';
+import GoogleSignInButton from '../components/auth/GoogleSignInButton';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -13,7 +14,7 @@ export default function RegisterPage() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const { register } = useAuth();
+  const { register, googleLogin } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -37,6 +38,19 @@ export default function RegisterPage() {
       password,
       phone: phone.trim() ? phone.trim() : undefined,
     });
+    setSubmitting(false);
+
+    if (result.success) {
+      navigate('/', { replace: true });
+    } else {
+      setErrorMessage(result.message);
+    }
+  };
+
+  const handleGoogleSuccess = async (credential) => {
+    setErrorMessage(null);
+    setSubmitting(true);
+    const result = await googleLogin(credential);
     setSubmitting(false);
 
     if (result.success) {
@@ -203,6 +217,24 @@ export default function RegisterPage() {
                 )}
               </button>
             </form>
+
+            <div className="relative my-5">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-[#E7DED5]" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-[#FFFFFF] px-3 text-[#6F6963] font-medium tracking-wider">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <GoogleSignInButton
+              onSuccess={handleGoogleSuccess}
+              onError={(err) => setErrorMessage(err.message || 'Google sign-up failed')}
+              disabled={submitting}
+              text="signup_with"
+            />
 
             <div className="text-center pt-2 border-t border-[#E7DED5]">
               <p className="text-xs text-[#6F6963]">

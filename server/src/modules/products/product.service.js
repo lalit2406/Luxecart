@@ -497,9 +497,10 @@ class ProductService {
       throw error;
     }
 
+    const MAX_PRODUCT_IMAGES = 30;
     const currentCount = product.images?.length || 0;
-    if (currentCount + files.length > 10) {
-      const error = new Error(`Maximum 10 images allowed per product. Currently has ${currentCount}, cannot add ${files.length} more.`);
+    if (currentCount + files.length > MAX_PRODUCT_IMAGES) {
+      const error = new Error(`Maximum ${MAX_PRODUCT_IMAGES} images allowed per product. Currently has ${currentCount}, cannot add ${files.length} more.`);
       error.statusCode = 400;
       error.code = 'MAX_IMAGES_EXCEEDED';
       throw error;
@@ -509,11 +510,28 @@ class ProductService {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+      const folderPath = options.folder || `luxecart/products/${product.slug || productId}`;
+      const customPublicId = (Array.isArray(options.publicIds) ? options.publicIds[i] : options.publicId) || undefined;
+      
+      // Prevent duplicate Cloudinary upload / media records if publicId is provided
+      if (customPublicId) {
+        const fullPublicId = `${folderPath}/${customPublicId}`;
+        const existingImg = product.images.find(
+          (img) => img.publicId === fullPublicId || img.publicId === customPublicId
+        );
+        if (existingImg) {
+          continue; // Skip duplicate file without creating redundant record
+        }
+      }
+
       const uploadResult = await uploadToCloudinary(file.buffer, {
-        folder: `luxecart/products/${productId}`,
+        folder: folderPath,
+        publicId: customPublicId,
       });
 
       const isFirstUploaded = i === 0 && !hasPrimary;
+      const altText = (Array.isArray(options.alts) ? options.alts[i] : options.alt) || product.name;
+      const colorVal = (Array.isArray(options.colors) ? options.colors[i] : options.color) || '';
 
       product.images.push({
         url: uploadResult.url,
@@ -522,9 +540,10 @@ class ProductService {
         height: uploadResult.height,
         format: uploadResult.format,
         bytes: uploadResult.bytes,
-        alt: options.alt || product.name,
+        alt: altText,
         isPrimary: isFirstUploaded,
         displayOrder: currentCount + i,
+        color: colorVal,
       });
 
       if (isFirstUploaded) {
@@ -682,6 +701,44 @@ class ProductService {
       await deleteFromCloudinary(publicIdToDelete);
     }
 
+    return product;
+  }
+
+  /**
+   * Admin: Update media metadata (alt text, color tag)
+   * @param {string} productId
+   * @param {string} mediaId
+   * @param {{ alt?: string, color?: string }} metadata
+   * @returns {Promise<Product>}
+   */
+  async updateMediaMetadata(productId, mediaId, { alt, color } = {}) {
+    const product = await Product.findById(productId);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    const targetImg = product.images.find(
+      (img) => (img._id && img._id.toString() === mediaId) || img.publicId === mediaId
+    );
+
+    if (!targetImg) {
+      const error = new Error('Image not found in this product');
+      error.statusCode = 404;
+      error.code = 'MEDIA_NOT_FOUND';
+      throw error;
+    }
+
+    if (alt !== undefined) {
+      targetImg.alt = String(alt).trim();
+    }
+    if (color !== undefined) {
+      targetImg.color = String(color).trim();
+    }
+
+    await product.save();
     return product;
   }
 }

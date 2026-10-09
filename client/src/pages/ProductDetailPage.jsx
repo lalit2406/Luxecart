@@ -12,6 +12,7 @@ import ReviewCard from '../components/reviews/ReviewCard';
 import ReviewFormModal from '../components/reviews/ReviewFormModal';
 import SEO from '../components/common/SEO';
 import { isWebGLSupported } from '../utils/webgl';
+import { getOptimizedImageUrl, LUXE_PLACEHOLDER_IMAGE } from '../utils/image';
 import ThreeErrorBoundary from '../components/home/three/ThreeErrorBoundary';
 import {
   Star,
@@ -142,6 +143,36 @@ export default function ProductDetailPage() {
     }
   }, [product?._id, page, ratingFilter, sortBy, sortOrder, fetchReviews, fetchMyReview]);
 
+  // Active colorway determined by selected variant
+  const selectedColorName = selectedVariant?.attributes?.color?.name || '';
+
+  // Filter gallery images to the active colorway.
+  // Computed unconditionally to preserve React Hook execution order.
+  const colorFilteredImages = React.useMemo(() => {
+    if (!product || !product.images || product.images.length === 0) {
+      return [{ url: LUXE_PLACEHOLDER_IMAGE, alt: product?.name || 'LuxeCart' }];
+    }
+    if (selectedColorName) {
+      const matchingColorImages = product.images.filter(
+        (img) => img.color && img.color.toLowerCase() === selectedColorName.toLowerCase()
+      );
+      if (matchingColorImages.length > 0) {
+        return matchingColorImages;
+      }
+      // If variant has images directly attached
+      if (selectedVariant?.images && selectedVariant.images.length > 0) {
+        return selectedVariant.images.map((url, idx) => ({
+          url,
+          alt: `${product.name} - ${selectedColorName} View ${idx + 1}`,
+          color: selectedColorName,
+        }));
+      }
+      // Clean luxury fallback for colors without photography yet
+      return [{ url: LUXE_PLACEHOLDER_IMAGE, alt: `${product.name} - ${selectedColorName} (Photography Pending)` }];
+    }
+    return product.images;
+  }, [product, selectedColorName, selectedVariant?.images]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F3EE] flex flex-col justify-between">
@@ -175,11 +206,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  // Variant & pricing calculations
-  const images = (product.images || []).length > 0
-    ? product.images
-    : [{ url: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=800', alt: product.name }];
-
+  const images = colorFilteredImages;
   const activeImage = images[selectedImageIndex] || images[0];
 
   const currentPrice = selectedVariant ? selectedVariant.price : (product.priceSummary?.minPrice || 0);
@@ -211,6 +238,8 @@ export default function ProductDetailPage() {
     if (matching) {
       setSelectedVariant(matching);
       setQuantity(1);
+      // Reset gallery to the primary shot (index 0) of the newly selected colorway
+      setSelectedImageIndex(0);
     }
   };
 
@@ -567,7 +596,13 @@ export default function ProductDetailPage() {
                           selectedImageIndex === idx ? 'border-[#9A6A45]' : 'border-transparent opacity-70 hover:opacity-100'
                         }`}
                       >
-                        <img src={img.url} alt={img.alt || `Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                        <img
+                          src={getOptimizedImageUrl(img.url, { width: 160, quality: 'auto:good' })}
+                          alt={img.alt || `Thumbnail ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
                       </button>
                     ))}
                   </div>
@@ -576,9 +611,11 @@ export default function ProductDetailPage() {
                 {/* Main Stage Image */}
                 <div className="flex-1 aspect-4/5 rounded-2xl overflow-hidden bg-[#F7F3EE] border border-[#E7DED5] relative">
                   <img
-                    src={activeImage.url}
+                    src={getOptimizedImageUrl(activeImage.url, { width: 1000, quality: 'auto:good' })}
                     alt={activeImage.alt || product.name}
                     className="w-full h-full object-cover object-center"
+                    fetchPriority="high"
+                    decoding="async"
                   />
                   {discountPercent > 0 && (
                     <div className="absolute top-4 left-4 bg-[#9A6A45] text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-md">

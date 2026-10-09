@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Star, Heart } from 'lucide-react';
 import { useWishlist } from '../features/wishlist/context/WishlistContext';
 import { useAuth } from '../features/auth/hooks/useAuth';
+import { getOptimizedImageUrl, LUXE_PLACEHOLDER_IMAGE } from '../utils/image';
 
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
@@ -10,7 +11,8 @@ export default function ProductCard({ product }) {
   const { isAuthenticated } = useAuth();
 
   const primaryImage = product.images?.find((img) => img.isPrimary) || product.images?.[0];
-  const imageUrl = primaryImage?.url || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80';
+  const rawImageUrl = primaryImage?.url || LUXE_PLACEHOLDER_IMAGE;
+  const imageUrl = getOptimizedImageUrl(rawImageUrl, { width: 600, quality: 'auto:good' });
 
   const minPrice = product.priceSummary?.minPrice || 0;
   const minMrp = product.priceSummary?.minMrp || minPrice;

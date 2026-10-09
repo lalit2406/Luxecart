@@ -577,6 +577,7 @@ export default function AdminProductEditPage() {
         <ProductMediaManager
           productId={product._id || product.id}
           images={product.images || []}
+          variants={product.variants || []}
           onUpdate={(updatedProd) => setProduct(updatedProd)}
         />
       </div>

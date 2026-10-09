@@ -263,3 +263,17 @@ export const deleteProductMedia = async (req, res, next) => {
   }
 };
 
+/**
+ * Admin: Update media metadata (alt, color tag)
+ */
+export const updateProductMediaMetadata = async (req, res, next) => {
+  try {
+    const { id, mediaId } = req.params;
+    const product = await productService.updateMediaMetadata(id, mediaId, req.body);
+    return sendSuccess(res, 200, 'Media metadata updated successfully', { product });
+  } catch (error) {
+    next(error);
+  }
+};
+
+

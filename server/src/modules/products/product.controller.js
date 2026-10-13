@@ -87,7 +87,7 @@ export const createProduct = async (req, res, next) => {
 export const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { isValid, errors, sanitized } = validateProductInput(req.body, false);
+    const { isValid, errors, sanitized } = validateProductInput(req.body, false, true);
     if (!isValid) {
       const error = new Error(errors[0]);
       error.statusCode = 400;
@@ -99,6 +99,7 @@ export const updateProduct = async (req, res, next) => {
     const product = await productService.updateProduct(id, sanitized);
     return sendSuccess(res, 200, 'Product updated successfully', { product });
   } catch (error) {
+    console.error(`[Admin Product Update Error] Product ID: ${req.params?.id} | Error:`, error.message);
     next(error);
   }
 };
@@ -219,6 +220,7 @@ export const uploadProductMedia = async (req, res, next) => {
     const product = await productService.uploadMedia(id, files, req.body);
     return sendSuccess(res, 201, 'Media uploaded successfully', { product });
   } catch (error) {
+    console.error(`[Admin Product Media Upload Error] Product ID: ${req.params?.id} | Error:`, error.message);
     next(error);
   }
 };

@@ -1,0 +1,773 @@
+import Product from './product.model.js';
+import Category from '../categories/category.model.js';
+import { generateUniqueSlug } from '../../utils/slugify.js';
+import { uploadToCloudinary, deleteFromCloudinary } from '../../config/cloudinary.js';
+
+class ProductService {
+  /**
+   * Helper to build categoryTree array for a product
+   * @param {string | import('mongoose').Types.ObjectId} categoryId
+   * @returns {Promise<Array<import('mongoose').Types.ObjectId>>}
+   */
+  async buildCategoryTree(categoryId) {
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      const error = new Error('Category not found');
+      error.statusCode = 404;
+      error.code = 'CATEGORY_NOT_FOUND';
+      throw error;
+    }
+
+    if (!category.isActive) {
+      const error = new Error('Cannot assign product to an inactive category');
+      error.statusCode = 400;
+      error.code = 'INACTIVE_CATEGORY';
+      throw error;
+    }
+
+    const ancestorIds = (category.ancestors || []).map((a) => a._id);
+    return [...ancestorIds, category._id];
+  }
+
+  /**
+   * Helper to verify that a set of SKUs does not exist in any other product
+   * @param {string[]} skus
+   * @param {string} [excludeProductId]
+   */
+  async verifySkuUniqueness(skus, excludeProductId = null) {
+    if (!skus || skus.length === 0) return;
+
+    const query = {
+      'variants.sku': { $in: skus },
+    };
+
+    if (excludeProductId) {
+      query._id = { $ne: excludeProductId };
+    }
+
+    const existing = await Product.findOne(query).select('name variants.sku').lean();
+    if (existing) {
+      const duplicateSku = existing.variants
+        .map((v) => v.sku)
+        .find((s) => skus.includes(s));
+
+      const error = new Error(`SKU '${duplicateSku}' is already in use by product '${existing.name}'.`);
+      error.statusCode = 409;
+      error.code = 'DUPLICATE_SKU';
+      throw error;
+    }
+  }
+
+  /**
+   * Create a new product (starts as DRAFT or ACTIVE if validated)
+   * @param {object} data
+   * @returns {Promise<Product>}
+   */
+  async createProduct(data) {
+    let slug = data.slug;
+    if (!slug) {
+      slug = await generateUniqueSlug(Product, data.name);
+    } else {
+      const existing = await Product.findOne({ slug });
+      if (existing) {
+        const error = new Error(`Product slug '${slug}' already exists`);
+        error.statusCode = 409;
+        error.code = 'DUPLICATE_SLUG';
+        throw error;
+      }
+    }
+
+    const categoryTree = await this.buildCategoryTree(data.category);
+
+    // Cross-product SKU uniqueness check
+    if (data.variants && data.variants.length > 0) {
+      const skus = data.variants.map((v) => v.sku).filter(Boolean);
+      await this.verifySkuUniqueness(skus);
+    }
+
+    const product = new Product({
+      ...data,
+      slug,
+      categoryTree,
+    });
+
+    await product.save();
+    return product;
+  }
+
+  /**
+   * Update product details
+   * @param {string} id
+   * @param {object} updates
+   * @returns {Promise<Product>}
+   */
+  async updateProduct(id, updates) {
+    const product = await Product.findById(id);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    // Slug check
+    if (updates.slug && updates.slug !== product.slug) {
+      const existing = await Product.findOne({ slug: updates.slug, _id: { $ne: id } });
+      if (existing) {
+        const error = new Error(`Product slug '${updates.slug}' already exists`);
+        error.statusCode = 409;
+        error.code = 'DUPLICATE_SLUG';
+        throw error;
+      }
+      product.slug = updates.slug;
+    } else if (updates.name && updates.name !== product.name && !updates.slug) {
+      product.slug = await generateUniqueSlug(Product, updates.name, id);
+      product.name = updates.name;
+    }
+
+    // Category check
+    if (updates.category && String(updates.category) !== String(product.category)) {
+      product.categoryTree = await this.buildCategoryTree(updates.category);
+      product.category = updates.category;
+    }
+
+    // Variants check - ONLY modify variants if explicitly provided and defined
+    if (updates.variants !== undefined) {
+      const skus = updates.variants.map((v) => v.sku).filter(Boolean);
+      await this.verifySkuUniqueness(skus, id);
+      product.variants = updates.variants;
+    }
+
+    // Apply remaining fields ONLY if explicitly defined
+    if (updates.brand !== undefined) product.brand = updates.brand;
+    if (updates.description !== undefined) product.description = updates.description;
+    if (updates.shortDescription !== undefined) product.shortDescription = updates.shortDescription;
+    if (updates.gender !== undefined) product.gender = updates.gender;
+    if (updates.images !== undefined) product.images = updates.images;
+    if (updates.specifications !== undefined) product.specifications = updates.specifications;
+    if (updates.isFeatured !== undefined) product.isFeatured = updates.isFeatured;
+    if (updates.isNewArrival !== undefined) product.isNewArrival = updates.isNewArrival;
+    if (updates.isBestseller !== undefined) product.isBestseller = updates.isBestseller;
+    if (updates.tags !== undefined) product.tags = updates.tags;
+    if (updates.seo !== undefined) product.seo = updates.seo;
+    if (updates.model3d !== undefined) product.model3d = updates.model3d;
+
+    await product.save();
+    return product;
+  }
+
+  /**
+   * Update product status (with strict validation on transition to ACTIVE)
+   * @param {string} id
+   * @param {'DRAFT' | 'ACTIVE' | 'ARCHIVED'} newStatus
+   * @returns {Promise<Product>}
+   */
+  async updateProductStatus(id, newStatus) {
+    const product = await Product.findById(id);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    if (newStatus === 'ACTIVE') {
+      // Strict publish validation
+      const category = await Category.findById(product.category);
+      if (!category || !category.isActive) {
+        const error = new Error('Cannot publish product: Assigned category is invalid or inactive.');
+        error.statusCode = 400;
+        error.code = 'INVALID_CATEGORY';
+        throw error;
+      }
+
+      if (!product.variants || product.variants.length === 0) {
+        const error = new Error('Cannot publish product: At least one variant is required.');
+        error.statusCode = 400;
+        error.code = 'VARIANTS_REQUIRED';
+        throw error;
+      }
+
+      const activeVariants = product.variants.filter((v) => v.isActive);
+      if (activeVariants.length === 0) {
+        const error = new Error('Cannot publish product: At least one active variant is required.');
+        error.statusCode = 400;
+        error.code = 'ACTIVE_VARIANT_REQUIRED';
+        throw error;
+      }
+
+      if (!product.images || product.images.length === 0) {
+        const error = new Error('Cannot publish product: At least one product image is required.');
+        error.statusCode = 400;
+        error.code = 'IMAGE_REQUIRED';
+        throw error;
+      }
+
+      const primaryImages = product.images.filter((img) => img.isPrimary);
+      if (primaryImages.length !== 1) {
+        const error = new Error('Cannot publish product: Exactly one primary image must be set.');
+        error.statusCode = 400;
+        error.code = 'PRIMARY_IMAGE_REQUIRED';
+        throw error;
+      }
+    }
+
+    product.status = newStatus;
+    await product.save();
+    return product;
+  }
+
+  /**
+   * Add a new variant to an existing product
+   * @param {string} productId
+   * @param {object} variantData
+   * @returns {Promise<Product>}
+   */
+  async addVariant(productId, variantData) {
+    const product = await Product.findById(productId);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    // Verify SKU uniqueness
+    await this.verifySkuUniqueness([variantData.sku]);
+
+    product.variants.push(variantData);
+    await product.save();
+    return product;
+  }
+
+  /**
+   * Update an existing variant inside a product
+   * @param {string} productId
+   * @param {string} variantId
+   * @param {object} variantUpdates
+   * @returns {Promise<Product>}
+   */
+  async updateVariant(productId, variantId, variantUpdates) {
+    const product = await Product.findById(productId);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    const variant = product.variants.id(variantId);
+    if (!variant) {
+      const error = new Error('Variant not found');
+      error.statusCode = 404;
+      error.code = 'VARIANT_NOT_FOUND';
+      throw error;
+    }
+
+    if (variantUpdates.sku && variantUpdates.sku !== variant.sku) {
+      await this.verifySkuUniqueness([variantUpdates.sku], productId);
+      variant.sku = variantUpdates.sku;
+    }
+
+    if (variantUpdates.price !== undefined) variant.price = variantUpdates.price;
+    if (variantUpdates.mrp !== undefined) variant.mrp = variantUpdates.mrp;
+    if (variantUpdates.barcode !== undefined) variant.barcode = variantUpdates.barcode;
+    if (variantUpdates.attributes) variant.attributes = variantUpdates.attributes;
+    if (variantUpdates.inventory) {
+      variant.inventory = {
+        ...variant.inventory.toObject(),
+        ...variantUpdates.inventory,
+      };
+    }
+    if (variantUpdates.weightInGrams !== undefined) variant.weightInGrams = variantUpdates.weightInGrams;
+    if (variantUpdates.dimensionsInCm) variant.dimensionsInCm = variantUpdates.dimensionsInCm;
+    if (variantUpdates.images) variant.images = variantUpdates.images;
+    if (variantUpdates.isActive !== undefined) variant.isActive = variantUpdates.isActive;
+
+    await product.save();
+    return product;
+  }
+
+  /**
+   * Remove a variant from a product
+   * @param {string} productId
+   * @param {string} variantId
+   * @returns {Promise<Product>}
+   */
+  async deleteVariant(productId, variantId) {
+    const product = await Product.findById(productId);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    const variant = product.variants.id(variantId);
+    if (!variant) {
+      const error = new Error('Variant not found');
+      error.statusCode = 404;
+      error.code = 'VARIANT_NOT_FOUND';
+      throw error;
+    }
+
+    product.variants.pull(variantId);
+
+    // If product is ACTIVE and has no variants left, revert to DRAFT
+    if (product.status === 'ACTIVE' && product.variants.length === 0) {
+      product.status = 'DRAFT';
+    }
+
+    await product.save();
+    return product;
+  }
+
+  /**
+   * Public: Query filtered, sorted, paginated catalog products
+   * @param {object} parsedQuery - Output from validateCatalogQuery
+   * @returns {Promise<{ products: Array<object>, pagination: object }>}
+   */
+  async getProducts(parsedQuery) {
+    const { filter, sort, pagination } = parsedQuery;
+
+    const [products, total] = await Promise.all([
+      Product.find(filter)
+        .select('name slug brand description shortDescription category gender images priceSummary isFeatured isNewArrival isBestseller ratings tags createdAt')
+        .populate('category', 'name slug')
+        .sort(sort)
+        .skip(pagination.skip)
+        .limit(pagination.limit)
+        .lean(),
+      Product.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(total / pagination.limit) || 1;
+
+    return {
+      products: products.map((p) => ({
+        ...p,
+        id: p._id.toString(),
+      })),
+      pagination: {
+        page: pagination.page,
+        limit: pagination.limit,
+        total,
+        totalPages,
+        hasNextPage: pagination.page < totalPages,
+        hasPreviousPage: pagination.page > 1,
+      },
+    };
+  }
+
+  /**
+   * Public: Get full product details by slug with active variants
+   * @param {string} slug
+   * @returns {Promise<object>}
+   */
+  async getProductBySlug(slug) {
+    const product = await Product.findOne({ slug, status: 'ACTIVE' })
+      .populate('category', 'name slug ancestors')
+      .lean();
+
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    // Filter out inactive variants for customer storefront
+    product.variants = (product.variants || []).filter((v) => v.isActive);
+    product.id = product._id.toString();
+
+    return product;
+  }
+
+  /**
+   * Public: Fetch featured products
+   * @param {number} [limit=8]
+   * @returns {Promise<Array<object>>}
+   */
+  async getFeaturedProducts(limit = 8) {
+    return Product.find({ status: 'ACTIVE', isFeatured: true })
+      .select('name slug brand images priceSummary ratings isFeatured isNewArrival isBestseller')
+      .limit(limit)
+      .lean();
+  }
+
+  /**
+   * Public: Fetch new arrivals
+   * @param {number} [limit=8]
+   * @returns {Promise<Array<object>>}
+   */
+  async getNewArrivals(limit = 8) {
+    return Product.find({ status: 'ACTIVE', isNewArrival: true })
+      .select('name slug brand images priceSummary ratings isFeatured isNewArrival isBestseller')
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .lean();
+  }
+
+  /**
+   * Admin: List all products (including DRAFT, ARCHIVED)
+   * @param {object} query
+   * @returns {Promise<{ products: Array<object>, pagination: object }>}
+   */
+  async getAdminProducts(query = {}) {
+    const filter = {};
+    if (query.status) filter.status = query.status;
+    if (query.category) filter.category = query.category;
+    if (query.brand) filter.brand = new RegExp(query.brand, 'i');
+    if (query.search) {
+      filter.$or = [
+        { name: new RegExp(query.search, 'i') },
+        { brand: new RegExp(query.search, 'i') },
+        { 'variants.sku': new RegExp(query.search, 'i') },
+      ];
+    }
+
+    const page = Math.max(1, parseInt(query.page || '1', 10));
+    const limit = Math.min(100, Math.max(1, parseInt(query.limit || '20', 10)));
+    const skip = (page - 1) * limit;
+
+    const [products, total] = await Promise.all([
+      Product.find(filter)
+        .populate('category', 'name slug')
+        .sort({ updatedAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Product.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(total / limit) || 1;
+
+    return {
+      products: products.map((p) => ({
+        ...p,
+        id: p._id.toString(),
+      })),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
+    };
+  }
+
+  /**
+   * Admin: Get product by ID
+   * @param {string} id
+   * @returns {Promise<Product>}
+   */
+  async getProductById(id) {
+    const product = await Product.findById(id).populate('category', 'name slug ancestors');
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+    return product;
+  }
+
+  /**
+   * Admin: Upload multiple media files to product
+   * @param {string} productId
+   * @param {Array<{ buffer: Buffer, originalname: string, mimetype: string }>} files
+   * @param {object} [options]
+   * @returns {Promise<Product>}
+   */
+  async uploadMedia(productId, files = [], options = {}) {
+    const product = await Product.findById(productId);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    if (!files || files.length === 0) {
+      const error = new Error('No image files provided for upload');
+      error.statusCode = 400;
+      error.code = 'NO_FILES_PROVIDED';
+      throw error;
+    }
+
+    const MAX_PRODUCT_IMAGES = 30;
+    const currentCount = product.images?.length || 0;
+    if (currentCount + files.length > MAX_PRODUCT_IMAGES) {
+      const error = new Error(`Maximum ${MAX_PRODUCT_IMAGES} images allowed per product. Currently has ${currentCount}, cannot add ${files.length} more.`);
+      error.statusCode = 400;
+      error.code = 'MAX_IMAGES_EXCEEDED';
+      throw error;
+    }
+
+    let hasPrimary = product.images?.some((img) => img.isPrimary);
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const folderPath = options.folder || `luxecart/products/${product.slug || productId}`;
+      const customPublicId = (Array.isArray(options.publicIds) ? options.publicIds[i] : options.publicId) || undefined;
+      
+      // Prevent duplicate Cloudinary upload / media records if publicId is provided
+      if (customPublicId) {
+        const fullPublicId = `${folderPath}/${customPublicId}`;
+        const existingImg = product.images.find(
+          (img) => img.publicId === fullPublicId || img.publicId === customPublicId
+        );
+        if (existingImg) {
+          continue; // Skip duplicate file without creating redundant record
+        }
+      }
+
+      let uploadResult;
+      try {
+        uploadResult = await uploadToCloudinary(file.buffer, {
+          folder: folderPath,
+          publicId: customPublicId,
+        });
+      } catch (uploadErr) {
+        console.error(`[Cloudinary Upload Error] Product ID: ${productId} | File: ${file.originalname || `image_${i+1}`} | Error:`, uploadErr.message);
+        const error = new Error(`Image upload failed for "${file.originalname || `image_${i+1}`}": ${uploadErr.message}`);
+        error.statusCode = 502;
+        error.code = 'CLOUDINARY_UPLOAD_FAILED';
+        throw error;
+      }
+
+      const isFirstUploaded = i === 0 && !hasPrimary;
+      const altList = options.alts || options['alts[]'];
+      const altText = (Array.isArray(altList) ? altList[i] : altList) || options.alt || product.name;
+
+      const colorList = options.colors || options['colors[]'];
+      const colorVal = (Array.isArray(colorList) ? colorList[i] : colorList) || options.color || '';
+
+      product.images.push({
+        url: uploadResult.url,
+        publicId: uploadResult.publicId,
+        width: uploadResult.width,
+        height: uploadResult.height,
+        format: uploadResult.format,
+        bytes: uploadResult.bytes,
+        alt: altText,
+        isPrimary: isFirstUploaded,
+        displayOrder: currentCount + i,
+        color: colorVal,
+      });
+
+      // If color is specified and product has variants, sync image URL into matching variants' images array
+      if (colorVal && product.variants && product.variants.length > 0) {
+        product.variants.forEach((v) => {
+          if (
+            v.attributes?.color?.name &&
+            v.attributes.color.name.toLowerCase() === colorVal.toLowerCase()
+          ) {
+            v.images = v.images || [];
+            if (!v.images.includes(uploadResult.url)) {
+              v.images.push(uploadResult.url);
+            }
+          }
+        });
+      }
+
+      if (isFirstUploaded) {
+        hasPrimary = true;
+      }
+    }
+
+    await product.save();
+    return product;
+  }
+
+  /**
+   * Admin: Set an image as the single primary image
+   * @param {string} productId
+   * @param {string} mediaId
+   * @returns {Promise<Product>}
+   */
+  async setPrimaryMedia(productId, mediaId) {
+    const product = await Product.findById(productId);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    const targetImg = product.images.find(
+      (img) => (img._id && img._id.toString() === mediaId) || img.publicId === mediaId
+    );
+
+    if (!targetImg) {
+      const error = new Error('Image not found in this product');
+      error.statusCode = 404;
+      error.code = 'MEDIA_NOT_FOUND';
+      throw error;
+    }
+
+    product.images.forEach((img) => {
+      const isTarget = (img._id && img._id.toString() === mediaId) || img.publicId === mediaId;
+      img.isPrimary = isTarget;
+    });
+
+    await product.save();
+    return product;
+  }
+
+  /**
+   * Admin: Reorder product media gallery
+   * @param {string} productId
+   * @param {Array<{ mediaId?: string, publicId?: string, displayOrder?: number, sortOrder?: number }>} imageOrders
+   * @returns {Promise<Product>}
+   */
+  async reorderMedia(productId, imageOrders = []) {
+    const product = await Product.findById(productId);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    if (!Array.isArray(imageOrders) || imageOrders.length === 0) {
+      const error = new Error('Image order array is required');
+      error.statusCode = 400;
+      error.code = 'INVALID_ORDER_PAYLOAD';
+      throw error;
+    }
+
+    // Verify all references belong to this product
+    for (const item of imageOrders) {
+      const idToMatch = item.mediaId || item.publicId || item._id;
+      const found = product.images.some(
+        (img) => (img._id && img._id.toString() === idToMatch) || img.publicId === idToMatch
+      );
+      if (!found) {
+        const error = new Error(`Image '${idToMatch}' does not belong to this product`);
+        error.statusCode = 400;
+        error.code = 'INVALID_MEDIA_REFERENCE';
+        throw error;
+      }
+    }
+
+    // Apply new display orders
+    imageOrders.forEach((item, idx) => {
+      const idToMatch = item.mediaId || item.publicId || item._id;
+      const order = typeof item.displayOrder === 'number' ? item.displayOrder : typeof item.sortOrder === 'number' ? item.sortOrder : idx;
+      const img = product.images.find(
+        (i) => (i._id && i._id.toString() === idToMatch) || i.publicId === idToMatch
+      );
+      if (img) {
+        img.displayOrder = order;
+      }
+    });
+
+    // Sort product.images in-place by displayOrder
+    product.images.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+
+    await product.save();
+    return product;
+  }
+
+  /**
+   * Admin: Delete media image from product and Cloudinary
+   * @param {string} productId
+   * @param {string} mediaId
+   * @returns {Promise<Product>}
+   */
+  async deleteMedia(productId, mediaId) {
+    const product = await Product.findById(productId);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    const targetImg = product.images.find(
+      (img) => (img._id && img._id.toString() === mediaId) || img.publicId === mediaId
+    );
+
+    if (!targetImg) {
+      const error = new Error('Image not found in this product');
+      error.statusCode = 404;
+      error.code = 'MEDIA_NOT_FOUND';
+      throw error;
+    }
+
+    const wasPrimary = targetImg.isPrimary;
+    const publicIdToDelete = targetImg.publicId;
+
+    // Pull image from array
+    product.images = product.images.filter(
+      (img) => !((img._id && img._id.toString() === mediaId) || img.publicId === mediaId)
+    );
+
+    // If deleted image was primary and other images exist, assign primary to first remaining image
+    if (wasPrimary && product.images.length > 0) {
+      product.images[0].isPrimary = true;
+    }
+
+    // If product is ACTIVE and has 0 images left, revert to DRAFT
+    if (product.status === 'ACTIVE' && product.images.length === 0) {
+      product.status = 'DRAFT';
+    }
+
+    // Re-index display orders
+    product.images.forEach((img, idx) => {
+      img.displayOrder = idx;
+    });
+
+    await product.save();
+
+    // Delete remote Cloudinary asset
+    if (publicIdToDelete) {
+      await deleteFromCloudinary(publicIdToDelete);
+    }
+
+    return product;
+  }
+
+  /**
+   * Admin: Update media metadata (alt text, color tag)
+   * @param {string} productId
+   * @param {string} mediaId
+   * @param {{ alt?: string, color?: string }} metadata
+   * @returns {Promise<Product>}
+   */
+  async updateMediaMetadata(productId, mediaId, { alt, color } = {}) {
+    const product = await Product.findById(productId);
+    if (!product) {
+      const error = new Error('Product not found');
+      error.statusCode = 404;
+      error.code = 'PRODUCT_NOT_FOUND';
+      throw error;
+    }
+
+    const targetImg = product.images.find(
+      (img) => (img._id && img._id.toString() === mediaId) || img.publicId === mediaId
+    );
+
+    if (!targetImg) {
+      const error = new Error('Image not found in this product');
+      error.statusCode = 404;
+      error.code = 'MEDIA_NOT_FOUND';
+      throw error;
+    }
+
+    if (alt !== undefined) {
+      targetImg.alt = String(alt).trim();
+    }
+    if (color !== undefined) {
+      targetImg.color = String(color).trim();
+    }
+
+    await product.save();
+    return product;
+  }
+}
+
+export default new ProductService();

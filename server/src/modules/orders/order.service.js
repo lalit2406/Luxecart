@@ -248,8 +248,12 @@ class OrderService {
           const updateResult = await Product.updateOne(
             {
               _id: item.productId,
-              'variants._id': item.variantId,
-              'variants.inventory.stock': { $gte: item.quantity },
+              variants: {
+                $elemMatch: {
+                  _id: item.variantId,
+                  'inventory.stock': { $gte: item.quantity },
+                },
+              },
             },
             {
               $inc: { 'variants.$.inventory.stock': -item.quantity },
@@ -295,8 +299,12 @@ class OrderService {
           const updateResult = await Product.updateOne(
             {
               _id: item.productId,
-              'variants._id': item.variantId,
-              'variants.inventory.stock': { $gte: item.quantity },
+              variants: {
+                $elemMatch: {
+                  _id: item.variantId,
+                  'inventory.stock': { $gte: item.quantity },
+                },
+              },
             },
             {
               $inc: { 'variants.$.inventory.stock': -item.quantity },
@@ -334,7 +342,14 @@ class OrderService {
         // Compensatory Rollback: Restore any decremented stock
         for (const dec of decrementedItems) {
           await Product.updateOne(
-            { _id: dec.productId, 'variants._id': dec.variantId },
+            {
+              _id: dec.productId,
+              variants: {
+                $elemMatch: {
+                  _id: dec.variantId,
+                },
+              },
+            },
             { $inc: { 'variants.$.inventory.stock': dec.quantity } }
           ).catch((rollbackErr) => {
             console.error('[CRITICAL] Stock rollback failure:', rollbackErr);
@@ -660,7 +675,11 @@ class OrderService {
             await Product.updateOne(
               {
                 _id: item.productId,
-                'variants._id': item.variantId,
+                variants: {
+                  $elemMatch: {
+                    _id: item.variantId,
+                  },
+                },
               },
               {
                 $inc: { 'variants.$.inventory.stock': item.quantity },
@@ -728,7 +747,11 @@ class OrderService {
           await Product.updateOne(
             {
               _id: item.productId,
-              'variants._id': item.variantId,
+              variants: {
+                $elemMatch: {
+                  _id: item.variantId,
+                },
+              },
             },
             {
               $inc: { 'variants.$.inventory.stock': item.quantity },

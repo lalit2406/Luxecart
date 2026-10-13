@@ -54,7 +54,6 @@ export default function AdminProductEditPage() {
     description: '',
     tags: '',
     specifications: [],
-    images: [{ url: '', isPrimary: true }],
     model3d: {
       enabled: false,
       url: '',
@@ -86,7 +85,6 @@ export default function AdminProductEditPage() {
           description: p.description || '',
           tags: Array.isArray(p.tags) ? p.tags.join(', ') : '',
           specifications: p.specifications || [],
-          images: p.images?.length > 0 ? p.images : [{ url: '', isPrimary: true }],
           model3d: {
             enabled: Boolean(p.model3d?.enabled),
             url: p.model3d?.url || '',
@@ -123,7 +121,6 @@ export default function AdminProductEditPage() {
         description: generalForm.description.trim(),
         tags: generalForm.tags ? generalForm.tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
         specifications: generalForm.specifications.filter((s) => s.name?.trim() && s.value?.trim()),
-        images: generalForm.images.filter((img) => img.url?.trim()),
         model3d: generalForm.model3d?.enabled
           ? {
               enabled: true,

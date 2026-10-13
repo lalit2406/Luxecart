@@ -73,7 +73,7 @@ export const validateVariantInput = (variant = {}) => {
  * @param {boolean} [isPublishing=false]
  * @returns {{ isValid: boolean, errors: string[], sanitized: object }}
  */
-export const validateProductInput = (data = {}, isPublishing = false) => {
+export const validateProductInput = (data = {}, isPublishing = false, isUpdate = false) => {
   const errors = [];
   const {
     name,
@@ -96,22 +96,30 @@ export const validateProductInput = (data = {}, isPublishing = false) => {
   } = data;
 
   // Basic required fields
-  if (!name || typeof name !== 'string' || name.trim().length < 2) {
-    errors.push('Product name must be at least 2 characters long');
-  } else if (name.trim().length > 150) {
-    errors.push('Product name cannot exceed 150 characters');
+  if (!isUpdate || name !== undefined) {
+    if (!name || typeof name !== 'string' || name.trim().length < 2) {
+      errors.push('Product name must be at least 2 characters long');
+    } else if (name.trim().length > 150) {
+      errors.push('Product name cannot exceed 150 characters');
+    }
   }
 
-  if (!brand || typeof brand !== 'string' || brand.trim().length < 1) {
-    errors.push('Brand name is required');
+  if (!isUpdate || brand !== undefined) {
+    if (!brand || typeof brand !== 'string' || brand.trim().length < 1) {
+      errors.push('Brand name is required');
+    }
   }
 
-  if (!description || typeof description !== 'string' || description.trim().length < 10) {
-    errors.push('Product description must be at least 10 characters long');
+  if (!isUpdate || description !== undefined) {
+    if (!description || typeof description !== 'string' || description.trim().length < 10) {
+      errors.push('Product description must be at least 10 characters long');
+    }
   }
 
-  if (!category || !mongoose.Types.ObjectId.isValid(category)) {
-    errors.push('Valid category ID is required');
+  if (!isUpdate || category !== undefined) {
+    if (!category || !mongoose.Types.ObjectId.isValid(category)) {
+      errors.push('Valid category ID is required');
+    }
   }
 
   if (slug !== undefined && slug !== null && slug !== '') {
@@ -120,73 +128,99 @@ export const validateProductInput = (data = {}, isPublishing = false) => {
     }
   }
 
-  if (gender && !ALLOWED_GENDERS.includes(gender)) {
+  if (gender !== undefined && !ALLOWED_GENDERS.includes(gender)) {
     errors.push(`Gender must be one of: ${ALLOWED_GENDERS.join(', ')}`);
   }
 
   // Variant validations
-  const sanitizedVariants = [];
-  if (variants && Array.isArray(variants)) {
-    const skuSet = new Set();
-    variants.forEach((v, idx) => {
-      const vResult = validateVariantInput(v);
-      if (!vResult.isValid) {
-        errors.push(`Variant #${idx + 1}: ${vResult.errors.join(', ')}`);
-      } else {
-        if (skuSet.has(vResult.sanitized.sku)) {
-          errors.push(`Duplicate SKU '${vResult.sanitized.sku}' found inside product.`);
+  let sanitizedVariants = undefined;
+  if (variants !== undefined) {
+    sanitizedVariants = [];
+    if (Array.isArray(variants)) {
+      const skuSet = new Set();
+      variants.forEach((v, idx) => {
+        const vResult = validateVariantInput(v);
+        if (!vResult.isValid) {
+          errors.push(`Variant #${idx + 1}: ${vResult.errors.join(', ')}`);
+        } else {
+          if (skuSet.has(vResult.sanitized.sku)) {
+            errors.push(`Duplicate SKU '${vResult.sanitized.sku}' found inside product.`);
+          }
+          skuSet.add(vResult.sanitized.sku);
+          sanitizedVariants.push(vResult.sanitized);
         }
-        skuSet.add(vResult.sanitized.sku);
-        sanitizedVariants.push(vResult.sanitized);
-      }
-    });
+      });
+    } else {
+      errors.push('Variants must be provided as an array');
+    }
   }
 
   // Image validations
-  const sanitizedImages = [];
+  let sanitizedImages = undefined;
   let primaryCount = 0;
 
-  if (images && Array.isArray(images)) {
-    images.forEach((img, idx) => {
-      if (!img.url || typeof img.url !== 'string') {
-        errors.push(`Image #${idx + 1} is missing a valid URL`);
-      } else {
-        const isPrimary = Boolean(img.isPrimary);
-        if (isPrimary) primaryCount++;
-        sanitizedImages.push({
-          url: img.url.trim(),
-          alt: img.alt ? String(img.alt).trim() : '',
-          isPrimary,
-          displayOrder: typeof img.displayOrder === 'number' ? img.displayOrder : idx,
-          color: img.color ? String(img.color).trim() : '',
-        });
-      }
-    });
-  }
+  if (images !== undefined) {
+    sanitizedImages = [];
+    if (Array.isArray(images)) {
+      images.forEach((img, idx) => {
+        if (!img.url || typeof img.url !== 'string') {
+          errors.push(`Image #${idx + 1} is missing a valid URL`);
+        } else {
+          const isPrimary = Boolean(img.isPrimary);
+          if (isPrimary) primaryCount++;
+          sanitizedImages.push({
+            url: img.url.trim(),
+            alt: img.alt ? String(img.alt).trim() : '',
+            isPrimary,
+            displayOrder: typeof img.displayOrder === 'number' ? img.displayOrder : idx,
+            color: img.color ? String(img.color).trim() : '',
+          });
+        }
+      });
 
-  // If first image exists and none was explicitly primary, default first to primary
-  if (sanitizedImages.length > 0 && primaryCount === 0) {
-    sanitizedImages[0].isPrimary = true;
-    primaryCount = 1;
+      // If first image exists and none was explicitly primary, default first to primary
+      if (sanitizedImages.length > 0 && primaryCount === 0) {
+        sanitizedImages[0].isPrimary = true;
+        primaryCount = 1;
+      }
+    } else {
+      errors.push('Images must be provided as an array');
+    }
   }
 
   // Strict validation if status is ACTIVE or transitioning to ACTIVE
-  const targetStatus = status || (isPublishing ? 'ACTIVE' : 'DRAFT');
+  const targetStatus = status !== undefined ? status : (!isUpdate ? (isPublishing ? 'ACTIVE' : 'DRAFT') : undefined);
   if (targetStatus === 'ACTIVE') {
-    if (sanitizedVariants.length === 0) {
-      errors.push('Active product must contain at least one valid variant.');
-    } else {
-      const hasActiveVariant = sanitizedVariants.some((v) => v.isActive);
-      if (!hasActiveVariant) {
-        errors.push('Active product must have at least one active variant.');
+    if (sanitizedVariants !== undefined) {
+      if (sanitizedVariants.length === 0) {
+        errors.push('Active product must contain at least one valid variant.');
+      } else {
+        const hasActiveVariant = sanitizedVariants.some((v) => v.isActive);
+        if (!hasActiveVariant) {
+          errors.push('Active product must have at least one active variant.');
+        }
       }
     }
 
-    if (sanitizedImages.length === 0) {
-      errors.push('Active product must have at least one image.');
-    } else if (primaryCount !== 1) {
-      errors.push('Active product must have exactly one primary image.');
+    if (sanitizedImages !== undefined) {
+      if (sanitizedImages.length === 0) {
+        errors.push('Active product must have at least one image.');
+      } else if (primaryCount !== 1) {
+        errors.push('Active product must have exactly one primary image.');
+      }
     }
+  }
+
+  // Specifications
+  let sanitizedSpecs = undefined;
+  if (specifications !== undefined) {
+    sanitizedSpecs = Array.isArray(specifications) ? specifications : [];
+  }
+
+  // Tags
+  let sanitizedTags = undefined;
+  if (tags !== undefined) {
+    sanitizedTags = Array.isArray(tags) ? tags.map((t) => String(t).trim().toLowerCase()) : [];
   }
 
   // 3D Model Metadata Validation (Optional Phase 15)
@@ -226,28 +260,56 @@ export const validateProductInput = (data = {}, isPublishing = false) => {
     }
   }
 
+  const sanitized = {};
+  if (name !== undefined) sanitized.name = name.trim();
+  else if (!isUpdate) sanitized.name = '';
+
+  if (slug !== undefined && slug !== null && slug !== '') sanitized.slug = slug.trim().toLowerCase();
+
+  if (brand !== undefined) sanitized.brand = brand.trim();
+  else if (!isUpdate) sanitized.brand = '';
+
+  if (description !== undefined) sanitized.description = description.trim();
+  else if (!isUpdate) sanitized.description = '';
+
+  if (shortDescription !== undefined) sanitized.shortDescription = String(shortDescription).trim();
+  else if (!isUpdate) sanitized.shortDescription = '';
+
+  if (category !== undefined) sanitized.category = new mongoose.Types.ObjectId(category);
+
+  if (gender !== undefined) sanitized.gender = gender;
+  else if (!isUpdate) sanitized.gender = 'UNISEX';
+
+  if (sanitizedImages !== undefined) sanitized.images = sanitizedImages;
+  else if (!isUpdate) sanitized.images = [];
+
+  if (sanitizedSpecs !== undefined) sanitized.specifications = sanitizedSpecs;
+  else if (!isUpdate) sanitized.specifications = [];
+
+  if (sanitizedVariants !== undefined) sanitized.variants = sanitizedVariants;
+  else if (!isUpdate) sanitized.variants = [];
+
+  if (targetStatus !== undefined) sanitized.status = targetStatus;
+
+  if (isFeatured !== undefined) sanitized.isFeatured = Boolean(isFeatured);
+  else if (!isUpdate) sanitized.isFeatured = false;
+
+  if (isNewArrival !== undefined) sanitized.isNewArrival = Boolean(isNewArrival);
+  else if (!isUpdate) sanitized.isNewArrival = false;
+
+  if (isBestseller !== undefined) sanitized.isBestseller = Boolean(isBestseller);
+  else if (!isUpdate) sanitized.isBestseller = false;
+
+  if (sanitizedTags !== undefined) sanitized.tags = sanitizedTags;
+  else if (!isUpdate) sanitized.tags = [];
+
+  if (seo !== undefined && typeof seo === 'object') sanitized.seo = seo;
+  if (sanitizedModel3d !== undefined) sanitized.model3d = sanitizedModel3d;
+
   return {
     isValid: errors.length === 0,
     errors,
-    sanitized: {
-      name: name ? name.trim() : '',
-      slug: slug ? slug.trim().toLowerCase() : undefined,
-      brand: brand ? brand.trim() : '',
-      description: description ? description.trim() : '',
-      shortDescription: shortDescription ? String(shortDescription).trim() : '',
-      category: category ? new mongoose.Types.ObjectId(category) : undefined,
-      gender: gender || 'UNISEX',
-      images: sanitizedImages,
-      specifications: Array.isArray(specifications) ? specifications : [],
-      variants: sanitizedVariants,
-      status: targetStatus,
-      isFeatured: Boolean(isFeatured),
-      isNewArrival: Boolean(isNewArrival),
-      isBestseller: Boolean(isBestseller),
-      tags: Array.isArray(tags) ? tags.map((t) => String(t).trim().toLowerCase()) : [],
-      seo: seo && typeof seo === 'object' ? seo : undefined,
-      ...(sanitizedModel3d !== undefined ? { model3d: sanitizedModel3d } : {}),
-    },
+    sanitized,
   };
 };
 

@@ -1,0 +1,307 @@
+{
+  "priceSummary": {
+    "minPrice": 2499,
+    "maxPrice": 2499,
+    "minMrp": 3999,
+    "maxMrp": 3999,
+    "maxDiscountPercent": 38,
+    "hasStock": true,
+    "totalStock": 74
+  },
+  "ratings": {
+    "average": 0,
+    "count": 0
+  },
+  "seo": {
+    "keywords": []
+  },
+  "model3d": {
+    "url": null,
+    "format": null,
+    "posterUrl": null,
+    "enabled": false
+  },
+  "_id": "6ac6539e1301d7776aa391b1",
+  "name": "Vanta Retro Runner Sneakers",
+  "slug": "vanta-retro-runner-sneakers",
+  "brand": "Vanta",
+  "description": "A retro-inspired everyday sneaker featuring layered panels, a cushioned footbed and a clean contemporary profile. Designed for casual city wear.",
+  "shortDescription": "Retro runner sneakers featuring layered tonal paneling and cushioned EVA sole.",
+  "category": "6ac6539c1301d7776aa39144",
+  "categoryTree": [
+    "6ac6505bf53283f8117c4478",
+    "6ac6539c1301d7776aa39144"
+  ],
+  "gender": "UNISEX",
+  "images": [
+    {
+      "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+      "publicId": "luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi",
+      "width": 1145,
+      "height": 1374,
+      "format": "jpg",
+      "bytes": 123018,
+      "alt": "White / Black - Front View",
+      "isPrimary": true,
+      "displayOrder": 0,
+      "color": "White / Black",
+      "_id": "6aca1998831a4a731cd81529"
+    },
+    {
+      "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+      "publicId": "luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb",
+      "width": 1312,
+      "height": 1199,
+      "format": "jpg",
+      "bytes": 137458,
+      "alt": "White / Black - Front View",
+      "isPrimary": false,
+      "displayOrder": 1,
+      "color": "White / Black",
+      "_id": "6aca1999831a4a731cd8152a"
+    },
+    {
+      "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg",
+      "publicId": "luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm",
+      "width": 1312,
+      "height": 1199,
+      "format": "jpg",
+      "bytes": 207279,
+      "alt": "White / Black - Back View",
+      "isPrimary": false,
+      "displayOrder": 2,
+      "color": "White / Black",
+      "_id": "6aca199a831a4a731cd8152b"
+    }
+  ],
+  "specifications": [
+    {
+      "name": "Upper Material",
+      "value": "Synthetic Suede, Vegan Leather & Breathable Mesh"
+    },
+    {
+      "name": "Sole",
+      "value": "Lightweight Cushioned EVA with Rubber Grip"
+    },
+    {
+      "name": "Closure",
+      "value": "Lace-Up"
+    },
+    {
+      "name": "Toe Shape",
+      "value": "Round Toe"
+    },
+    {
+      "name": "Country of Origin",
+      "value": "India"
+    }
+  ],
+  "variants": [
+    {
+      "attributes": {
+        "color": {
+          "name": "White / Black",
+          "hex": "#FFFFFF"
+        },
+        "size": "6",
+        "custom": {}
+      },
+      "inventory": {
+        "stock": 12,
+        "reserved": 0,
+        "lowStockThreshold": 5
+      },
+      "dimensionsInCm": {
+        "length": 30,
+        "width": 25,
+        "height": 3
+      },
+      "sku": "VAN-RUN-001-WBK-6",
+      "barcode": null,
+      "price": 2499,
+      "mrp": 3999,
+      "weightInGrams": 280,
+      "images": [
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+      ],
+      "isActive": true,
+      "_id": "6ac838112e9c8d3d83c2a95c"
+    },
+    {
+      "attributes": {
+        "color": {
+          "name": "White / Black",
+          "hex": "#FFFFFF"
+        },
+        "size": "7",
+        "custom": {}
+      },
+      "inventory": {
+        "stock": 12,
+        "reserved": 0,
+        "lowStockThreshold": 5
+      },
+      "dimensionsInCm": {
+        "length": 30,
+        "width": 25,
+        "height": 3
+      },
+      "sku": "VAN-RUN-001-WBK-7",
+      "barcode": null,
+      "price": 2499,
+      "mrp": 3999,
+      "weightInGrams": 280,
+      "images": [
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+      ],
+      "isActive": true,
+      "_id": "6ac838112e9c8d3d83c2a95d"
+    },
+    {
+      "attributes": {
+        "color": {
+          "name": "White / Black",
+          "hex": "#FFFFFF"
+        },
+        "size": "8",
+        "custom": {}
+      },
+      "inventory": {
+        "stock": 12,
+        "reserved": 0,
+        "lowStockThreshold": 5
+      },
+      "dimensionsInCm": {
+        "length": 30,
+        "width": 25,
+        "height": 3
+      },
+      "sku": "VAN-RUN-001-WBK-8",
+      "barcode": null,
+      "price": 2499,
+      "mrp": 3999,
+      "weightInGrams": 280,
+      "images": [
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+      ],
+      "isActive": true,
+      "_id": "6ac838112e9c8d3d83c2a95e"
+    },
+    {
+      "attributes": {
+        "color": {
+          "name": "White / Black",
+          "hex": "#FFFFFF"
+        },
+        "size": "9",
+        "custom": {}
+      },
+      "inventory": {
+        "stock": 12,
+        "reserved": 0,
+        "lowStockThreshold": 5
+      },
+      "dimensionsInCm": {
+        "length": 30,
+        "width": 25,
+        "height": 3
+      },
+      "sku": "VAN-RUN-001-WBK-9",
+      "barcode": null,
+      "price": 2499,
+      "mrp": 3999,
+      "weightInGrams": 280,
+      "images": [
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+      ],
+      "isActive": true,
+      "_id": "6ac838112e9c8d3d83c2a95f"
+    },
+    {
+      "attributes": {
+        "color": {
+          "name": "White / Black",
+          "hex": "#FFFFFF"
+        },
+        "size": "10",
+        "custom": {}
+      },
+      "inventory": {
+        "stock": 13,
+        "reserved": 0,
+        "lowStockThreshold": 5
+      },
+      "dimensionsInCm": {
+        "length": 30,
+        "width": 25,
+        "height": 3
+      },
+      "sku": "VAN-RUN-001-WBK-10",
+      "barcode": null,
+      "price": 2499,
+      "mrp": 3999,
+      "weightInGrams": 280,
+      "images": [
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+      ],
+      "isActive": true,
+      "_id": "6ac838112e9c8d3d83c2a960"
+    },
+    {
+      "attributes": {
+        "color": {
+          "name": "White / Black",
+          "hex": "#FFFFFF"
+        },
+        "size": "11",
+        "custom": {}
+      },
+      "inventory": {
+        "stock": 13,
+        "reserved": 0,
+        "lowStockThreshold": 5
+      },
+      "dimensionsInCm": {
+        "length": 30,
+        "width": 25,
+        "height": 3
+      },
+      "sku": "VAN-RUN-001-WBK-11",
+      "barcode": null,
+      "price": 2499,
+      "mrp": 3999,
+      "weightInGrams": 280,
+      "images": [
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+        "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+      ],
+      "isActive": true,
+      "_id": "6ac838112e9c8d3d83c2a961"
+    }
+  ],
+  "status": "DRAFT",
+  "isFeatured": false,
+  "isNewArrival": true,
+  "isBestseller": false,
+  "tags": [
+    "sneakers",
+    "runners",
+    "streetwear",
+    "casual",
+    "lifestyle"
+  ],
+  "createdAt": "2026-10-07T14:13:50.398Z",
+  "updatedAt": "2026-10-10T10:55:22.887Z",
+  "__v": 3
+}

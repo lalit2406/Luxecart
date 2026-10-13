@@ -1,0 +1,1211 @@
+[
+  {
+    "priceSummary": {
+      "minPrice": 899,
+      "maxPrice": 899,
+      "minMrp": 1499,
+      "maxMrp": 1499,
+      "maxDiscountPercent": 40,
+      "hasStock": true,
+      "totalStock": 306
+    },
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "_id": "6ac6539d1301d7776aa3918b",
+    "name": "Miraé Ribbed Knit Top",
+    "slug": "mirae-ribbed-knit-top",
+    "brand": "Miraé",
+    "description": "A soft ribbed knit top with a clean fitted silhouette and versatile neckline. Designed to pair effortlessly with denim, tailored trousers and skirts.",
+    "shortDescription": "Soft stretch ribbed knit top tailored with a clean fitted profile and versatile crew neckline.",
+    "category": "6ac6505bf53283f8117c447b",
+    "categoryTree": [
+      "6ac6505bf53283f8117c447b"
+    ],
+    "gender": "WOMEN",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565622/luxecart/products/mirae-ribbed-knit-top/cxmwkdtgqrqam3scgfc6.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Black - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 0,
+        "color": "Black",
+        "_id": "6aca0cd14ab59d65a89fb3f1"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565621/luxecart/products/mirae-ribbed-knit-top/amy7newf8khkv2eoxmrk.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Black - Back View",
+        "isPrimary": false,
+        "displayOrder": 1,
+        "color": "Black",
+        "_id": "6aca0cd14ab59d65a89fb3f0"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565619/luxecart/products/mirae-ribbed-knit-top/cg5pd4ntzymtgtt76dlv.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Black - Front View",
+        "isPrimary": false,
+        "displayOrder": 2,
+        "color": "Black",
+        "_id": "6aca0cd14ab59d65a89fb3ef"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565258/luxecart/products/mirae-ribbed-knit-top/snodqtlal9ff5pghqwpg.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Mocha - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 3,
+        "color": "Mocha",
+        "_id": "6aca0cd14ab59d65a89fb3ee"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565256/luxecart/products/mirae-ribbed-knit-top/obkgez9c7sbrt3irmzrb.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Mocha - Back View",
+        "isPrimary": false,
+        "displayOrder": 4,
+        "color": "Mocha",
+        "_id": "6aca0cd14ab59d65a89fb3ed"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565254/luxecart/products/mirae-ribbed-knit-top/n59lykkv7wzhyg0c1zpv.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Mocha - Front View",
+        "isPrimary": false,
+        "displayOrder": 5,
+        "color": "Mocha",
+        "_id": "6aca0cd14ab59d65a89fb3ec"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791564153/luxecart/products/mirae-ribbed-knit-top/llnvqqjbmdrogdj60po5.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Cream - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 6,
+        "color": "Cream",
+        "_id": "6aca0cd14ab59d65a89fb3eb"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791564149/luxecart/products/mirae-ribbed-knit-top/uskmnnag16arwwcc8h2x.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Cream - Back View",
+        "isPrimary": false,
+        "displayOrder": 7,
+        "color": "Cream",
+        "_id": "6aca0cd14ab59d65a89fb3ea"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791564146/luxecart/products/mirae-ribbed-knit-top/mb6rfjvgo6xbfyg6vrep.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Cream - Front View",
+        "isPrimary": true,
+        "displayOrder": 8,
+        "color": "Cream",
+        "_id": "6aca0cd14ab59d65a89fb3e9"
+      }
+    ],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "80% Viscose, 20% Nylon Ribbed Knit"
+      },
+      {
+        "name": "Fit",
+        "value": "Fitted"
+      },
+      {
+        "name": "Neckline",
+        "value": "Jewel Crew Neck"
+      },
+      {
+        "name": "Sleeve",
+        "value": "Elbow Length"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "attributes": {
+          "color": {
+            "name": "Cream",
+            "hex": "#FFFDD0"
+          },
+          "size": "XS",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 21,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-CRM-XS",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564146/luxecart/products/mirae-ribbed-knit-top/mb6rfjvgo6xbfyg6vrep.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564149/luxecart/products/mirae-ribbed-knit-top/uskmnnag16arwwcc8h2x.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564153/luxecart/products/mirae-ribbed-knit-top/llnvqqjbmdrogdj60po5.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad24"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Cream",
+            "hex": "#FFFDD0"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-CRM-S",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564146/luxecart/products/mirae-ribbed-knit-top/mb6rfjvgo6xbfyg6vrep.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564149/luxecart/products/mirae-ribbed-knit-top/uskmnnag16arwwcc8h2x.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564153/luxecart/products/mirae-ribbed-knit-top/llnvqqjbmdrogdj60po5.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad25"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Cream",
+            "hex": "#FFFDD0"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-CRM-M",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564146/luxecart/products/mirae-ribbed-knit-top/mb6rfjvgo6xbfyg6vrep.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564149/luxecart/products/mirae-ribbed-knit-top/uskmnnag16arwwcc8h2x.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564153/luxecart/products/mirae-ribbed-knit-top/llnvqqjbmdrogdj60po5.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad26"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Cream",
+            "hex": "#FFFDD0"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-CRM-L",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564146/luxecart/products/mirae-ribbed-knit-top/mb6rfjvgo6xbfyg6vrep.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564149/luxecart/products/mirae-ribbed-knit-top/uskmnnag16arwwcc8h2x.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564153/luxecart/products/mirae-ribbed-knit-top/llnvqqjbmdrogdj60po5.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad27"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Cream",
+            "hex": "#FFFDD0"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 21,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-CRM-XL",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564146/luxecart/products/mirae-ribbed-knit-top/mb6rfjvgo6xbfyg6vrep.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564149/luxecart/products/mirae-ribbed-knit-top/uskmnnag16arwwcc8h2x.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791564153/luxecart/products/mirae-ribbed-knit-top/llnvqqjbmdrogdj60po5.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad28"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Mocha",
+            "hex": "#493829"
+          },
+          "size": "XS",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 21,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-MCH-XS",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565254/luxecart/products/mirae-ribbed-knit-top/n59lykkv7wzhyg0c1zpv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565256/luxecart/products/mirae-ribbed-knit-top/obkgez9c7sbrt3irmzrb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565258/luxecart/products/mirae-ribbed-knit-top/snodqtlal9ff5pghqwpg.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad29"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Mocha",
+            "hex": "#493829"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-MCH-S",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565254/luxecart/products/mirae-ribbed-knit-top/n59lykkv7wzhyg0c1zpv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565256/luxecart/products/mirae-ribbed-knit-top/obkgez9c7sbrt3irmzrb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565258/luxecart/products/mirae-ribbed-knit-top/snodqtlal9ff5pghqwpg.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad2a"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Mocha",
+            "hex": "#493829"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-MCH-M",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565254/luxecart/products/mirae-ribbed-knit-top/n59lykkv7wzhyg0c1zpv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565256/luxecart/products/mirae-ribbed-knit-top/obkgez9c7sbrt3irmzrb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565258/luxecart/products/mirae-ribbed-knit-top/snodqtlal9ff5pghqwpg.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad2b"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Mocha",
+            "hex": "#493829"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-MCH-L",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565254/luxecart/products/mirae-ribbed-knit-top/n59lykkv7wzhyg0c1zpv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565256/luxecart/products/mirae-ribbed-knit-top/obkgez9c7sbrt3irmzrb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565258/luxecart/products/mirae-ribbed-knit-top/snodqtlal9ff5pghqwpg.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad2c"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Mocha",
+            "hex": "#493829"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 21,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-MCH-XL",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565254/luxecart/products/mirae-ribbed-knit-top/n59lykkv7wzhyg0c1zpv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565256/luxecart/products/mirae-ribbed-knit-top/obkgez9c7sbrt3irmzrb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565258/luxecart/products/mirae-ribbed-knit-top/snodqtlal9ff5pghqwpg.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad2d"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "XS",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 21,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-BLK-XS",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565619/luxecart/products/mirae-ribbed-knit-top/cg5pd4ntzymtgtt76dlv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565621/luxecart/products/mirae-ribbed-knit-top/amy7newf8khkv2eoxmrk.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565622/luxecart/products/mirae-ribbed-knit-top/cxmwkdtgqrqam3scgfc6.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad2e"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-BLK-S",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565619/luxecart/products/mirae-ribbed-knit-top/cg5pd4ntzymtgtt76dlv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565621/luxecart/products/mirae-ribbed-knit-top/amy7newf8khkv2eoxmrk.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565622/luxecart/products/mirae-ribbed-knit-top/cxmwkdtgqrqam3scgfc6.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad2f"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-BLK-M",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565619/luxecart/products/mirae-ribbed-knit-top/cg5pd4ntzymtgtt76dlv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565621/luxecart/products/mirae-ribbed-knit-top/amy7newf8khkv2eoxmrk.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565622/luxecart/products/mirae-ribbed-knit-top/cxmwkdtgqrqam3scgfc6.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad30"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-BLK-L",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565619/luxecart/products/mirae-ribbed-knit-top/cg5pd4ntzymtgtt76dlv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565621/luxecart/products/mirae-ribbed-knit-top/amy7newf8khkv2eoxmrk.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565622/luxecart/products/mirae-ribbed-knit-top/cxmwkdtgqrqam3scgfc6.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad31"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 21,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "MIR-TOP-001-BLK-XL",
+        "barcode": null,
+        "price": 899,
+        "mrp": 1499,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565619/luxecart/products/mirae-ribbed-knit-top/cg5pd4ntzymtgtt76dlv.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565621/luxecart/products/mirae-ribbed-knit-top/amy7newf8khkv2eoxmrk.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791565622/luxecart/products/mirae-ribbed-knit-top/cxmwkdtgqrqam3scgfc6.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1278ecf7b8bded79ad32"
+      }
+    ],
+    "status": "ACTIVE",
+    "isFeatured": false,
+    "isNewArrival": false,
+    "isBestseller": false,
+    "tags": [
+      "ribbed",
+      "knit",
+      "top",
+      "minimal",
+      "casual"
+    ],
+    "createdAt": "2026-10-07T14:13:49.895Z",
+    "updatedAt": "2026-10-10T12:27:29.285Z",
+    "__v": 23
+  },
+  {
+    "priceSummary": {
+      "minPrice": 2499,
+      "maxPrice": 2499,
+      "minMrp": 3999,
+      "maxMrp": 3999,
+      "maxDiscountPercent": 38,
+      "hasStock": true,
+      "totalStock": 74
+    },
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "_id": "6ac6539e1301d7776aa391b1",
+    "name": "Vanta Retro Runner Sneakers",
+    "slug": "vanta-retro-runner-sneakers",
+    "brand": "Vanta",
+    "description": "A retro-inspired everyday sneaker featuring layered panels, a cushioned footbed and a clean contemporary profile. Designed for casual city wear.",
+    "shortDescription": "Retro runner sneakers featuring layered tonal paneling and cushioned EVA sole.",
+    "category": "6ac6505bf53283f8117c4478",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4478"
+    ],
+    "gender": "UNISEX",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+        "publicId": "luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi",
+        "width": 1145,
+        "height": 1374,
+        "format": "jpg",
+        "bytes": 123018,
+        "alt": "White - Front View",
+        "isPrimary": true,
+        "displayOrder": 0,
+        "color": "White",
+        "_id": "6aca1998831a4a731cd81529"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+        "publicId": "luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb",
+        "width": 1312,
+        "height": 1199,
+        "format": "jpg",
+        "bytes": 137458,
+        "alt": "White - Front View",
+        "isPrimary": false,
+        "displayOrder": 1,
+        "color": "White",
+        "_id": "6aca1999831a4a731cd8152a"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg",
+        "publicId": "luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm",
+        "width": 1312,
+        "height": 1199,
+        "format": "jpg",
+        "bytes": 207279,
+        "alt": "White - Back View",
+        "isPrimary": false,
+        "displayOrder": 2,
+        "color": "White",
+        "_id": "6aca199a831a4a731cd8152b"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791630789/luxecart/products/vanta-retro-runner-sneakers/i1p4wbq8cl9iz2orafsx.jpg",
+        "publicId": "luxecart/products/vanta-retro-runner-sneakers/i1p4wbq8cl9iz2orafsx",
+        "width": 1145,
+        "height": 1374,
+        "format": "jpg",
+        "bytes": 133203,
+        "alt": "Black - Front View",
+        "isPrimary": false,
+        "displayOrder": 3,
+        "color": "Black",
+        "_id": "6aca1dc70ec5db030da30411"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791630790/luxecart/products/vanta-retro-runner-sneakers/yhbgci3syfqt5lrlkded.jpg",
+        "publicId": "luxecart/products/vanta-retro-runner-sneakers/yhbgci3syfqt5lrlkded",
+        "width": 1312,
+        "height": 1199,
+        "format": "jpg",
+        "bytes": 160174,
+        "alt": "Black - Front View",
+        "isPrimary": false,
+        "displayOrder": 4,
+        "color": "Black",
+        "_id": "6aca1dc80ec5db030da30412"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791630792/luxecart/products/vanta-retro-runner-sneakers/f8bhbinse0w8lowidlld.jpg",
+        "publicId": "luxecart/products/vanta-retro-runner-sneakers/f8bhbinse0w8lowidlld",
+        "width": 1312,
+        "height": 1199,
+        "format": "jpg",
+        "bytes": 277588,
+        "alt": "Black - Back View",
+        "isPrimary": false,
+        "displayOrder": 5,
+        "color": "Black",
+        "_id": "6aca1dca0ec5db030da30413"
+      }
+    ],
+    "specifications": [
+      {
+        "name": "Upper Material",
+        "value": "Synthetic Suede, Vegan Leather & Breathable Mesh"
+      },
+      {
+        "name": "Sole",
+        "value": "Lightweight Cushioned EVA with Rubber Grip"
+      },
+      {
+        "name": "Closure",
+        "value": "Lace-Up"
+      },
+      {
+        "name": "Toe Shape",
+        "value": "Round Toe"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "attributes": {
+          "color": {
+            "name": "White",
+            "hex": "#FFFFFF"
+          },
+          "size": "6",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-WHT-6",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99ca"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "White",
+            "hex": "#FFFFFF"
+          },
+          "size": "7",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-WHT-7",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99cb"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "White",
+            "hex": "#FFFFFF"
+          },
+          "size": "8",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-WHT-8",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99cc"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "White",
+            "hex": "#FFFFFF"
+          },
+          "size": "9",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-WHT-9",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99cd"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "White",
+            "hex": "#FFFFFF"
+          },
+          "size": "10",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 13,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-WHT-10",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99ce"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "White",
+            "hex": "#FFFFFF"
+          },
+          "size": "11",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 13,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-WHT-11",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629718/luxecart/products/vanta-retro-runner-sneakers/bntp3g1xmmjwgfrqhwwi.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629719/luxecart/products/vanta-retro-runner-sneakers/g5kc153r9kdpn39cpplb.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791629721/luxecart/products/vanta-retro-runner-sneakers/glreqluzrp3cpdyfufcm.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99cf"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "6",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 0,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-BLK-6",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630789/luxecart/products/vanta-retro-runner-sneakers/i1p4wbq8cl9iz2orafsx.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630790/luxecart/products/vanta-retro-runner-sneakers/yhbgci3syfqt5lrlkded.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630792/luxecart/products/vanta-retro-runner-sneakers/f8bhbinse0w8lowidlld.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99d0"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "7",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 0,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-BLK-7",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630789/luxecart/products/vanta-retro-runner-sneakers/i1p4wbq8cl9iz2orafsx.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630790/luxecart/products/vanta-retro-runner-sneakers/yhbgci3syfqt5lrlkded.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630792/luxecart/products/vanta-retro-runner-sneakers/f8bhbinse0w8lowidlld.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99d1"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "8",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 0,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-BLK-8",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630789/luxecart/products/vanta-retro-runner-sneakers/i1p4wbq8cl9iz2orafsx.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630790/luxecart/products/vanta-retro-runner-sneakers/yhbgci3syfqt5lrlkded.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630792/luxecart/products/vanta-retro-runner-sneakers/f8bhbinse0w8lowidlld.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99d2"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "9",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 0,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-BLK-9",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630789/luxecart/products/vanta-retro-runner-sneakers/i1p4wbq8cl9iz2orafsx.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630790/luxecart/products/vanta-retro-runner-sneakers/yhbgci3syfqt5lrlkded.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630792/luxecart/products/vanta-retro-runner-sneakers/f8bhbinse0w8lowidlld.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99d3"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "10",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 0,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-BLK-10",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630789/luxecart/products/vanta-retro-runner-sneakers/i1p4wbq8cl9iz2orafsx.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630790/luxecart/products/vanta-retro-runner-sneakers/yhbgci3syfqt5lrlkded.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630792/luxecart/products/vanta-retro-runner-sneakers/f8bhbinse0w8lowidlld.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99d4"
+      },
+      {
+        "attributes": {
+          "color": {
+            "name": "Black",
+            "hex": "#000000"
+          },
+          "size": "11",
+          "custom": {}
+        },
+        "inventory": {
+          "stock": 0,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "sku": "VAN-RUN-001-BLK-11",
+        "barcode": null,
+        "price": 2499,
+        "mrp": 3999,
+        "weightInGrams": 280,
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630789/luxecart/products/vanta-retro-runner-sneakers/i1p4wbq8cl9iz2orafsx.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630790/luxecart/products/vanta-retro-runner-sneakers/yhbgci3syfqt5lrlkded.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791630792/luxecart/products/vanta-retro-runner-sneakers/f8bhbinse0w8lowidlld.jpg"
+        ],
+        "isActive": true,
+        "_id": "6aca1b2e5f7df6c1500f99d5"
+      }
+    ],
+    "status": "ACTIVE",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "sneakers",
+      "runners",
+      "streetwear",
+      "casual",
+      "lifestyle"
+    ],
+    "createdAt": "2026-10-07T14:13:50.398Z",
+    "updatedAt": "2026-10-10T12:27:29.480Z",
+    "__v": 10
+  }
+]

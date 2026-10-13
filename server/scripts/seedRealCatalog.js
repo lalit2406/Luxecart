@@ -388,10 +388,11 @@ const PRODUCTS_DATA = [
     price: 2499,
     mrp: 3999,
     colors: [
-      { code: 'WBK', name: 'White / Black', hex: '#FFFFFF' },
+      { code: 'WHT', name: 'White', hex: '#FFFFFF' },
+      { code: 'BLK', name: 'Black', hex: '#000000' },
     ],
     sizes: ['6', '7', '8', '9', '10', '11'],
-    skuGenerator: (col, sz) => `VAN-RUN-001-WBK-${sz}`,
+    skuGenerator: (col, sz) => `VAN-RUN-001-${col}-${sz}`,
     baseStock: 12,
   },
 

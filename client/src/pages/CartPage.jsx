@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import { useCart } from '../features/cart/context/CartContext';
 import { couponApi } from '../features/coupons/api/couponApi';
 import CouponInput from '../components/coupons/CouponInput';
+import { LUXE_PLACEHOLDER_IMAGE } from '../utils/image';
 import {
   ShoppingBag,
   Trash2,
@@ -145,7 +146,7 @@ export default function CartPage() {
                     {/* Item Image */}
                     <div className="w-20 h-24 sm:w-28 sm:h-36 rounded-2xl bg-[#F7F3EE] border border-[#E7DED5] overflow-hidden shrink-0 relative">
                       <img
-                        src={item.image || 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=300'}
+                        src={item.image || LUXE_PLACEHOLDER_IMAGE}
                         alt={item.name}
                         className="w-full h-full object-cover object-center"
                       />

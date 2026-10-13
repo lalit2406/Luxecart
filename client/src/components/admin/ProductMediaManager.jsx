@@ -111,6 +111,7 @@ export default function ProductMediaManager({ productId, images = [], variants =
       formData.append('color', selectedColorForUpload);
     }
     stagedFiles.forEach((item) => {
+      formData.append('alts', item.alt);
       formData.append('alts[]', item.alt);
     });
 
@@ -137,7 +138,8 @@ export default function ProductMediaManager({ productId, images = [], variants =
       }
       setTimeout(() => setSuccess(null), 4000);
     } catch (err) {
-      setError(err.message || 'Failed to upload images');
+      const errorMsg = err.response?.data?.message || err.message || 'Failed to upload images';
+      setError(errorMsg);
     } finally {
       setUploading(false);
       setUploadProgress(0);

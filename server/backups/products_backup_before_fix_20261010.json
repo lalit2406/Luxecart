@@ -1,0 +1,3801 @@
+[
+  {
+    "_id": "6ac6539c1301d7776aa3914a",
+    "name": "Aurelio Essential Oversized T-Shirt",
+    "slug": "aurelio-essential-oversized-t-shirt",
+    "brand": "Aurelio",
+    "description": "A heavyweight cotton oversized T-shirt designed with a relaxed silhouette, dropped shoulders and a clean minimal finish. The versatile shape works equally well with denim, trousers or relaxed shorts.",
+    "shortDescription": "Heavyweight cotton oversized tee with dropped shoulders and a relaxed streetwear silhouette.",
+    "category": "6ac6539b1301d7776aa3913c",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4476",
+      "6ac6539b1301d7776aa3913b",
+      "6ac6539b1301d7776aa3913c"
+    ],
+    "gender": "MEN",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791520958/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-front.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-front",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 91985,
+        "alt": "Aurelio Essential Oversized T-Shirt - Jet Black Front View",
+        "isPrimary": true,
+        "displayOrder": 0,
+        "color": "Jet Black",
+        "_id": "6ac870bf13551ed1ecfb74b6"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791520959/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-back.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-back",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 85724,
+        "alt": "Aurelio Essential Oversized T-Shirt - Jet Black Back View",
+        "isPrimary": false,
+        "displayOrder": 1,
+        "color": "Jet Black",
+        "_id": "6ac870c013551ed1ecfb74b7"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791520961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-side.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-side",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 79540,
+        "alt": "Aurelio Essential Oversized T-Shirt - Jet Black Side Profile",
+        "isPrimary": false,
+        "displayOrder": 2,
+        "color": "Jet Black",
+        "_id": "6ac870c213551ed1ecfb74b8"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791520962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-detail.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-detail",
+        "width": 1312,
+        "height": 1199,
+        "format": "jpg",
+        "bytes": 190364,
+        "alt": "Aurelio Essential Oversized T-Shirt - Jet Black Collar & Stitching Detail",
+        "isPrimary": false,
+        "displayOrder": 3,
+        "color": "Jet Black",
+        "_id": "6ac870c313551ed1ecfb74b9"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791520963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-editorial.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-editorial",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 146143,
+        "alt": "Aurelio Essential Oversized T-Shirt - Jet Black Editorial Look",
+        "isPrimary": false,
+        "displayOrder": 4,
+        "color": "Jet Black",
+        "_id": "6ac870c413551ed1ecfb74ba"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791522961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-front.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-front",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 91030,
+        "alt": "Aurelio Essential Oversized T-Shirt - Off White Front View",
+        "isPrimary": false,
+        "displayOrder": 5,
+        "color": "Off White",
+        "_id": "6ac87892e911878938c3a7c5"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791522962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-back.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-back",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 87897,
+        "alt": "Aurelio Essential Oversized T-Shirt - Off White Back View",
+        "isPrimary": false,
+        "displayOrder": 6,
+        "color": "Off White",
+        "_id": "6ac87893e911878938c3a7c6"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791522963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-side.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-side",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 73524,
+        "alt": "Aurelio Essential Oversized T-Shirt - Off White Side Profile",
+        "isPrimary": false,
+        "displayOrder": 7,
+        "color": "Off White",
+        "_id": "6ac87894e911878938c3a7c7"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791522965/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-detail.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-detail",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 181221,
+        "alt": "Aurelio Essential Oversized T-Shirt - Off White Collar & Fabric Detail",
+        "isPrimary": false,
+        "displayOrder": 8,
+        "color": "Off White",
+        "_id": "6ac87895e911878938c3a7c8"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791522966/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-editorial.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-editorial",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 124115,
+        "alt": "Aurelio Essential Oversized T-Shirt - Off White Editorial Look",
+        "isPrimary": false,
+        "displayOrder": 9,
+        "color": "Off White",
+        "_id": "6ac87897e911878938c3a7c9"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791525593/luxecart/products/aurelio-essential-oversized-t-shirt/itebkilcdorytmilm2r2.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-t-shirt/itebkilcdorytmilm2r2",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 106342,
+        "alt": "Stone Grey - Front View",
+        "isPrimary": false,
+        "displayOrder": 10,
+        "color": "Stone Grey",
+        "_id": "6ac882da823789a768529838"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791525594/luxecart/products/aurelio-essential-oversized-t-shirt/nwel0avtckxwdosvow6u.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-t-shirt/nwel0avtckxwdosvow6u",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 102458,
+        "alt": "Stone Grey - Back View",
+        "isPrimary": false,
+        "displayOrder": 11,
+        "color": "Stone Grey",
+        "_id": "6ac882db823789a768529839"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791525596/luxecart/products/aurelio-essential-oversized-t-shirt/phq6g4hikla9oedptu9l.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-t-shirt/phq6g4hikla9oedptu9l",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 92276,
+        "alt": "Stone Grey - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 12,
+        "color": "Stone Grey",
+        "_id": "6ac882dc823789a76852983a"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791525598/luxecart/products/aurelio-essential-oversized-t-shirt/yf26ydxbubm8th7t48op.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-t-shirt/yf26ydxbubm8th7t48op",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 361026,
+        "alt": "Stone Grey - Detail / Texture",
+        "isPrimary": false,
+        "displayOrder": 13,
+        "color": "Stone Grey",
+        "_id": "6ac882df823789a76852983b"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791525706/luxecart/products/aurelio-essential-oversized-t-shirt/wizgrha5ni0asp0nncv8.jpg",
+        "publicId": "luxecart/products/aurelio-essential-oversized-t-shirt/wizgrha5ni0asp0nncv8",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 145999,
+        "alt": "Stone Grey - Front View",
+        "isPrimary": false,
+        "displayOrder": 14,
+        "color": "Stone Grey",
+        "_id": "6ac8834a823789a768529945"
+      }
+    ],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "Heavyweight cotton (240 GSM)"
+      },
+      {
+        "name": "Fit",
+        "value": "Oversized Relaxed"
+      },
+      {
+        "name": "Neckline",
+        "value": "Ribbed Crew Neck"
+      },
+      {
+        "name": "Sleeve",
+        "value": "Half Sleeve"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "sku": "AUR-TEE-001-BLK-S",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Jet Black",
+            "hex": "#0A0A0A"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520958/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520959/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8a7"
+      },
+      {
+        "sku": "AUR-TEE-001-BLK-M",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Jet Black",
+            "hex": "#0A0A0A"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520958/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520959/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8a8"
+      },
+      {
+        "sku": "AUR-TEE-001-BLK-L",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Jet Black",
+            "hex": "#0A0A0A"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520958/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520959/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8a9"
+      },
+      {
+        "sku": "AUR-TEE-001-BLK-XL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Jet Black",
+            "hex": "#0A0A0A"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 19,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520958/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520959/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8aa"
+      },
+      {
+        "sku": "AUR-TEE-001-BLK-XXL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Jet Black",
+            "hex": "#0A0A0A"
+          },
+          "size": "XXL",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520958/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520959/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791520963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-jet-black-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8ab"
+      },
+      {
+        "sku": "AUR-TEE-001-WHT-S",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Off White",
+            "hex": "#FAF9F6"
+          },
+          "size": "S"
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 250,
+        "dimensionsInCm": {
+          "length": 0,
+          "width": 0,
+          "height": 0
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522965/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522966/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8ac"
+      },
+      {
+        "sku": "AUR-TEE-001-WHT-M",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Off White",
+            "hex": "#FAF9F6"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522965/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522966/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8ad"
+      },
+      {
+        "sku": "AUR-TEE-001-WHT-L",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Off White",
+            "hex": "#FAF9F6"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522965/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522966/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8ae"
+      },
+      {
+        "sku": "AUR-TEE-001-WHT-XL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Off White",
+            "hex": "#FAF9F6"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 19,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522965/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522966/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8af"
+      },
+      {
+        "sku": "AUR-TEE-001-WHT-XXL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Off White",
+            "hex": "#FAF9F6"
+          },
+          "size": "XXL",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522961/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-front.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522962/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-back.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522963/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-side.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522965/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-detail.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791522966/luxecart/products/aurelio-essential-oversized-tshirt/aurelio-essential-oversized-tshirt-off-white-editorial.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8b0"
+      },
+      {
+        "sku": "AUR-TEE-001-GRY-S",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Stone Grey",
+            "hex": "#878787"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525593/luxecart/products/aurelio-essential-oversized-t-shirt/itebkilcdorytmilm2r2.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525594/luxecart/products/aurelio-essential-oversized-t-shirt/nwel0avtckxwdosvow6u.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525596/luxecart/products/aurelio-essential-oversized-t-shirt/phq6g4hikla9oedptu9l.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525598/luxecart/products/aurelio-essential-oversized-t-shirt/yf26ydxbubm8th7t48op.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525706/luxecart/products/aurelio-essential-oversized-t-shirt/wizgrha5ni0asp0nncv8.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8b1"
+      },
+      {
+        "sku": "AUR-TEE-001-GRY-M",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Stone Grey",
+            "hex": "#878787"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525593/luxecart/products/aurelio-essential-oversized-t-shirt/itebkilcdorytmilm2r2.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525594/luxecart/products/aurelio-essential-oversized-t-shirt/nwel0avtckxwdosvow6u.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525596/luxecart/products/aurelio-essential-oversized-t-shirt/phq6g4hikla9oedptu9l.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525598/luxecart/products/aurelio-essential-oversized-t-shirt/yf26ydxbubm8th7t48op.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525706/luxecart/products/aurelio-essential-oversized-t-shirt/wizgrha5ni0asp0nncv8.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8b2"
+      },
+      {
+        "sku": "AUR-TEE-001-GRY-L",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Stone Grey",
+            "hex": "#878787"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525593/luxecart/products/aurelio-essential-oversized-t-shirt/itebkilcdorytmilm2r2.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525594/luxecart/products/aurelio-essential-oversized-t-shirt/nwel0avtckxwdosvow6u.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525596/luxecart/products/aurelio-essential-oversized-t-shirt/phq6g4hikla9oedptu9l.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525598/luxecart/products/aurelio-essential-oversized-t-shirt/yf26ydxbubm8th7t48op.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525706/luxecart/products/aurelio-essential-oversized-t-shirt/wizgrha5ni0asp0nncv8.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8b3"
+      },
+      {
+        "sku": "AUR-TEE-001-GRY-XL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Stone Grey",
+            "hex": "#878787"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 19,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525593/luxecart/products/aurelio-essential-oversized-t-shirt/itebkilcdorytmilm2r2.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525594/luxecart/products/aurelio-essential-oversized-t-shirt/nwel0avtckxwdosvow6u.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525596/luxecart/products/aurelio-essential-oversized-t-shirt/phq6g4hikla9oedptu9l.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525598/luxecart/products/aurelio-essential-oversized-t-shirt/yf26ydxbubm8th7t48op.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525706/luxecart/products/aurelio-essential-oversized-t-shirt/wizgrha5ni0asp0nncv8.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8b4"
+      },
+      {
+        "sku": "AUR-TEE-001-GRY-XXL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Stone Grey",
+            "hex": "#878787"
+          },
+          "size": "XXL",
+          "custom": {}
+        },
+        "price": 899,
+        "mrp": 1499,
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525593/luxecart/products/aurelio-essential-oversized-t-shirt/itebkilcdorytmilm2r2.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525594/luxecart/products/aurelio-essential-oversized-t-shirt/nwel0avtckxwdosvow6u.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525596/luxecart/products/aurelio-essential-oversized-t-shirt/phq6g4hikla9oedptu9l.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525598/luxecart/products/aurelio-essential-oversized-t-shirt/yf26ydxbubm8th7t48op.jpg",
+          "https://res.cloudinary.com/luxecart-india/image/upload/v1791525706/luxecart/products/aurelio-essential-oversized-t-shirt/wizgrha5ni0asp0nncv8.jpg"
+        ],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8b5"
+      }
+    ],
+    "priceSummary": {
+      "minPrice": 899,
+      "maxPrice": 899,
+      "minMrp": 1499,
+      "maxMrp": 1499,
+      "maxDiscountPercent": 40,
+      "hasStock": true,
+      "totalStock": 279
+    },
+    "status": "ACTIVE",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "oversized",
+      "cotton",
+      "streetwear",
+      "casual",
+      "everyday"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:49.025Z",
+    "updatedAt": "2026-10-09T11:48:47.408Z",
+    "searchKeywords": "aurelio essential oversized t-shirt aurelio heavyweight cotton oversized tee with dropped shoulders and a relaxed streetwear silhouette oversized cotton streetwear casual everyday material heavyweight cotton 240 gsm fit oversized relaxed neckline ribbed crew neck sleeve half sleeve country of origin india aur-tee-001-blk-s jet black s aur-tee-001-blk-m jet black m aur-tee-001-blk-l jet black l aur-tee-001-blk-xl jet black xl aur-tee-001-blk-xxl jet black xxl aur-tee-001-wht-s off white s aur-tee-001-wht-m off white m aur-tee-001-wht-l off white l aur-tee-001-wht-xl off white xl aur-tee-001-wht-xxl off white xxl aur-tee-001-gry-s stone grey s aur-tee-001-gry-m stone grey m aur-tee-001-gry-l stone grey l aur-tee-001-gry-xl stone grey xl aur-tee-001-gry-xxl stone grey xxl",
+    "__v": 19
+  },
+  {
+    "_id": "6ac6539d1301d7776aa3915a",
+    "name": "Northline Oxford Casual Shirt",
+    "slug": "northline-oxford-casual-shirt",
+    "brand": "Northline",
+    "description": "A refined Oxford shirt combining a structured collar, breathable cotton construction and a relaxed contemporary fit. Designed for effortless weekday and weekend dressing.",
+    "shortDescription": "Refined Oxford cotton shirt featuring a structured button-down collar and relaxed contemporary cut.",
+    "category": "6ac6539b1301d7776aa3913d",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4476",
+      "6ac6539b1301d7776aa3913b",
+      "6ac6539b1301d7776aa3913d"
+    ],
+    "gender": "MEN",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791548905/luxecart/products/northline-oxford-casual-shirt/m5blvfpnalwob3ent1ce.jpg",
+        "publicId": "luxecart/products/northline-oxford-casual-shirt/m5blvfpnalwob3ent1ce",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 100817,
+        "alt": "Sky Blue - Front View",
+        "isPrimary": true,
+        "displayOrder": 0,
+        "color": "Sky Blue",
+        "_id": "6ac8ddea5b9150aa0f4cb88a"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791548906/luxecart/products/northline-oxford-casual-shirt/oojr4vjp1b5tpejooyoo.jpg",
+        "publicId": "luxecart/products/northline-oxford-casual-shirt/oojr4vjp1b5tpejooyoo",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 131584,
+        "alt": "Sky Blue - Back View",
+        "isPrimary": false,
+        "displayOrder": 1,
+        "color": "Sky Blue",
+        "_id": "6ac8ddeb5b9150aa0f4cb88b"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791548908/luxecart/products/northline-oxford-casual-shirt/ykcesznh5a4plzjsu0ld.jpg",
+        "publicId": "luxecart/products/northline-oxford-casual-shirt/ykcesznh5a4plzjsu0ld",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 147604,
+        "alt": "Sky Blue - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 2,
+        "color": "Sky Blue",
+        "_id": "6ac8dded5b9150aa0f4cb88c"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791548909/luxecart/products/northline-oxford-casual-shirt/xb0hytd8od8ktwpdbg4l.jpg",
+        "publicId": "luxecart/products/northline-oxford-casual-shirt/xb0hytd8od8ktwpdbg4l",
+        "width": 1536,
+        "height": 1024,
+        "format": "jpg",
+        "bytes": 274679,
+        "alt": "Sky Blue - Detail / Texture",
+        "isPrimary": false,
+        "displayOrder": 3,
+        "color": "Sky Blue",
+        "_id": "6ac8ddee5b9150aa0f4cb88d"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791551725/luxecart/products/northline-oxford-casual-shirt/e58l7wahu35iysnt0ugp.jpg",
+        "publicId": "luxecart/products/northline-oxford-casual-shirt/e58l7wahu35iysnt0ugp",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 102571,
+        "alt": "Cloud White - Front View",
+        "isPrimary": false,
+        "displayOrder": 4,
+        "color": "Cloud White",
+        "_id": "6ac8e8ed5b9150aa0f4cb8b8"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791551726/luxecart/products/northline-oxford-casual-shirt/trdhbvqf5qipoxlnbqqq.jpg",
+        "publicId": "luxecart/products/northline-oxford-casual-shirt/trdhbvqf5qipoxlnbqqq",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 83024,
+        "alt": "Cloud White - Back View",
+        "isPrimary": false,
+        "displayOrder": 5,
+        "color": "Cloud White",
+        "_id": "6ac8e8ee5b9150aa0f4cb8b9"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791551727/luxecart/products/northline-oxford-casual-shirt/annpwr0qajgu7yiobx4l.jpg",
+        "publicId": "luxecart/products/northline-oxford-casual-shirt/annpwr0qajgu7yiobx4l",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 85952,
+        "alt": "Cloud White - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 6,
+        "color": "Cloud White",
+        "_id": "6ac8e8f05b9150aa0f4cb8ba"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791551730/luxecart/products/northline-oxford-casual-shirt/jspjnnb6cxs3uhvflehc.jpg",
+        "publicId": "luxecart/products/northline-oxford-casual-shirt/jspjnnb6cxs3uhvflehc",
+        "width": 1536,
+        "height": 1024,
+        "format": "jpg",
+        "bytes": 152485,
+        "alt": "Cloud White - Detail / Texture",
+        "isPrimary": false,
+        "displayOrder": 7,
+        "color": "Cloud White",
+        "_id": "6ac8e8f35b9150aa0f4cb8bb"
+      }
+    ],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "100% Cotton Oxford Weave"
+      },
+      {
+        "name": "Fit",
+        "value": "Relaxed Tailored"
+      },
+      {
+        "name": "Collar",
+        "value": "Button-Down Collar"
+      },
+      {
+        "name": "Sleeve",
+        "value": "Full Sleeve with Barrel Cuffs"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "sku": "NOR-SHT-001-WHT-S",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Cloud White",
+            "hex": "#F8F9FA"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c0"
+      },
+      {
+        "sku": "NOR-SHT-001-WHT-M",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Cloud White",
+            "hex": "#F8F9FA"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c1"
+      },
+      {
+        "sku": "NOR-SHT-001-WHT-L",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Cloud White",
+            "hex": "#F8F9FA"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c2"
+      },
+      {
+        "sku": "NOR-SHT-001-WHT-XL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Cloud White",
+            "hex": "#F8F9FA"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 17,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c3"
+      },
+      {
+        "sku": "NOR-SHT-001-WHT-XXL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Cloud White",
+            "hex": "#F8F9FA"
+          },
+          "size": "XXL",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c4"
+      },
+      {
+        "sku": "NOR-SHT-001-BLU-S",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Sky Blue",
+            "hex": "#87CEEB"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c5"
+      },
+      {
+        "sku": "NOR-SHT-001-BLU-M",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Sky Blue",
+            "hex": "#87CEEB"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c6"
+      },
+      {
+        "sku": "NOR-SHT-001-BLU-L",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Sky Blue",
+            "hex": "#87CEEB"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c7"
+      },
+      {
+        "sku": "NOR-SHT-001-BLU-XL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Sky Blue",
+            "hex": "#87CEEB"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 17,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c8"
+      },
+      {
+        "sku": "NOR-SHT-001-BLU-XXL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Sky Blue",
+            "hex": "#87CEEB"
+          },
+          "size": "XXL",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 18,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8c9"
+      }
+    ],
+    "priceSummary": {
+      "minPrice": 1499,
+      "maxPrice": 1499,
+      "minMrp": 2499,
+      "maxMrp": 2499,
+      "maxDiscountPercent": 40,
+      "hasStock": true,
+      "totalStock": 166
+    },
+    "status": "ACTIVE",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "oxford",
+      "shirt",
+      "smart casual",
+      "cotton",
+      "formal casual"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:49.186Z",
+    "updatedAt": "2026-10-09T13:15:48.014Z",
+    "searchKeywords": "northline oxford casual shirt northline refined oxford cotton shirt featuring a structured button-down collar and relaxed contemporary cut oxford shirt smart casual cotton formal casual material 100 cotton oxford weave fit relaxed tailored collar button-down collar sleeve full sleeve with barrel cuffs country of origin india nor-sht-001-wht-s cloud white s nor-sht-001-wht-m cloud white m nor-sht-001-wht-l cloud white l nor-sht-001-wht-xl cloud white xl nor-sht-001-wht-xxl cloud white xxl nor-sht-001-blu-s sky blue s nor-sht-001-blu-m sky blue m nor-sht-001-blu-l sky blue l nor-sht-001-blu-xl sky blue xl nor-sht-001-blu-xxl sky blue xxl",
+    "__v": 4
+  },
+  {
+    "_id": "6ac6539d1301d7776aa39165",
+    "name": "Veyron Relaxed Linen Shirt",
+    "slug": "veyron-relaxed-linen-shirt",
+    "brand": "Veyron",
+    "description": "A lightweight linen-blend shirt with a relaxed silhouette and understated texture. Designed for warm-weather dressing and effortless layering.",
+    "shortDescription": "Lightweight breathable linen-cotton shirt with a relaxed resort silhouette and textured weave.",
+    "category": "6ac6539b1301d7776aa3913d",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4476",
+      "6ac6539b1301d7776aa3913b",
+      "6ac6539b1301d7776aa3913d"
+    ],
+    "gender": "MEN",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791552375/luxecart/products/veyron-relaxed-linen-shirt/qyeb0ierlygcrbhsnoch.jpg",
+        "publicId": "luxecart/products/veyron-relaxed-linen-shirt/qyeb0ierlygcrbhsnoch",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 162785,
+        "alt": "Sand - Front View",
+        "isPrimary": true,
+        "displayOrder": 0,
+        "color": "Sand",
+        "_id": "6ac8eb775b9150aa0f4cb8e6"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791552380/luxecart/products/veyron-relaxed-linen-shirt/wdnitqfy5rejzszci69i.jpg",
+        "publicId": "luxecart/products/veyron-relaxed-linen-shirt/wdnitqfy5rejzszci69i",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 137534,
+        "alt": "Sand - Back View",
+        "isPrimary": false,
+        "displayOrder": 1,
+        "color": "Sand",
+        "_id": "6ac8eb7c5b9150aa0f4cb8e7"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791552384/luxecart/products/veyron-relaxed-linen-shirt/lfruifx6ybsbu9n4jniq.jpg",
+        "publicId": "luxecart/products/veyron-relaxed-linen-shirt/lfruifx6ybsbu9n4jniq",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 116340,
+        "alt": "Sand - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 2,
+        "color": "Sand",
+        "_id": "6ac8eb805b9150aa0f4cb8e8"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791552390/luxecart/products/veyron-relaxed-linen-shirt/u35hfvowom9uxmawuv2h.jpg",
+        "publicId": "luxecart/products/veyron-relaxed-linen-shirt/u35hfvowom9uxmawuv2h",
+        "width": 1536,
+        "height": 1024,
+        "format": "jpg",
+        "bytes": 289025,
+        "alt": "Sand - Detail / Texture",
+        "isPrimary": false,
+        "displayOrder": 3,
+        "color": "Sand",
+        "_id": "6ac8eb865b9150aa0f4cb8e9"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791552879/luxecart/products/veyron-relaxed-linen-shirt/a080bqnqya2mfafbyp0b.jpg",
+        "publicId": "luxecart/products/veyron-relaxed-linen-shirt/a080bqnqya2mfafbyp0b",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 128047,
+        "alt": "Olive - Front View",
+        "isPrimary": false,
+        "displayOrder": 4,
+        "color": "Olive",
+        "_id": "6ac8ed705b9150aa0f4cb90e"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791552883/luxecart/products/veyron-relaxed-linen-shirt/jkl1q75teoqoscgrr3i9.jpg",
+        "publicId": "luxecart/products/veyron-relaxed-linen-shirt/jkl1q75teoqoscgrr3i9",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 127650,
+        "alt": "Olive - Back View",
+        "isPrimary": false,
+        "displayOrder": 5,
+        "color": "Olive",
+        "_id": "6ac8ed735b9150aa0f4cb90f"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791552885/luxecart/products/veyron-relaxed-linen-shirt/mzjp856rzh9qzjk2zfx2.jpg",
+        "publicId": "luxecart/products/veyron-relaxed-linen-shirt/mzjp856rzh9qzjk2zfx2",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 152550,
+        "alt": "Olive - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 6,
+        "color": "Olive",
+        "_id": "6ac8ed755b9150aa0f4cb910"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791552892/luxecart/products/veyron-relaxed-linen-shirt/twcvuf9nnwbbktcevz7o.jpg",
+        "publicId": "luxecart/products/veyron-relaxed-linen-shirt/twcvuf9nnwbbktcevz7o",
+        "width": 1536,
+        "height": 1024,
+        "format": "jpg",
+        "bytes": 393263,
+        "alt": "Olive - Detail / Texture",
+        "isPrimary": false,
+        "displayOrder": 7,
+        "color": "Olive",
+        "_id": "6ac8ed7c5b9150aa0f4cb911"
+      }
+    ],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "55% Linen, 45% Organic Cotton"
+      },
+      {
+        "name": "Fit",
+        "value": "Relaxed Resort"
+      },
+      {
+        "name": "Collar",
+        "value": "Cuban Resort Collar"
+      },
+      {
+        "name": "Sleeve",
+        "value": "Full Sleeve"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "sku": "VEY-LIN-001-SND-S",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Sand",
+            "hex": "#C2B280"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "price": 1699,
+        "mrp": 2799,
+        "inventory": {
+          "stock": 14,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8d2"
+      },
+      {
+        "sku": "VEY-LIN-001-SND-M",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Sand",
+            "hex": "#C2B280"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "price": 1699,
+        "mrp": 2799,
+        "inventory": {
+          "stock": 14,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8d3"
+      },
+      {
+        "sku": "VEY-LIN-001-SND-L",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Sand",
+            "hex": "#C2B280"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "price": 1699,
+        "mrp": 2799,
+        "inventory": {
+          "stock": 14,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8d4"
+      },
+      {
+        "sku": "VEY-LIN-001-SND-XL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Sand",
+            "hex": "#C2B280"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "price": 1699,
+        "mrp": 2799,
+        "inventory": {
+          "stock": 15,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8d5"
+      },
+      {
+        "sku": "VEY-LIN-001-OLV-S",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Olive",
+            "hex": "#556B2F"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "price": 1699,
+        "mrp": 2799,
+        "inventory": {
+          "stock": 14,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8d6"
+      },
+      {
+        "sku": "VEY-LIN-001-OLV-M",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Olive",
+            "hex": "#556B2F"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "price": 1699,
+        "mrp": 2799,
+        "inventory": {
+          "stock": 14,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8d7"
+      },
+      {
+        "sku": "VEY-LIN-001-OLV-L",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Olive",
+            "hex": "#556B2F"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "price": 1699,
+        "mrp": 2799,
+        "inventory": {
+          "stock": 14,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8d8"
+      },
+      {
+        "sku": "VEY-LIN-001-OLV-XL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Olive",
+            "hex": "#556B2F"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "price": 1699,
+        "mrp": 2799,
+        "inventory": {
+          "stock": 15,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8d9"
+      }
+    ],
+    "priceSummary": {
+      "minPrice": 1699,
+      "maxPrice": 1699,
+      "minMrp": 2799,
+      "maxMrp": 2799,
+      "maxDiscountPercent": 39,
+      "hasStock": true,
+      "totalStock": 114
+    },
+    "status": "ACTIVE",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "linen",
+      "summer",
+      "resort",
+      "relaxed",
+      "premium"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:49.364Z",
+    "updatedAt": "2026-10-09T13:35:45.344Z",
+    "searchKeywords": "veyron relaxed linen shirt veyron lightweight breathable linen-cotton shirt with a relaxed resort silhouette and textured weave linen summer resort relaxed premium material 55 linen 45 organic cotton fit relaxed resort collar cuban resort collar sleeve full sleeve country of origin india vey-lin-001-snd-s sand s vey-lin-001-snd-m sand m vey-lin-001-snd-l sand l vey-lin-001-snd-xl sand xl vey-lin-001-olv-s olive s vey-lin-001-olv-m olive m vey-lin-001-olv-l olive l vey-lin-001-olv-xl olive xl",
+    "__v": 4
+  },
+  {
+    "_id": "6ac6539d1301d7776aa3916e",
+    "name": "Urban Form Straight Fit Denim",
+    "slug": "urban-form-straight-fit-denim",
+    "brand": "Urban Form",
+    "description": "Straight-fit denim with a clean leg profile, subtle wash and comfortable stretch construction. Built as an everyday wardrobe essential.",
+    "shortDescription": "Comfort-stretch straight-fit jeans with a classic mid-rise and versatile wash.",
+    "category": "6ac6539b1301d7776aa3913e",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4476",
+      "6ac6539b1301d7776aa3913b",
+      "6ac6539b1301d7776aa3913e"
+    ],
+    "gender": "MEN",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791554338/luxecart/products/urban-form-straight-fit-denim/qgndpbevgjltlzqqpln3.jpg",
+        "publicId": "luxecart/products/urban-form-straight-fit-denim/qgndpbevgjltlzqqpln3",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 162301,
+        "alt": "Dark Indigo - Front View",
+        "isPrimary": true,
+        "displayOrder": 0,
+        "color": "Dark Indigo",
+        "_id": "6ac8f3225b9150aa0f4cb986"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791554339/luxecart/products/urban-form-straight-fit-denim/ccumy8snezypqze7xemq.jpg",
+        "publicId": "luxecart/products/urban-form-straight-fit-denim/ccumy8snezypqze7xemq",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 198357,
+        "alt": "Dark Indigo - Back View",
+        "isPrimary": false,
+        "displayOrder": 1,
+        "color": "Dark Indigo",
+        "_id": "6ac8f3245b9150aa0f4cb987"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791554344/luxecart/products/urban-form-straight-fit-denim/lcvcco0cvif1afxdnki7.jpg",
+        "publicId": "luxecart/products/urban-form-straight-fit-denim/lcvcco0cvif1afxdnki7",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 436166,
+        "alt": "Dark Indigo - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 2,
+        "color": "Dark Indigo",
+        "_id": "6ac8f3285b9150aa0f4cb988"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791554805/luxecart/products/urban-form-straight-fit-denim/xlkt7rudfqwo73xrvzex.jpg",
+        "publicId": "luxecart/products/urban-form-straight-fit-denim/xlkt7rudfqwo73xrvzex",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 151075,
+        "alt": "Washed Blue - Front View",
+        "isPrimary": false,
+        "displayOrder": 3,
+        "color": "Washed Blue",
+        "_id": "6ac8f4f55b9150aa0f4cb998"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791554806/luxecart/products/urban-form-straight-fit-denim/gva0p3ln7tafrkaphthy.jpg",
+        "publicId": "luxecart/products/urban-form-straight-fit-denim/gva0p3ln7tafrkaphthy",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 228031,
+        "alt": "Washed Blue - Back View",
+        "isPrimary": false,
+        "displayOrder": 4,
+        "color": "Washed Blue",
+        "_id": "6ac8f4f65b9150aa0f4cb999"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791554808/luxecart/products/urban-form-straight-fit-denim/nf9h9haticdpsp5p6f0u.jpg",
+        "publicId": "luxecart/products/urban-form-straight-fit-denim/nf9h9haticdpsp5p6f0u",
+        "width": 1024,
+        "height": 1536,
+        "format": "jpg",
+        "bytes": 481797,
+        "alt": "Washed Blue - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 5,
+        "color": "Washed Blue",
+        "_id": "6ac8f4f95b9150aa0f4cb99a"
+      }
+    ],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "98% Cotton Denim, 2% Elastane"
+      },
+      {
+        "name": "Fit",
+        "value": "Straight Fit"
+      },
+      {
+        "name": "Rise",
+        "value": "Mid Rise"
+      },
+      {
+        "name": "Closure",
+        "value": "Zip Fly with Shank Button"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "sku": "UFM-DNM-001-IND-28",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Dark Indigo",
+            "hex": "#1A2B4C"
+          },
+          "size": "28",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8e6"
+      },
+      {
+        "sku": "UFM-DNM-001-IND-30",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Dark Indigo",
+            "hex": "#1A2B4C"
+          },
+          "size": "30",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8e7"
+      },
+      {
+        "sku": "UFM-DNM-001-IND-32",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Dark Indigo",
+            "hex": "#1A2B4C"
+          },
+          "size": "32",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8e8"
+      },
+      {
+        "sku": "UFM-DNM-001-IND-34",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Dark Indigo",
+            "hex": "#1A2B4C"
+          },
+          "size": "34",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8e9"
+      },
+      {
+        "sku": "UFM-DNM-001-IND-36",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Dark Indigo",
+            "hex": "#1A2B4C"
+          },
+          "size": "36",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8ea"
+      },
+      {
+        "sku": "UFM-DNM-001-IND-38",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Dark Indigo",
+            "hex": "#1A2B4C"
+          },
+          "size": "38",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8eb"
+      },
+      {
+        "sku": "UFM-DNM-001-BLU-28",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Washed Blue",
+            "hex": "#5B7C99"
+          },
+          "size": "28",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8ec"
+      },
+      {
+        "sku": "UFM-DNM-001-BLU-30",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Washed Blue",
+            "hex": "#5B7C99"
+          },
+          "size": "30",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8ed"
+      },
+      {
+        "sku": "UFM-DNM-001-BLU-32",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Washed Blue",
+            "hex": "#5B7C99"
+          },
+          "size": "32",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8ee"
+      },
+      {
+        "sku": "UFM-DNM-001-BLU-34",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Washed Blue",
+            "hex": "#5B7C99"
+          },
+          "size": "34",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8ef"
+      },
+      {
+        "sku": "UFM-DNM-001-BLU-36",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Washed Blue",
+            "hex": "#5B7C99"
+          },
+          "size": "36",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8f0"
+      },
+      {
+        "sku": "UFM-DNM-001-BLU-38",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Washed Blue",
+            "hex": "#5B7C99"
+          },
+          "size": "38",
+          "custom": {}
+        },
+        "price": 1899,
+        "mrp": 2999,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838102e9c8d3d83c2a8f1"
+      }
+    ],
+    "priceSummary": {
+      "minPrice": 1899,
+      "maxPrice": 1899,
+      "minMrp": 2999,
+      "maxMrp": 2999,
+      "maxDiscountPercent": 37,
+      "hasStock": true,
+      "totalStock": 192
+    },
+    "status": "ACTIVE",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "denim",
+      "jeans",
+      "straight fit",
+      "casual",
+      "everyday"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:49.500Z",
+    "updatedAt": "2026-10-09T14:07:10.760Z",
+    "searchKeywords": "urban form straight fit denim urban form comfort-stretch straight-fit jeans with a classic mid-rise and versatile wash denim jeans straight fit casual everyday material 98 cotton denim 2 elastane fit straight fit rise mid rise closure zip fly with shank button country of origin india ufm-dnm-001-ind-28 dark indigo 28 ufm-dnm-001-ind-30 dark indigo 30 ufm-dnm-001-ind-32 dark indigo 32 ufm-dnm-001-ind-34 dark indigo 34 ufm-dnm-001-ind-36 dark indigo 36 ufm-dnm-001-ind-38 dark indigo 38 ufm-dnm-001-blu-28 washed blue 28 ufm-dnm-001-blu-30 washed blue 30 ufm-dnm-001-blu-32 washed blue 32 ufm-dnm-001-blu-34 washed blue 34 ufm-dnm-001-blu-36 washed blue 36 ufm-dnm-001-blu-38 washed blue 38",
+    "__v": 4
+  },
+  {
+    "_id": "6ac6539d1301d7776aa3917b",
+    "name": "Élané Satin Midi Dress",
+    "slug": "elane-satin-midi-dress",
+    "brand": "Élané",
+    "description": "A fluid satin midi dress designed with a flattering silhouette and subtle sheen. The minimal design transitions easily from evening dinners to special occasions.",
+    "shortDescription": "Fluid satin midi dress featuring a subtle luster, bias-cut drape, and elegant neckline.",
+    "category": "6ac6505bf53283f8117c4477",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4477"
+    ],
+    "gender": "WOMEN",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791556121/luxecart/products/elane-satin-midi-dress/wdnrdoghhkxcuuoyffkh.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Deep Wine - Front View",
+        "isPrimary": true,
+        "displayOrder": 0,
+        "color": "Deep Wine",
+        "_id": "6aca098fd02b34678ee05399"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791556123/luxecart/products/elane-satin-midi-dress/ye5b7rtdbdq4vweybgpc.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Deep Wine - Back View",
+        "isPrimary": false,
+        "displayOrder": 1,
+        "color": "Deep Wine",
+        "_id": "6aca098fd02b34678ee0539a"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791556124/luxecart/products/elane-satin-midi-dress/ht29kbl7cj5lj04bwhr6.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Deep Wine - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 2,
+        "color": "Deep Wine",
+        "_id": "6aca098fd02b34678ee0539b"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791558679/luxecart/products/elane-satin-midi-dress/st7sabaliqt3gilw7eqt.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Midnight Black - Front View",
+        "isPrimary": false,
+        "displayOrder": 3,
+        "color": "Midnight Black",
+        "_id": "6aca098fd02b34678ee0539c"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791558681/luxecart/products/elane-satin-midi-dress/q4x2thnzt8qjx6qziwts.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Midnight Black - Back View",
+        "isPrimary": false,
+        "displayOrder": 4,
+        "color": "Midnight Black",
+        "_id": "6aca098fd02b34678ee0539d"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791558682/luxecart/products/elane-satin-midi-dress/ypjjxiquj2sdwo3wfyw4.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Midnight Black - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 5,
+        "color": "Midnight Black",
+        "_id": "6aca098fd02b34678ee0539e"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791559851/luxecart/products/elane-satin-midi-dress/z27wd66yhrni021uqc4w.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Champagne - Front View",
+        "isPrimary": false,
+        "displayOrder": 6,
+        "color": "Champagne",
+        "_id": "6aca098fd02b34678ee0539f"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791559854/luxecart/products/elane-satin-midi-dress/ahvw6xcpgbzjwalhvoyy.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Champagne - Back View",
+        "isPrimary": false,
+        "displayOrder": 7,
+        "color": "Champagne",
+        "_id": "6aca098fd02b34678ee053a0"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791559857/luxecart/products/elane-satin-midi-dress/efftkpu86qyiy1skpwgz.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Champagne - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 8,
+        "color": "Champagne",
+        "_id": "6aca098fd02b34678ee053a1"
+      }
+    ],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "Heavy Liquid Satin Polyester"
+      },
+      {
+        "name": "Fit",
+        "value": "Bias-Cut Regular"
+      },
+      {
+        "name": "Length",
+        "value": "Midi (Below Knee)"
+      },
+      {
+        "name": "Lining",
+        "value": "Soft Tone-on-Tone Lining"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [],
+    "priceSummary": {
+      "minPrice": 0,
+      "maxPrice": 0,
+      "minMrp": 0,
+      "maxMrp": 0,
+      "maxDiscountPercent": 0,
+      "hasStock": false,
+      "totalStock": 0
+    },
+    "status": "ACTIVE",
+    "isFeatured": false,
+    "isNewArrival": false,
+    "isBestseller": false,
+    "tags": [
+      "dress",
+      "satin",
+      "evening",
+      "occasion",
+      "elegant"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:49.692Z",
+    "updatedAt": "2026-10-10T09:46:55.448Z",
+    "searchKeywords": "lan satin midi dress lan fluid satin midi dress featuring a subtle luster bias-cut drape and elegant neckline dress satin evening occasion elegant material heavy liquid satin polyester fit bias-cut regular length midi below knee lining soft tone-on-tone lining country of origin india",
+    "__v": 6
+  },
+  {
+    "_id": "6ac6539d1301d7776aa3918b",
+    "name": "Miraé Ribbed Knit Top",
+    "slug": "mirae-ribbed-knit-top",
+    "brand": "Miraé",
+    "description": "A soft ribbed knit top with a clean fitted silhouette and versatile neckline. Designed to pair effortlessly with denim, tailored trousers and skirts.",
+    "shortDescription": "Soft stretch ribbed knit top tailored with a clean fitted profile and versatile crew neckline.",
+    "category": "6ac6505bf53283f8117c4476",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4476"
+    ],
+    "gender": "WOMEN",
+    "images": [
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791564146/luxecart/products/mirae-ribbed-knit-top/mb6rfjvgo6xbfyg6vrep.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Cream - Front View",
+        "isPrimary": true,
+        "displayOrder": 0,
+        "color": "Cream",
+        "_id": "6aca0cd14ab59d65a89fb3e9"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791564149/luxecart/products/mirae-ribbed-knit-top/uskmnnag16arwwcc8h2x.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Cream - Back View",
+        "isPrimary": false,
+        "displayOrder": 1,
+        "color": "Cream",
+        "_id": "6aca0cd14ab59d65a89fb3ea"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791564153/luxecart/products/mirae-ribbed-knit-top/llnvqqjbmdrogdj60po5.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Cream - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 2,
+        "color": "Cream",
+        "_id": "6aca0cd14ab59d65a89fb3eb"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565254/luxecart/products/mirae-ribbed-knit-top/n59lykkv7wzhyg0c1zpv.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Mocha - Front View",
+        "isPrimary": false,
+        "displayOrder": 3,
+        "color": "Mocha",
+        "_id": "6aca0cd14ab59d65a89fb3ec"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565256/luxecart/products/mirae-ribbed-knit-top/obkgez9c7sbrt3irmzrb.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Mocha - Back View",
+        "isPrimary": false,
+        "displayOrder": 4,
+        "color": "Mocha",
+        "_id": "6aca0cd14ab59d65a89fb3ed"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565258/luxecart/products/mirae-ribbed-knit-top/snodqtlal9ff5pghqwpg.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Mocha - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 5,
+        "color": "Mocha",
+        "_id": "6aca0cd14ab59d65a89fb3ee"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565619/luxecart/products/mirae-ribbed-knit-top/cg5pd4ntzymtgtt76dlv.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Black - Front View",
+        "isPrimary": false,
+        "displayOrder": 6,
+        "color": "Black",
+        "_id": "6aca0cd14ab59d65a89fb3ef"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565621/luxecart/products/mirae-ribbed-knit-top/amy7newf8khkv2eoxmrk.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Black - Back View",
+        "isPrimary": false,
+        "displayOrder": 7,
+        "color": "Black",
+        "_id": "6aca0cd14ab59d65a89fb3f0"
+      },
+      {
+        "url": "https://res.cloudinary.com/luxecart-india/image/upload/v1791565622/luxecart/products/mirae-ribbed-knit-top/cxmwkdtgqrqam3scgfc6.jpg",
+        "publicId": null,
+        "width": null,
+        "height": null,
+        "format": null,
+        "bytes": null,
+        "alt": "Black - Side Profile",
+        "isPrimary": false,
+        "displayOrder": 8,
+        "color": "Black",
+        "_id": "6aca0cd14ab59d65a89fb3f1"
+      }
+    ],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "80% Viscose, 20% Nylon Ribbed Knit"
+      },
+      {
+        "name": "Fit",
+        "value": "Fitted"
+      },
+      {
+        "name": "Neckline",
+        "value": "Jewel Crew Neck"
+      },
+      {
+        "name": "Sleeve",
+        "value": "Elbow Length"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [],
+    "priceSummary": {
+      "minPrice": 0,
+      "maxPrice": 0,
+      "minMrp": 0,
+      "maxMrp": 0,
+      "maxDiscountPercent": 0,
+      "hasStock": false,
+      "totalStock": 0
+    },
+    "status": "ACTIVE",
+    "isFeatured": false,
+    "isNewArrival": false,
+    "isBestseller": false,
+    "tags": [
+      "ribbed",
+      "knit",
+      "top",
+      "minimal",
+      "casual"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:49.895Z",
+    "updatedAt": "2026-10-10T10:00:49.265Z",
+    "searchKeywords": "mira ribbed knit top mira soft stretch ribbed knit top tailored with a clean fitted profile and versatile crew neckline ribbed knit top minimal casual material 80 viscose 20 nylon ribbed knit fit fitted neckline jewel crew neck sleeve elbow length country of origin india",
+    "__v": 12
+  },
+  {
+    "_id": "6ac6539e1301d7776aa3919b",
+    "name": "Nivara Printed Kurta Set",
+    "slug": "nivara-printed-kurta-set",
+    "brand": "Nivara",
+    "description": "A contemporary printed kurta set combining an easy silhouette with subtle botanical detailing. Designed for festive gatherings, casual celebrations and everyday ethnic dressing.",
+    "shortDescription": "Contemporary botanical print kurta set with matching straight trousers and delicate border accents.",
+    "category": "6ac6505bf53283f8117c4477",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4477"
+    ],
+    "gender": "WOMEN",
+    "images": [],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "Fine Cotton Silk Blend"
+      },
+      {
+        "name": "Fit",
+        "value": "Regular Comfort"
+      },
+      {
+        "name": "Set Includes",
+        "value": "Straight Kurta and Cropped Trousers"
+      },
+      {
+        "name": "Work / Print",
+        "value": "Subtle Botanical Block Print"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [],
+    "priceSummary": {
+      "minPrice": 0,
+      "maxPrice": 0,
+      "minMrp": 0,
+      "maxMrp": 0,
+      "maxDiscountPercent": 0,
+      "hasStock": false,
+      "totalStock": 0
+    },
+    "status": "DRAFT",
+    "isFeatured": false,
+    "isNewArrival": false,
+    "isBestseller": false,
+    "tags": [
+      "kurta",
+      "ethnic",
+      "indian wear",
+      "printed",
+      "festive"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:50.113Z",
+    "updatedAt": "2026-10-10T09:56:58.050Z",
+    "searchKeywords": "nivara printed kurta set nivara contemporary botanical print kurta set with matching straight trousers and delicate border accents kurta ethnic indian wear printed festive material fine cotton silk blend fit regular comfort set includes straight kurta and cropped trousers work print subtle botanical block print country of origin india",
+    "__v": 5
+  },
+  {
+    "_id": "6ac6539e1301d7776aa391a6",
+    "name": "Velora Wide-Leg Trousers",
+    "slug": "velora-wide-leg-trousers",
+    "brand": "Velora",
+    "description": "High-rise wide-leg trousers with a fluid drape and clean tailored finish. Designed for polished everyday styling with shirts, tops and structured outerwear.",
+    "shortDescription": "Tailored high-rise wide-leg trousers crafted with a fluid poly-viscose drape.",
+    "category": "6ac6539c1301d7776aa39143",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4477",
+      "6ac6539b1301d7776aa3913f",
+      "6ac6539c1301d7776aa39143"
+    ],
+    "gender": "WOMEN",
+    "images": [],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "Poly-viscose blend with stretch"
+      },
+      {
+        "name": "Fit",
+        "value": "Wide Leg"
+      },
+      {
+        "name": "Rise",
+        "value": "High Rise"
+      },
+      {
+        "name": "Pockets",
+        "value": "Side Slant Pockets"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "sku": "VEL-TRS-001-BGE-XS",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Beige",
+            "hex": "#D8BC9D"
+          },
+          "size": "XS",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 17,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a94c"
+      },
+      {
+        "sku": "VEL-TRS-001-BGE-S",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Beige",
+            "hex": "#D8BC9D"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a94d"
+      },
+      {
+        "sku": "VEL-TRS-001-BGE-M",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Beige",
+            "hex": "#D8BC9D"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a94e"
+      },
+      {
+        "sku": "VEL-TRS-001-BGE-L",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Beige",
+            "hex": "#D8BC9D"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a94f"
+      },
+      {
+        "sku": "VEL-TRS-001-BGE-XL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Beige",
+            "hex": "#D8BC9D"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 17,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a950"
+      },
+      {
+        "sku": "VEL-TRS-001-CHR-XS",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Charcoal",
+            "hex": "#36454F"
+          },
+          "size": "XS",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 17,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a951"
+      },
+      {
+        "sku": "VEL-TRS-001-CHR-S",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Charcoal",
+            "hex": "#36454F"
+          },
+          "size": "S",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a952"
+      },
+      {
+        "sku": "VEL-TRS-001-CHR-M",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Charcoal",
+            "hex": "#36454F"
+          },
+          "size": "M",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a953"
+      },
+      {
+        "sku": "VEL-TRS-001-CHR-L",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Charcoal",
+            "hex": "#36454F"
+          },
+          "size": "L",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 16,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a954"
+      },
+      {
+        "sku": "VEL-TRS-001-CHR-XL",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Charcoal",
+            "hex": "#36454F"
+          },
+          "size": "XL",
+          "custom": {}
+        },
+        "price": 1499,
+        "mrp": 2499,
+        "inventory": {
+          "stock": 17,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a955"
+      }
+    ],
+    "priceSummary": {
+      "minPrice": 1499,
+      "maxPrice": 1499,
+      "minMrp": 2499,
+      "maxMrp": 2499,
+      "maxDiscountPercent": 40,
+      "hasStock": true,
+      "totalStock": 164
+    },
+    "status": "DRAFT",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "trousers",
+      "wide leg",
+      "tailored",
+      "office",
+      "contemporary"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:50.262Z",
+    "updatedAt": "2026-10-09T00:40:49.470Z",
+    "searchKeywords": "velora wide-leg trousers velora tailored high-rise wide-leg trousers crafted with a fluid poly-viscose drape trousers wide leg tailored office contemporary material poly-viscose blend with stretch fit wide leg rise high rise pockets side slant pockets country of origin india vel-trs-001-bge-xs warm beige xs vel-trs-001-bge-s warm beige s vel-trs-001-bge-m warm beige m vel-trs-001-bge-l warm beige l vel-trs-001-bge-xl warm beige xl vel-trs-001-chr-xs charcoal xs vel-trs-001-chr-s charcoal s vel-trs-001-chr-m charcoal m vel-trs-001-chr-l charcoal l vel-trs-001-chr-xl charcoal xl",
+    "__v": 2
+  },
+  {
+    "_id": "6ac6539e1301d7776aa391b1",
+    "name": "Vanta Retro Runner Sneakers",
+    "slug": "vanta-retro-runner-sneakers",
+    "brand": "Vanta",
+    "description": "A retro-inspired everyday sneaker featuring layered panels, a cushioned footbed and a clean contemporary profile. Designed for casual city wear.",
+    "shortDescription": "Retro runner sneakers featuring layered tonal paneling and cushioned EVA sole.",
+    "category": "6ac6539c1301d7776aa39144",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4478",
+      "6ac6539c1301d7776aa39144"
+    ],
+    "gender": "UNISEX",
+    "images": [],
+    "specifications": [
+      {
+        "name": "Upper Material",
+        "value": "Synthetic Suede, Vegan Leather & Breathable Mesh"
+      },
+      {
+        "name": "Sole",
+        "value": "Lightweight Cushioned EVA with Rubber Grip"
+      },
+      {
+        "name": "Closure",
+        "value": "Lace-Up"
+      },
+      {
+        "name": "Toe Shape",
+        "value": "Round Toe"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "sku": "VAN-RUN-001-WBK-6",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "White / Black",
+            "hex": "#FFFFFF"
+          },
+          "size": "6",
+          "custom": {}
+        },
+        "price": 2499,
+        "mrp": 3999,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a95c"
+      },
+      {
+        "sku": "VAN-RUN-001-WBK-7",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "White / Black",
+            "hex": "#FFFFFF"
+          },
+          "size": "7",
+          "custom": {}
+        },
+        "price": 2499,
+        "mrp": 3999,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a95d"
+      },
+      {
+        "sku": "VAN-RUN-001-WBK-8",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "White / Black",
+            "hex": "#FFFFFF"
+          },
+          "size": "8",
+          "custom": {}
+        },
+        "price": 2499,
+        "mrp": 3999,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a95e"
+      },
+      {
+        "sku": "VAN-RUN-001-WBK-9",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "White / Black",
+            "hex": "#FFFFFF"
+          },
+          "size": "9",
+          "custom": {}
+        },
+        "price": 2499,
+        "mrp": 3999,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a95f"
+      },
+      {
+        "sku": "VAN-RUN-001-WBK-10",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "White / Black",
+            "hex": "#FFFFFF"
+          },
+          "size": "10",
+          "custom": {}
+        },
+        "price": 2499,
+        "mrp": 3999,
+        "inventory": {
+          "stock": 13,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a960"
+      },
+      {
+        "sku": "VAN-RUN-001-WBK-11",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "White / Black",
+            "hex": "#FFFFFF"
+          },
+          "size": "11",
+          "custom": {}
+        },
+        "price": 2499,
+        "mrp": 3999,
+        "inventory": {
+          "stock": 13,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a961"
+      }
+    ],
+    "priceSummary": {
+      "minPrice": 2499,
+      "maxPrice": 2499,
+      "minMrp": 3999,
+      "maxMrp": 3999,
+      "maxDiscountPercent": 38,
+      "hasStock": true,
+      "totalStock": 74
+    },
+    "status": "DRAFT",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "sneakers",
+      "runners",
+      "streetwear",
+      "casual",
+      "lifestyle"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:50.398Z",
+    "updatedAt": "2026-10-09T00:40:49.624Z",
+    "searchKeywords": "vanta retro runner sneakers vanta retro runner sneakers featuring layered tonal paneling and cushioned eva sole sneakers runners streetwear casual lifestyle upper material synthetic suede vegan leather breathable mesh sole lightweight cushioned eva with rubber grip closure lace-up toe shape round toe country of origin india van-run-001-wbk-6 white black 6 van-run-001-wbk-7 white black 7 van-run-001-wbk-8 white black 8 van-run-001-wbk-9 white black 9 van-run-001-wbk-10 white black 10 van-run-001-wbk-11 white black 11",
+    "__v": 2
+  },
+  {
+    "_id": "6ac6539e1301d7776aa391b8",
+    "name": "Stride Minimal Leather Loafers",
+    "slug": "stride-minimal-leather-loafers",
+    "brand": "Stride",
+    "description": "A clean-profile loafer designed with a softly structured upper and understated metal detailing. Ideal for office styling and elevated everyday outfits.",
+    "shortDescription": "Sleek minimal loafers crafted with premium faux leather and understated metal trim.",
+    "category": "6ac6539c1301d7776aa39145",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4478",
+      "6ac6539c1301d7776aa39145"
+    ],
+    "gender": "WOMEN",
+    "images": [],
+    "specifications": [
+      {
+        "name": "Upper Material",
+        "value": "Premium Synthetic Leather"
+      },
+      {
+        "name": "Insole",
+        "value": "Padded Foam Comfort Cushioning"
+      },
+      {
+        "name": "Outsole",
+        "value": "Non-Slip Flexible TPR"
+      },
+      {
+        "name": "Heel Height",
+        "value": "2 cm Low Block Heel"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "sku": "STR-LOA-001-BLK-4",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Classic Black",
+            "hex": "#1A1A1A"
+          },
+          "size": "4",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a96c"
+      },
+      {
+        "sku": "STR-LOA-001-BLK-5",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Classic Black",
+            "hex": "#1A1A1A"
+          },
+          "size": "5",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a96d"
+      },
+      {
+        "sku": "STR-LOA-001-BLK-6",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Classic Black",
+            "hex": "#1A1A1A"
+          },
+          "size": "6",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a96e"
+      },
+      {
+        "sku": "STR-LOA-001-BLK-7",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Classic Black",
+            "hex": "#1A1A1A"
+          },
+          "size": "7",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a96f"
+      },
+      {
+        "sku": "STR-LOA-001-BLK-8",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Classic Black",
+            "hex": "#1A1A1A"
+          },
+          "size": "8",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a970"
+      },
+      {
+        "sku": "STR-LOA-001-TAN-4",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Tan",
+            "hex": "#B5651D"
+          },
+          "size": "4",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a971"
+      },
+      {
+        "sku": "STR-LOA-001-TAN-5",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Tan",
+            "hex": "#B5651D"
+          },
+          "size": "5",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a972"
+      },
+      {
+        "sku": "STR-LOA-001-TAN-6",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Tan",
+            "hex": "#B5651D"
+          },
+          "size": "6",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a973"
+      },
+      {
+        "sku": "STR-LOA-001-TAN-7",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Tan",
+            "hex": "#B5651D"
+          },
+          "size": "7",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a974"
+      },
+      {
+        "sku": "STR-LOA-001-TAN-8",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Warm Tan",
+            "hex": "#B5651D"
+          },
+          "size": "8",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3799,
+        "inventory": {
+          "stock": 12,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 280,
+        "dimensionsInCm": {
+          "length": 30,
+          "width": 25,
+          "height": 3
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a975"
+      }
+    ],
+    "priceSummary": {
+      "minPrice": 2299,
+      "maxPrice": 2299,
+      "minMrp": 3799,
+      "maxMrp": 3799,
+      "maxDiscountPercent": 39,
+      "hasStock": true,
+      "totalStock": 120
+    },
+    "status": "DRAFT",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "loafers",
+      "footwear",
+      "office",
+      "minimal",
+      "premium"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:50.549Z",
+    "updatedAt": "2026-10-09T00:40:49.797Z",
+    "searchKeywords": "stride minimal leather loafers stride sleek minimal loafers crafted with premium faux leather and understated metal trim loafers footwear office minimal premium upper material premium synthetic leather insole padded foam comfort cushioning outsole non-slip flexible tpr heel height 2 cm low block heel country of origin india str-loa-001-blk-4 classic black 4 str-loa-001-blk-5 classic black 5 str-loa-001-blk-6 classic black 6 str-loa-001-blk-7 classic black 7 str-loa-001-blk-8 classic black 8 str-loa-001-tan-4 warm tan 4 str-loa-001-tan-5 warm tan 5 str-loa-001-tan-6 warm tan 6 str-loa-001-tan-7 warm tan 7 str-loa-001-tan-8 warm tan 8",
+    "__v": 2
+  },
+  {
+    "_id": "6ac6539e1301d7776aa391c3",
+    "name": "Nivelle Vitamin C Brightening Serum",
+    "slug": "nivelle-vitamin-c-brightening-serum",
+    "brand": "Nivelle",
+    "description": "A lightweight daily facial serum formulated around a brightening skincare routine. The fast-absorbing texture is designed to layer comfortably under moisturizer and sunscreen.",
+    "shortDescription": "Lightweight daily facial serum crafted for a radiant, balanced complexion.",
+    "category": "6ac6539c1301d7776aa39147",
+    "categoryTree": [
+      "6ac6505bf53283f8117c4479",
+      "6ac6539c1301d7776aa39146",
+      "6ac6539c1301d7776aa39147"
+    ],
+    "gender": "UNISEX",
+    "images": [],
+    "specifications": [
+      {
+        "name": "Key Formulation",
+        "value": "10% Ethyl Ascorbic Acid, Ferulic Acid & Hyaluronic Acid"
+      },
+      {
+        "name": "Form",
+        "value": "Non-Greasy Liquid Dropper Serum"
+      },
+      {
+        "name": "Volume",
+        "value": "30 ml / 1.0 fl. oz."
+      },
+      {
+        "name": "Skin Compatibility",
+        "value": "Suitable for All Skin Types"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "sku": "NIV-SRM-001-30ML",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "",
+            "hex": ""
+          },
+          "size": "30 ml",
+          "custom": {}
+        },
+        "price": 699,
+        "mrp": 999,
+        "inventory": {
+          "stock": 30,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 100,
+        "dimensionsInCm": {
+          "length": 5,
+          "width": 5,
+          "height": 12
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838112e9c8d3d83c2a977"
+      }
+    ],
+    "priceSummary": {
+      "minPrice": 699,
+      "maxPrice": 699,
+      "minMrp": 999,
+      "maxMrp": 999,
+      "maxDiscountPercent": 30,
+      "hasStock": true,
+      "totalStock": 30
+    },
+    "status": "DRAFT",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "serum",
+      "skincare",
+      "vitamin c",
+      "face care",
+      "beauty"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:50.702Z",
+    "updatedAt": "2026-10-09T00:40:49.952Z",
+    "searchKeywords": "nivelle vitamin c brightening serum nivelle lightweight daily facial serum crafted for a radiant balanced complexion serum skincare vitamin c face care beauty key formulation 10 ethyl ascorbic acid ferulic acid hyaluronic acid form non-greasy liquid dropper serum volume 30 ml 1 0 fl oz skin compatibility suitable for all skin types country of origin india niv-srm-001-30ml 30 ml",
+    "__v": 2
+  },
+  {
+    "_id": "6ac6539e1301d7776aa391c5",
+    "name": "Aurelia Structured Shoulder Bag",
+    "slug": "aurelia-structured-shoulder-bag",
+    "brand": "Aurelia",
+    "description": "A structured shoulder bag with a clean rectangular silhouette, polished hardware and enough interior space for everyday essentials. Designed to transition from workdays to evening plans.",
+    "shortDescription": "Structured vegan leather shoulder bag with sleek rectangular geometry and refined gold hardware.",
+    "category": "6ac6539c1301d7776aa39149",
+    "categoryTree": [
+      "6ac6505bf53283f8117c447a",
+      "6ac6539c1301d7776aa39148",
+      "6ac6539c1301d7776aa39149"
+    ],
+    "gender": "WOMEN",
+    "images": [],
+    "specifications": [
+      {
+        "name": "Material",
+        "value": "Premium Smooth Vegan Leather"
+      },
+      {
+        "name": "Hardware",
+        "value": "Brushed Light-Gold Tone Metal"
+      },
+      {
+        "name": "Closure",
+        "value": "Secure Top Zip with Flap Magnet"
+      },
+      {
+        "name": "Dimensions",
+        "value": "26 cm (W) x 15 cm (H) x 7 cm (D)"
+      },
+      {
+        "name": "Strap",
+        "value": "Adjustable Shoulder Strap (48 cm drop)"
+      },
+      {
+        "name": "Country of Origin",
+        "value": "India"
+      }
+    ],
+    "variants": [
+      {
+        "sku": "AUR-BAG-001-BLK",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Onyx Black",
+            "hex": "#0F0F0F"
+          },
+          "size": "One Size",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3999,
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 450,
+        "dimensionsInCm": {
+          "length": 26,
+          "width": 7,
+          "height": 15
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838122e9c8d3d83c2a97a"
+      },
+      {
+        "sku": "AUR-BAG-001-TAN",
+        "barcode": null,
+        "attributes": {
+          "color": {
+            "name": "Caramel Tan",
+            "hex": "#A75D28"
+          },
+          "size": "One Size",
+          "custom": {}
+        },
+        "price": 2299,
+        "mrp": 3999,
+        "inventory": {
+          "stock": 20,
+          "reserved": 0,
+          "lowStockThreshold": 5
+        },
+        "weightInGrams": 450,
+        "dimensionsInCm": {
+          "length": 26,
+          "width": 7,
+          "height": 15
+        },
+        "images": [],
+        "isActive": true,
+        "_id": "6ac838122e9c8d3d83c2a97b"
+      }
+    ],
+    "priceSummary": {
+      "minPrice": 2299,
+      "maxPrice": 2299,
+      "minMrp": 3999,
+      "maxMrp": 3999,
+      "maxDiscountPercent": 43,
+      "hasStock": true,
+      "totalStock": 40
+    },
+    "status": "DRAFT",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isBestseller": false,
+    "tags": [
+      "handbag",
+      "shoulder bag",
+      "accessory",
+      "premium",
+      "everyday"
+    ],
+    "ratings": {
+      "average": 0,
+      "count": 0
+    },
+    "seo": {
+      "keywords": []
+    },
+    "model3d": {
+      "url": null,
+      "format": null,
+      "posterUrl": null,
+      "enabled": false
+    },
+    "createdAt": "2026-10-07T14:13:50.843Z",
+    "updatedAt": "2026-10-09T00:40:50.104Z",
+    "searchKeywords": "aurelia structured shoulder bag aurelia structured vegan leather shoulder bag with sleek rectangular geometry and refined gold hardware handbag shoulder bag accessory premium everyday material premium smooth vegan leather hardware brushed light-gold tone metal closure secure top zip with flap magnet dimensions 26 cm w x 15 cm h x 7 cm d strap adjustable shoulder strap 48 cm drop country of origin india aur-bag-001-blk onyx black one size aur-bag-001-tan caramel tan one size",
+    "__v": 2
+  }
+]

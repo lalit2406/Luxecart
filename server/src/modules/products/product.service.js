@@ -131,25 +131,25 @@ class ProductService {
       product.category = updates.category;
     }
 
-    // Variants check
-    if (updates.variants) {
+    // Variants check - ONLY modify variants if explicitly provided and defined
+    if (updates.variants !== undefined) {
       const skus = updates.variants.map((v) => v.sku).filter(Boolean);
       await this.verifySkuUniqueness(skus, id);
       product.variants = updates.variants;
     }
 
-    // Apply remaining fields
-    if (updates.brand) product.brand = updates.brand;
-    if (updates.description) product.description = updates.description;
+    // Apply remaining fields ONLY if explicitly defined
+    if (updates.brand !== undefined) product.brand = updates.brand;
+    if (updates.description !== undefined) product.description = updates.description;
     if (updates.shortDescription !== undefined) product.shortDescription = updates.shortDescription;
-    if (updates.gender) product.gender = updates.gender;
-    if (updates.images) product.images = updates.images;
-    if (updates.specifications) product.specifications = updates.specifications;
+    if (updates.gender !== undefined) product.gender = updates.gender;
+    if (updates.images !== undefined) product.images = updates.images;
+    if (updates.specifications !== undefined) product.specifications = updates.specifications;
     if (updates.isFeatured !== undefined) product.isFeatured = updates.isFeatured;
     if (updates.isNewArrival !== undefined) product.isNewArrival = updates.isNewArrival;
     if (updates.isBestseller !== undefined) product.isBestseller = updates.isBestseller;
-    if (updates.tags) product.tags = updates.tags;
-    if (updates.seo) product.seo = updates.seo;
+    if (updates.tags !== undefined) product.tags = updates.tags;
+    if (updates.seo !== undefined) product.seo = updates.seo;
     if (updates.model3d !== undefined) product.model3d = updates.model3d;
 
     await product.save();
@@ -332,7 +332,7 @@ class ProductService {
 
     const [products, total] = await Promise.all([
       Product.find(filter)
-        .select('name slug brand description shortDescription category gender images priceSummary isFeatured isNewArrival isBestseller ratings tags createdAt')
+        .select('name slug brand description shortDescription category categoryTree gender images priceSummary isFeatured isNewArrival isBestseller ratings tags createdAt')
         .populate('category', 'name slug')
         .sort(sort)
         .skip(pagination.skip)
@@ -524,14 +524,26 @@ class ProductService {
         }
       }
 
-      const uploadResult = await uploadToCloudinary(file.buffer, {
-        folder: folderPath,
-        publicId: customPublicId,
-      });
+      let uploadResult;
+      try {
+        uploadResult = await uploadToCloudinary(file.buffer, {
+          folder: folderPath,
+          publicId: customPublicId,
+        });
+      } catch (uploadErr) {
+        console.error(`[Cloudinary Upload Error] Product ID: ${productId} | File: ${file.originalname || `image_${i+1}`} | Error:`, uploadErr.message);
+        const error = new Error(`Image upload failed for "${file.originalname || `image_${i+1}`}": ${uploadErr.message}`);
+        error.statusCode = 502;
+        error.code = 'CLOUDINARY_UPLOAD_FAILED';
+        throw error;
+      }
 
       const isFirstUploaded = i === 0 && !hasPrimary;
-      const altText = (Array.isArray(options.alts) ? options.alts[i] : options.alt) || product.name;
-      const colorVal = (Array.isArray(options.colors) ? options.colors[i] : options.color) || '';
+      const altList = options.alts || options['alts[]'];
+      const altText = (Array.isArray(altList) ? altList[i] : altList) || options.alt || product.name;
+
+      const colorList = options.colors || options['colors[]'];
+      const colorVal = (Array.isArray(colorList) ? colorList[i] : colorList) || options.color || '';
 
       product.images.push({
         url: uploadResult.url,
@@ -545,6 +557,21 @@ class ProductService {
         displayOrder: currentCount + i,
         color: colorVal,
       });
+
+      // If color is specified and product has variants, sync image URL into matching variants' images array
+      if (colorVal && product.variants && product.variants.length > 0) {
+        product.variants.forEach((v) => {
+          if (
+            v.attributes?.color?.name &&
+            v.attributes.color.name.toLowerCase() === colorVal.toLowerCase()
+          ) {
+            v.images = v.images || [];
+            if (!v.images.includes(uploadResult.url)) {
+              v.images.push(uploadResult.url);
+            }
+          }
+        });
+      }
 
       if (isFirstUploaded) {
         hasPrimary = true;

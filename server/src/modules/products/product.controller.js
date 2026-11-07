@@ -11,7 +11,7 @@ import { sendSuccess } from '../../utils/response.js';
  */
 export const getProducts = async (req, res, next) => {
   try {
-    const parsedQuery = validateCatalogQuery(req.query);
+    const parsedQuery = await validateCatalogQuery(req.query);
     const result = await productService.getProducts(parsedQuery);
     return sendSuccess(res, 200, 'Products fetched successfully', result.products, {
       pagination: result.pagination,

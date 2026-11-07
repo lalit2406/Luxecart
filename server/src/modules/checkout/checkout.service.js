@@ -3,6 +3,8 @@ import Cart from '../cart/cart.model.js';
 import Address from '../addresses/address.model.js';
 import Product from '../products/product.model.js';
 import couponService from '../coupons/coupon.service.js';
+import { SHIPPING_FEE_PAISE, calculateShippingFeePaise } from '../../constants/shipping.constants.js';
+import { storeSettingsService } from '../settings/storeSettings.service.js';
 
 class CheckoutService {
   /**
@@ -14,7 +16,18 @@ class CheckoutService {
    * @returns {Promise<object>}
    */
   async prepareCheckout(userId, { addressId, couponCode } = {}) {
-    // 1. Fetch authenticated user's cart
+    // 1. Fetch authoritative StoreSettings
+    let settings;
+    try {
+      settings = await storeSettingsService.getOrCreateStoreSettings();
+    } catch (err) {
+      const error = new Error('Unable to retrieve store settings for checkout calculation. Please try again shortly.');
+      error.statusCode = 503;
+      error.code = 'SETTINGS_SERVICE_UNAVAILABLE';
+      throw error;
+    }
+
+    // 2. Fetch authenticated user's cart
     const cart = await Cart.findOne({ userId });
     if (!cart || !cart.items || cart.items.length === 0) {
       const error = new Error('Your cart is empty');
@@ -221,7 +234,10 @@ class CheckoutService {
     }
 
     // 4. Financial Calculations in Paise
-    const shippingPaise = 0; // Free delivery business rule
+    const hasEligibleItems = checkoutItems.some((i) => i.isAvailable) && subtotalPaise > 0;
+    const shippingPaise = hasEligibleItems
+      ? calculateShippingFeePaise(subtotalPaise, settings?.shipping)
+      : 0;
     const estimatedTaxPaise = 0; // Tax placeholder
     let couponDiscountPaise = 0;
     let couponSnapshot = null;
@@ -250,10 +266,22 @@ class CheckoutService {
     const grandTotalPaise = Math.max(0, subtotalPaise + shippingPaise + estimatedTaxPaise - couponDiscountPaise);
 
     // 5. COD Eligibility
+    const maxCodOrderPaise = settings?.payment?.maxCodOrderPaise ?? 10000000;
+    const isWithinCodLimit = grandTotalPaise <= maxCodOrderPaise;
+    let codUnavailableReason = null;
+    if (!canPlaceOrder) {
+      codUnavailableReason = 'CHECKOUT_VALIDATION_FAILED';
+    } else if (!isWithinCodLimit) {
+      codUnavailableReason = 'COD_LIMIT_EXCEEDED';
+      const maxCodRupeesFormatted = (maxCodOrderPaise / 100).toLocaleString('en-IN');
+      warnings.push(`Order total exceeds the maximum Cash on Delivery limit of ₹${maxCodRupeesFormatted}`);
+    }
+
     const payment = {
       method: 'CASH_ON_DELIVERY',
-      available: canPlaceOrder,
-      reason: canPlaceOrder ? null : 'CHECKOUT_VALIDATION_FAILED',
+      available: canPlaceOrder && isWithinCodLimit,
+      reason: codUnavailableReason,
+      maxLimitPaise: maxCodOrderPaise,
     };
 
     return {
@@ -272,7 +300,7 @@ class CheckoutService {
         grandTotal: grandTotalPaise,
       },
       payment,
-      canPlaceOrder,
+      canPlaceOrder: canPlaceOrder && isWithinCodLimit,
       warnings,
     };
   }

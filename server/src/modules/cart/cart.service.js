@@ -1,5 +1,7 @@
 import Cart from './cart.model.js';
 import Product from '../products/product.model.js';
+import { SHIPPING_FEE_RUPEES, calculateShippingFeePaise } from '../../constants/shipping.constants.js';
+import { storeSettingsService } from '../settings/storeSettings.service.js';
 
 class CartService {
   /**
@@ -179,6 +181,13 @@ class CartService {
     const subtotal = cartSubtotalPaise / 100;
     const totalMrp = cartMrpSubtotalPaise / 100;
     const totalSavings = totalMrp > subtotal ? totalMrp - subtotal : 0;
+    const settings = await storeSettingsService.getOrCreateStoreSettings().catch(() => null);
+    let estimatedShippingPaise = 0;
+    if (hydratedItems.length > 0 && cartSubtotalPaise > 0) {
+      estimatedShippingPaise = calculateShippingFeePaise(cartSubtotalPaise, settings?.shipping);
+    }
+    const estimatedShipping = estimatedShippingPaise / 100;
+    const grandTotal = subtotal + estimatedShipping;
 
     return {
       items: hydratedItems,
@@ -189,8 +198,8 @@ class CartService {
         totalMrp,
         totalSavings,
         estimatedTax: 0,
-        estimatedShipping: 0,
-        grandTotal: subtotal,
+        estimatedShipping,
+        grandTotal,
         canCheckout: hydratedItems.length > 0 && allItemsPurchasable,
       },
     };

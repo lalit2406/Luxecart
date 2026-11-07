@@ -12,6 +12,7 @@ import addressRoutes from '../modules/addresses/address.routes.js';
 import checkoutRoutes from '../modules/checkout/checkout.routes.js';
 import orderRoutes from '../modules/orders/order.routes.js';
 import adminOrderRoutes from '../modules/orders/adminOrder.routes.js';
+import adminLogisticsRoutes from '../modules/logistics/adminLogistics.routes.js';
 import reviewRoutes from '../modules/reviews/review.routes.js';
 import adminReviewRoutes from '../modules/reviews/adminReview.routes.js';
 import couponRoutes from '../modules/coupons/coupon.routes.js';
@@ -23,6 +24,10 @@ import adminSupportRoutes from '../modules/support/adminSupport.routes.js';
 import analyticsRoutes from '../modules/analytics/analytics.routes.js';
 import contentRoutes from '../modules/content/content.routes.js';
 import adminContentRoutes from '../modules/content/adminContent.routes.js';
+import adminCustomerRoutes from '../modules/users/adminCustomer.routes.js';
+import adminExportRoutes from '../modules/exports/adminExport.routes.js';
+import storeSettingsRoutes, { adminStoreSettingsRouter } from '../modules/settings/storeSettings.routes.js';
+import { checkMaintenanceMode } from '../middlewares/maintenance.middleware.js';
 import seoRoutes from '../modules/seo/seo.routes.js';
 import { authenticate, requireRole } from '../middlewares/auth.middleware.js';
 
@@ -58,6 +63,12 @@ router.get('/health', (req, res) => {
 // Authentication routes
 router.use('/auth', authRoutes);
 
+// Public settings route
+router.use('/settings', storeSettingsRoutes);
+
+// Maintenance mode protection for customer storefront mutations/orders
+router.use(checkMaintenanceMode);
+
 // Public Category, Product Catalog, Reviews & Storefront Content routes
 router.use('/categories', categoryRoutes);
 router.use('/products/:productId/reviews', reviewRoutes);
@@ -81,12 +92,16 @@ router.use('/admin/products/import', importRoutes);
 router.use('/admin/products/imports', importRoutes);
 router.use('/admin/products', adminProductRouter);
 router.use('/admin/orders', adminOrderRoutes);
+router.use('/admin/logistics', adminLogisticsRoutes);
 router.use('/admin/reviews', adminReviewRoutes);
 router.use('/admin/coupons', adminCouponRoutes);
 router.use('/admin/returns', adminReturnRoutes);
 router.use('/admin/support', adminSupportRoutes);
 router.use('/admin/analytics', analyticsRoutes);
 router.use('/admin/content', adminContentRoutes);
+router.use('/admin/customers', adminCustomerRoutes);
+router.use('/admin/exports', adminExportRoutes);
+router.use('/admin/settings', adminStoreSettingsRouter);
 
 // Phase 2 Admin-only authorization test route
 router.get('/admin/test', authenticate, requireRole('ADMIN'), (req, res) => {

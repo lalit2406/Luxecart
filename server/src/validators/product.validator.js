@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import Category from '../modules/categories/category.model.js';
+import { escapeRegex } from '../utils/regex.js';
 
 const SKU_REGEX = /^[A-Z0-9_-]{3,30}$/;
 const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -318,18 +320,55 @@ export const validateProductInput = (data = {}, isPublishing = false, isUpdate =
  * @param {object} query
  * @returns {{ filter: object, sort: object, pagination: { page: number, limit: number, skip: number } }}
  */
-export const validateCatalogQuery = (query = {}) => {
+export const validateCatalogQuery = async (query = {}) => {
   const filter = { status: 'ACTIVE' };
 
-  // Category filter
-  if (query.category && mongoose.Types.ObjectId.isValid(query.category)) {
-    filter.categoryTree = new mongoose.Types.ObjectId(query.category);
+  // Category filter: Support both 24-hex ObjectId and lowercase slug
+  if (query.category) {
+    const rawCat = typeof query.category === 'string' ? query.category.trim() : '';
+    if (rawCat) {
+      const is24Hex = /^[0-9a-fA-F]{24}$/.test(rawCat);
+      let categoryDoc = null;
+
+      if (is24Hex) {
+        categoryDoc = await Category.findById(rawCat).select('_id isActive name slug').lean();
+      } else {
+        const normalizedSlug = rawCat.toLowerCase();
+        if (!SLUG_REGEX.test(normalizedSlug)) {
+          const error = new Error(`Invalid category format: '${rawCat}'`);
+          error.statusCode = 400;
+          error.code = 'VALIDATION_ERROR';
+          error.details = [`Invalid category format: '${rawCat}'`];
+          throw error;
+        }
+        categoryDoc = await Category.findOne({ slug: normalizedSlug }).select('_id isActive name slug').lean();
+      }
+
+      if (!categoryDoc) {
+        const error = new Error(`Category '${rawCat}' not found`);
+        error.statusCode = 400;
+        error.code = 'VALIDATION_ERROR';
+        error.details = [`Category '${rawCat}' does not exist`];
+        throw error;
+      }
+
+      if (categoryDoc.isActive === false) {
+        const error = new Error(`Category '${rawCat}' is inactive`);
+        error.statusCode = 400;
+        error.code = 'VALIDATION_ERROR';
+        error.details = [`Category '${rawCat}' is not active`];
+        throw error;
+      }
+
+      filter.categoryTree = categoryDoc._id;
+    }
   }
 
   // Brand filter
   if (query.brand && (typeof query.brand === 'string' || Array.isArray(query.brand))) {
-    const brands = (Array.isArray(query.brand) ? query.brand : query.brand.split(','))
-      .map((b) => (typeof b === 'string' ? b.trim() : ''))
+    const rawBrands = Array.isArray(query.brand) ? query.brand : query.brand.split(',');
+    const brands = rawBrands
+      .map((b) => escapeRegex(b, 100))
       .filter(Boolean);
     if (brands.length > 0) {
       filter.brand = { $in: brands.map((b) => new RegExp(`^${b}$`, 'i')) };
@@ -346,9 +385,50 @@ export const validateCatalogQuery = (query = {}) => {
   if (query.isNewArrival === 'true') filter.isNewArrival = true;
   if (query.isBestseller === 'true') filter.isBestseller = true;
 
-  // Search keyword query
+  // Search keyword query: case-insensitive partial matching across name, brand, tags, shortDescription, and category
   if (query.search && typeof query.search === 'string' && query.search.trim()) {
-    filter.$text = { $search: query.search.trim() };
+    const rawSearch = query.search.trim().slice(0, 100);
+    const escapedSearch = rawSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const searchRegex = new RegExp(escapedSearch, 'i');
+
+    // 1. Resolve matching active categories by name or slug
+    let matchingCategoryIds = [];
+    try {
+      const matchedCats = await Category.find({
+        $or: [
+          { name: { $regex: searchRegex } },
+          { slug: { $regex: searchRegex } },
+        ],
+        isActive: { $ne: false },
+      })
+        .select('_id')
+        .limit(20)
+        .lean();
+
+      matchingCategoryIds = matchedCats.map((c) => c._id);
+    } catch {
+      matchingCategoryIds = [];
+    }
+
+    // 2. Build multi-field search conditions
+    const searchConditions = [
+      { name: searchRegex },
+      { brand: searchRegex },
+      { tags: searchRegex },
+      { shortDescription: searchRegex },
+    ];
+
+    if (matchingCategoryIds.length > 0) {
+      searchConditions.push(
+        { category: { $in: matchingCategoryIds } },
+        { categoryTree: { $in: matchingCategoryIds } }
+      );
+    }
+
+    if (!filter.$and) {
+      filter.$and = [];
+    }
+    filter.$and.push({ $or: searchConditions });
   }
 
   // Exact variant combinations ($elemMatch)
@@ -361,10 +441,15 @@ export const validateCatalogQuery = (query = {}) => {
     hasVariantFilter = true;
   }
 
-  if (query.color) {
-    const colors = (Array.isArray(query.color) ? query.color : query.color.split(',')).map((c) => c.trim());
-    variantConditions['attributes.color.name'] = { $in: colors.map((c) => new RegExp(`^${c}$`, 'i')) };
-    hasVariantFilter = true;
+  if (query.color && (typeof query.color === 'string' || Array.isArray(query.color))) {
+    const rawColors = Array.isArray(query.color) ? query.color : query.color.split(',');
+    const colors = rawColors
+      .map((c) => escapeRegex(c, 100))
+      .filter(Boolean);
+    if (colors.length > 0) {
+      variantConditions['attributes.color.name'] = { $in: colors.map((c) => new RegExp(`^${c}$`, 'i')) };
+      hasVariantFilter = true;
+    }
   }
 
   if (query.inStock === 'true') {

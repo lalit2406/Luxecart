@@ -83,7 +83,9 @@ class AnalyticsService {
   async getAnalyticsSummary(params = {}) {
     const { start, end, range } = this.resolveDateBounds(params);
 
-    const orderMatch = {};
+    const orderMatch = {
+      isDemo: { $ne: true }, // Exclude demo orders from executive business analytics
+    };
     if (start || end) {
       orderMatch.createdAt = {};
       if (start) orderMatch.createdAt.$gte = start;
@@ -211,6 +213,7 @@ class AnalyticsService {
 
     const orderMatch = {
       status: { $ne: 'CANCELLED' },
+      isDemo: { $ne: true }, // Exclude demo orders from sales trend trajectories
     };
     if (start || end) {
       orderMatch.createdAt = {};
@@ -325,6 +328,7 @@ class AnalyticsService {
 
     const orderMatch = {
       status: { $ne: 'CANCELLED' },
+      isDemo: { $ne: true }, // Exclude demo orders from product revenue and unit metrics
     };
     if (start || end) {
       orderMatch.createdAt = {};
@@ -517,6 +521,7 @@ class AnalyticsService {
 
     const orderMatch = {
       status: { $ne: 'CANCELLED' },
+      isDemo: { $ne: true }, // Exclude demo orders from product revenue and unit metrics
     };
     if (start || end) {
       orderMatch.createdAt = {};
@@ -695,7 +700,9 @@ class AnalyticsService {
   } = {}) {
     const { start, end, range: resolvedRange } = this.resolveDateBounds({ range, startDate, endDate });
 
-    const orderMatch = {};
+    const orderMatch = {
+      isDemo: { $ne: true }, // Exclude demo orders from customer cohort analytics
+    };
     if (start || end) {
       orderMatch.createdAt = {};
       if (start) orderMatch.createdAt.$gte = start;
@@ -762,7 +769,7 @@ class AnalyticsService {
 
     // Fetch lifetime order history to accurately identify first-ever order date & lifetime order count
     const lifetimeOrderStats = await Order.aggregate([
-      { $match: { userId: { $in: userIds }, status: { $ne: 'CANCELLED' } } },
+      { $match: { userId: { $in: userIds }, status: { $ne: 'CANCELLED' }, isDemo: { $ne: true } } },
       {
         $group: {
           _id: '$userId',
@@ -931,6 +938,7 @@ class AnalyticsService {
 
     const orderMatch = {
       status: { $ne: 'CANCELLED' },
+      isDemo: { $ne: true }, // Exclude demo orders from product revenue and unit metrics
     };
     if (start || end) {
       orderMatch.createdAt = {};
@@ -988,6 +996,7 @@ class AnalyticsService {
 
     const orderMatch = {
       status: { $ne: 'CANCELLED' },
+      isDemo: { $ne: true }, // Exclude demo orders from product revenue and unit metrics
     };
     if (start || end) {
       orderMatch.createdAt = {};
@@ -1003,9 +1012,9 @@ class AnalyticsService {
 
     const distinctUserIds = [...new Set(periodOrders.map((o) => o.userId?.toString()).filter(Boolean))];
 
-    // 2. Fetch first lifetime order date for each user
+    // 2. Fetch first lifetime order date for each user (strictly excluding demo orders)
     const lifetimeFirstOrders = await Order.aggregate([
-      { $match: { userId: { $in: distinctUserIds.map((id) => new mongoose.Types.ObjectId(id)) }, status: { $ne: 'CANCELLED' } } },
+      { $match: { userId: { $in: distinctUserIds.map((id) => new mongoose.Types.ObjectId(id)) }, status: { $ne: 'CANCELLED' }, isDemo: { $ne: true } } },
       {
         $group: {
           _id: '$userId',

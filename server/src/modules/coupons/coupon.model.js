@@ -81,6 +81,15 @@ const couponSchema = new mongoose.Schema(
       default: true,
       index: true,
     },
+    cancellationTokens: {
+      type: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+      select: false,
+    },
   },
   {
     timestamps: true,

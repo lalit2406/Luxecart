@@ -266,6 +266,15 @@ const productSchema = new mongoose.Schema(
         default: false,
       },
     },
+    cancellationTokens: {
+      type: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+      select: false,
+    },
   },
   {
     timestamps: true,

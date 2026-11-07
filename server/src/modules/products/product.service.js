@@ -2,6 +2,7 @@ import Product from './product.model.js';
 import Category from '../categories/category.model.js';
 import { generateUniqueSlug } from '../../utils/slugify.js';
 import { uploadToCloudinary, deleteFromCloudinary } from '../../config/cloudinary.js';
+import { escapeRegex } from '../../utils/regex.js';
 
 class ProductService {
   /**
@@ -328,7 +329,10 @@ class ProductService {
    * @returns {Promise<{ products: Array<object>, pagination: object }>}
    */
   async getProducts(parsedQuery) {
-    const { filter, sort, pagination } = parsedQuery;
+    const resolvedQuery = (parsedQuery && typeof parsedQuery.then === 'function')
+      ? await parsedQuery
+      : parsedQuery;
+    const { filter, sort, pagination } = resolvedQuery;
 
     const [products, total] = await Promise.all([
       Product.find(filter)
@@ -417,13 +421,36 @@ class ProductService {
     const filter = {};
     if (query.status) filter.status = query.status;
     if (query.category) filter.category = query.category;
-    if (query.brand) filter.brand = new RegExp(query.brand, 'i');
-    if (query.search) {
-      filter.$or = [
-        { name: new RegExp(query.search, 'i') },
-        { brand: new RegExp(query.search, 'i') },
-        { 'variants.sku': new RegExp(query.search, 'i') },
-      ];
+
+    if (query.brand !== undefined && query.brand !== null) {
+      if (typeof query.brand !== 'string') {
+        const error = new Error('Brand filter must be a string');
+        error.statusCode = 400;
+        error.code = 'VALIDATION_ERROR';
+        throw error;
+      }
+      const escapedBrand = escapeRegex(query.brand, 100);
+      if (escapedBrand) {
+        filter.brand = new RegExp(escapedBrand, 'i');
+      }
+    }
+
+    if (query.search !== undefined && query.search !== null) {
+      if (typeof query.search !== 'string') {
+        const error = new Error('Search query must be a string');
+        error.statusCode = 400;
+        error.code = 'VALIDATION_ERROR';
+        throw error;
+      }
+      const escapedSearch = escapeRegex(query.search, 100);
+      if (escapedSearch) {
+        const searchRegex = new RegExp(escapedSearch, 'i');
+        filter.$or = [
+          { name: searchRegex },
+          { brand: searchRegex },
+          { 'variants.sku': searchRegex },
+        ];
+      }
     }
 
     const page = Math.max(1, parseInt(query.page || '1', 10));
@@ -507,6 +534,7 @@ class ProductService {
     }
 
     let hasPrimary = product.images?.some((img) => img.isPrimary);
+    const newlyUploadedPublicIds = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -530,11 +558,24 @@ class ProductService {
           folder: folderPath,
           publicId: customPublicId,
         });
+        if (uploadResult?.publicId) {
+          newlyUploadedPublicIds.push(uploadResult.publicId);
+        }
       } catch (uploadErr) {
         console.error(`[Cloudinary Upload Error] Product ID: ${productId} | File: ${file.originalname || `image_${i+1}`} | Error:`, uploadErr.message);
+
+        // Safe cleanup: purge only newly uploaded assets from this failed batch without touching pre-existing media
+        for (const pubId of newlyUploadedPublicIds) {
+          try {
+            await deleteFromCloudinary(pubId);
+          } catch (delErr) {
+            console.error('[Cloudinary Cleanup Error]', delErr.message);
+          }
+        }
+
         const error = new Error(`Image upload failed for "${file.originalname || `image_${i+1}`}": ${uploadErr.message}`);
-        error.statusCode = 502;
-        error.code = 'CLOUDINARY_UPLOAD_FAILED';
+        error.statusCode = uploadErr.statusCode || 502;
+        error.code = uploadErr.code || 'CLOUDINARY_UPLOAD_FAILED';
         throw error;
       }
 

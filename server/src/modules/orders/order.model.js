@@ -128,6 +128,36 @@ const statusHistoryEventSchema = new mongoose.Schema(
   { _id: true }
 );
 
+const cancellationSchema = new mongoose.Schema(
+  {
+    status: {
+      type: String,
+      enum: ['PENDING', 'IN_PROGRESS', 'COMPLETED', 'FAILED_REQUIRES_ATTENTION', null],
+      default: null,
+    },
+    lockToken: { type: String, default: null, trim: true },
+    initiatedAt: { type: Date, default: null },
+    completedAt: { type: Date, default: null },
+    reason: { type: String, default: '', trim: true },
+    couponRestored: { type: Boolean, default: false },
+    restoredItems: [
+      {
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        variantId: { type: mongoose.Schema.Types.ObjectId },
+        sku: { type: String },
+        quantity: { type: Number },
+        restoredAt: { type: Date, default: Date.now },
+      },
+    ],
+    error: {
+      message: { type: String, default: null },
+      failedAt: { type: Date, default: null },
+      details: { type: mongoose.Schema.Types.Mixed, default: null },
+    },
+  },
+  { _id: false }
+);
+
 const orderSchema = new mongoose.Schema(
   {
     orderNumber: {
@@ -209,6 +239,14 @@ const orderSchema = new mongoose.Schema(
       trim: true,
       index: true,
       sparse: true,
+    },
+    isDemo: {
+      type: Boolean,
+      default: false,
+    },
+    cancellation: {
+      type: cancellationSchema,
+      default: () => ({ status: null, restoredItems: [] }),
     },
   },
   {

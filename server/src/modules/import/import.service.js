@@ -1,4 +1,5 @@
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
+import { Readable } from 'stream';
 import mongoose from 'mongoose';
 import ImportJob from './importJob.model.js';
 import Product from '../products/product.model.js';
@@ -14,42 +15,116 @@ import { generateUniqueSlug } from '../../utils/slugify.js';
 
 const MAX_ROWS = 5000;
 
+/**
+ * Safely extract raw or formatted value from an ExcelJS cell without evaluating
+ * or executing formulas, macros, or malicious script content.
+ * @param {import('exceljs').Cell} cell
+ * @returns {string | number | boolean}
+ */
+const extractCellValue = (cell) => {
+  if (!cell || cell.value === null || cell.value === undefined) {
+    return '';
+  }
+  const val = cell.value;
+  if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
+    return val;
+  }
+  if (val instanceof Date) {
+    return val.toISOString();
+  }
+  // Formula result: never execute the formula; extract pre-evaluated result safely
+  if (typeof val === 'object' && val.result !== undefined) {
+    if (val.result === null) return '';
+    if (typeof val.result === 'object') {
+      if (val.result.error) return '';
+      return String(val.result);
+    }
+    return val.result;
+  }
+  // Rich text: concatenate text segments safely
+  if (typeof val === 'object' && Array.isArray(val.richText)) {
+    return val.richText.map((t) => t.text || '').join('');
+  }
+  // Hyperlinks: return text
+  if (typeof val === 'object' && val.text !== undefined) {
+    return val.text;
+  }
+  return cell.text || '';
+};
+
 class ImportService {
   /**
    * Helper to parse spreadsheet buffer into headers and row objects
    * @param {Buffer} buffer
-   * @returns {{ headers: string[], rows: object[] }}
+   * @param {string} [fileName]
+   * @returns {Promise<{ headers: string[], rows: object[] }>}
    */
-  parseSpreadsheet(buffer) {
-    let workbook;
-    try {
-      workbook = XLSX.read(buffer, { type: 'buffer' });
-    } catch (err) {
-      const error = new Error('Failed to parse spreadsheet file. Please ensure it is a valid CSV or XLSX file.');
-      error.statusCode = 400;
-      error.code = 'INVALID_IMPORT_FILE';
-      throw error;
-    }
-
-    const firstSheetName = workbook.SheetNames[0];
-    if (!firstSheetName) {
-      const error = new Error('Spreadsheet contains no sheets.');
-      error.statusCode = 400;
-      error.code = 'EMPTY_IMPORT_FILE';
-      throw error;
-    }
-
-    const worksheet = workbook.Sheets[firstSheetName];
-    const rawMatrix = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-
-    if (!rawMatrix || rawMatrix.length === 0) {
+  async parseSpreadsheet(buffer, fileName = '') {
+    if (!buffer || buffer.length === 0) {
       const error = new Error('Spreadsheet is empty.');
       error.statusCode = 400;
       error.code = 'EMPTY_IMPORT_FILE';
       throw error;
     }
 
-    const rawHeaders = rawMatrix[0].map((h) => String(h).trim()).filter(Boolean);
+    const workbook = new ExcelJS.Workbook();
+    const isXlsx =
+      (fileName && fileName.toLowerCase().endsWith('.xlsx')) ||
+      (buffer.length >= 4 && buffer[0] === 0x50 && buffer[1] === 0x4b && buffer[2] === 0x03 && buffer[3] === 0x04);
+
+    try {
+      if (isXlsx) {
+        await workbook.xlsx.load(buffer);
+      } else {
+        const stream = Readable.from(buffer);
+        await workbook.csv.read(stream);
+      }
+    } catch (err) {
+      // Fallback attempt with opposite format before rejecting
+      try {
+        if (isXlsx) {
+          const stream = Readable.from(buffer);
+          await workbook.csv.read(stream);
+        } else {
+          await workbook.xlsx.load(buffer);
+        }
+      } catch (fallbackErr) {
+        const error = new Error('Failed to parse spreadsheet file. Please ensure it is a valid CSV or XLSX file.');
+        error.statusCode = 400;
+        error.code = 'INVALID_IMPORT_FILE';
+        throw error;
+      }
+    }
+
+    const worksheet = workbook.worksheets[0];
+    if (!worksheet) {
+      const error = new Error('Spreadsheet contains no sheets.');
+      error.statusCode = 400;
+      error.code = 'EMPTY_IMPORT_FILE';
+      throw error;
+    }
+
+    const allRows = [];
+    worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+      const vals = [];
+      const colCount = Math.max(worksheet.columnCount || 0, row.cellCount || 0, row.actualCellCount || 0);
+      for (let c = 1; c <= colCount; c++) {
+        vals.push(extractCellValue(row.getCell(c)));
+      }
+      if (!vals.every((cell) => cell === '' || cell === null || cell === undefined)) {
+        allRows.push({ rowNumber, vals });
+      }
+    });
+
+    if (allRows.length === 0) {
+      const error = new Error('Spreadsheet is empty.');
+      error.statusCode = 400;
+      error.code = 'EMPTY_IMPORT_FILE';
+      throw error;
+    }
+
+    const firstRow = allRows[0];
+    const rawHeaders = firstRow.vals.map((h) => String(h).trim()).filter(Boolean);
     if (rawHeaders.length === 0) {
       const error = new Error('Spreadsheet header row is missing or empty.');
       error.statusCode = 400;
@@ -67,21 +142,16 @@ class ImportService {
     }
 
     const dataRows = [];
-    for (let r = 1; r < rawMatrix.length; r++) {
-      const rowArr = rawMatrix[r];
-      // Skip completely empty rows
-      if (!rowArr || rowArr.every((cell) => cell === '' || cell === null || cell === undefined)) {
-        continue;
-      }
-
+    for (let i = 1; i < allRows.length; i++) {
+      const { rowNumber, vals } = allRows[i];
       const rowObj = {};
       rawHeaders.forEach((rawHeader, idx) => {
         const canonical = normalizedMap[rawHeader] || rawHeader;
-        rowObj[canonical] = rowArr[idx] !== undefined ? rowArr[idx] : '';
+        rowObj[canonical] = vals[idx] !== undefined ? vals[idx] : '';
       });
 
       dataRows.push({
-        rawIndex: r + 1, // 1-based spreadsheet row index
+        rawIndex: rowNumber,
         data: rowObj,
       });
     }
@@ -135,7 +205,7 @@ class ImportService {
     const isXlsx = fileName.toLowerCase().endsWith('.xlsx');
     const fileType = isXlsx ? 'XLSX' : 'CSV';
 
-    const { rows } = this.parseSpreadsheet(fileBuffer);
+    const { rows } = await this.parseSpreadsheet(fileBuffer, fileName);
 
     if (rows.length === 0) {
       const error = new Error('Spreadsheet contains no data rows to import.');
@@ -478,9 +548,9 @@ class ImportService {
   /**
    * Generate downloadable template in CSV or XLSX format
    * @param {'csv' | 'xlsx'} format
-   * @returns {{ data: string | Buffer, contentType: string, filename: string }}
+   * @returns {Promise<{ data: string | Buffer, contentType: string, filename: string }>}
    */
-  generateTemplate(format = 'csv') {
+  async generateTemplate(format = 'csv') {
     const exampleRows = [
       {
         'Product Name': 'Egyptian Cotton Dress Shirt',
@@ -521,24 +591,28 @@ class ImportService {
     ];
 
     if (format === 'xlsx') {
-      const worksheet = XLSX.utils.json_to_sheet(exampleRows, { header: CANONICAL_COLUMNS });
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Products');
-      const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Products');
+      worksheet.columns = CANONICAL_COLUMNS.map((col) => ({ header: col, key: col }));
+      exampleRows.forEach((row) => worksheet.addRow(row));
+      const buffer = await workbook.xlsx.writeBuffer();
 
       return {
-        data: buffer,
+        data: Buffer.from(buffer),
         contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         filename: 'luxecart_product_import_template.xlsx',
       };
     }
 
     // CSV format
-    const worksheet = XLSX.utils.json_to_sheet(exampleRows, { header: CANONICAL_COLUMNS });
-    const csvContent = XLSX.utils.sheet_to_csv(worksheet);
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Products');
+    worksheet.columns = CANONICAL_COLUMNS.map((col) => ({ header: col, key: col }));
+    exampleRows.forEach((row) => worksheet.addRow(row));
+    const csvBuffer = await workbook.csv.writeBuffer();
 
     return {
-      data: csvContent,
+      data: csvBuffer.toString('utf8'),
       contentType: 'text/csv',
       filename: 'luxecart_product_import_template.csv',
     };

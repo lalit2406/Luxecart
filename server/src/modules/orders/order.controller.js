@@ -1,5 +1,5 @@
 import orderService from './order.service.js';
-import { validateCreateOrder } from '../../validators/order.validator.js';
+import { validateCreateOrder, validateCancelOrder } from '../../validators/order.validator.js';
 import { sendSuccess } from '../../utils/response.js';
 
 /**
@@ -51,6 +51,28 @@ export const getMyOrders = async (req, res, next) => {
         pages: result.pages,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Cancel an order by ID or orderNumber for authenticated customer
+ */
+export const cancelMyOrder = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const validation = validateCancelOrder(req.body);
+    if (!validation.isValid) {
+      const error = new Error(validation.errors.join(', '));
+      error.statusCode = 400;
+      error.code = 'VALIDATION_ERROR';
+      error.details = validation.errors;
+      throw error;
+    }
+
+    const order = await orderService.cancelCustomerOrder(req.user.id, id, validation.sanitized);
+    return sendSuccess(res, 200, 'Order cancelled successfully', { order });
   } catch (error) {
     next(error);
   }

@@ -95,7 +95,7 @@ export const downloadErrorCsv = async (req, res, next) => {
 export const downloadTemplate = async (req, res, next) => {
   try {
     const format = req.query.format === 'xlsx' ? 'xlsx' : 'csv';
-    const { data, contentType, filename } = importService.generateTemplate(format);
+    const { data, contentType, filename } = await importService.generateTemplate(format);
 
     res.setHeader('Content-Type', contentType);
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);

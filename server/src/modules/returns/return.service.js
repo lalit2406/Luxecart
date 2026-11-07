@@ -5,6 +5,7 @@ import Product from '../products/product.model.js';
 import User from '../users/user.model.js';
 import { generateReturnNumber } from '../../utils/returnNumber.js';
 import { RETURN_STATUS, assertValidReturnTransition } from './returnStateMachine.js';
+import { storeSettingsService } from '../settings/storeSettings.service.js';
 
 export const DEFAULT_RETURN_WINDOW_DAYS = 7;
 
@@ -58,6 +59,24 @@ class ReturnService {
       throw error;
     }
 
+    // 1. Fetch authoritative StoreSettings
+    let settings;
+    try {
+      settings = await storeSettingsService.getOrCreateStoreSettings();
+    } catch (err) {
+      const error = new Error('Unable to retrieve store settings for return verification. Please try again shortly.');
+      error.statusCode = 503;
+      error.code = 'SETTINGS_SERVICE_UNAVAILABLE';
+      throw error;
+    }
+
+    if (settings?.returns?.isReturnsEnabled === false) {
+      const error = new Error('Returns are currently disabled for this store.');
+      error.statusCode = 400;
+      error.code = 'RETURNS_DISABLED';
+      throw error;
+    }
+
     const orderIdToFind = orderIdentifier || returnPayload.orderNumber;
     if (!orderIdToFind) {
       const error = new Error('Order number or order ID is required to request a return');
@@ -66,10 +85,10 @@ class ReturnService {
       throw error;
     }
 
-    // 1. Order Ownership & Existence Check
+    // 2. Order Ownership & Existence Check
     const order = await this.findUserOrder(userId, orderIdToFind);
 
-    // 2. Order Status Eligibility Check
+    // 3. Order Status Eligibility Check
     if (order.status !== 'DELIVERED') {
       const error = new Error(
         `Order '${order.orderNumber}' is not eligible for return. Current status is '${order.status}', but only DELIVERED orders can be returned.`
@@ -79,14 +98,25 @@ class ReturnService {
       throw error;
     }
 
-    // 3. Return Window Verification (Default: 7 days / 168 hours)
+    // 4. Return Window Verification
     const deliveredEvent = (order.statusHistory || [])
       .slice()
       .reverse()
       .find((e) => e.status === 'DELIVERED');
 
     const deliveredAt = deliveredEvent?.changedAt ? new Date(deliveredEvent.changedAt) : new Date(order.updatedAt);
-    const returnWindowDays = DEFAULT_RETURN_WINDOW_DAYS;
+    const returnWindowDays =
+      typeof settings?.returns?.returnWindowDays === 'number'
+        ? settings.returns.returnWindowDays
+        : DEFAULT_RETURN_WINDOW_DAYS;
+
+    if (returnWindowDays <= 0) {
+      const error = new Error(`Returns are currently not accepted for order '${order.orderNumber}'.`);
+      error.statusCode = 400;
+      error.code = 'RETURN_WINDOW_EXPIRED';
+      throw error;
+    }
+
     const returnDeadline = new Date(deliveredAt.getTime() + returnWindowDays * 24 * 60 * 60 * 1000);
 
     if (Date.now() > returnDeadline.getTime()) {

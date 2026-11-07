@@ -262,20 +262,27 @@ class CouponService {
   /**
    * Atomically rollback coupon usage when an order is cancelled
    * @param {string} code
+   * Rollback coupon usage count idempotently
+   * @param {string} code
    * @param {mongoose.ClientSession} [session]
+   * @param {string} [cancellationToken] - Idempotency marker
    */
-  async rollbackCouponUsage(code, session = null) {
+  async rollbackCouponUsage(code, session = null, cancellationToken = null) {
     if (!code) return;
     const normalized = code.trim().toUpperCase();
 
     const options = {};
     if (session) options.session = session;
 
-    await Coupon.updateOne(
-      { code: normalized, usedCount: { $gt: 0 } },
-      { $inc: { usedCount: -1 } },
-      options
-    );
+    const filter = { code: normalized, usedCount: { $gt: 0 } };
+    const update = { $inc: { usedCount: -1 } };
+
+    if (cancellationToken) {
+      filter.cancellationTokens = { $ne: cancellationToken };
+      update.$addToSet = { cancellationTokens: cancellationToken };
+    }
+
+    return await Coupon.updateOne(filter, update, options);
   }
 
   // ==========================================

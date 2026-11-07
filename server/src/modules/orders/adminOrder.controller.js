@@ -2,6 +2,7 @@ import orderService from './order.service.js';
 import {
   validateAdminOrderQuery,
   validateUpdateOrderStatus,
+  validateCreateDemoOrder,
 } from '../../validators/adminOrder.validator.js';
 import { sendSuccess } from '../../utils/response.js';
 
@@ -61,6 +62,27 @@ export const updateOrderStatus = async (req, res, next) => {
     );
 
     return sendSuccess(res, 200, 'Order status updated successfully', { order });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Create an explicit demo order for logistics simulation
+ */
+export const createDemoOrder = async (req, res, next) => {
+  try {
+    const validation = validateCreateDemoOrder(req.body);
+    if (!validation.isValid) {
+      const error = new Error(validation.errors.join(', '));
+      error.statusCode = 400;
+      error.code = 'VALIDATION_ERROR';
+      error.details = validation.errors;
+      throw error;
+    }
+
+    const order = await orderService.createDemoOrder(validation.sanitized, req.user.id);
+    return sendSuccess(res, 201, 'Demo order created successfully', { order });
   } catch (error) {
     next(error);
   }

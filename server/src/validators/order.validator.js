@@ -25,6 +25,7 @@ const FORBIDDEN_FIELDS = [
   'productName',
   'sku',
   'pricing',
+  'isDemo',
 ];
 
 /**
@@ -83,6 +84,37 @@ export const validateCreateOrder = (body = {}) => {
       errors.push('Coupon code must be a string');
     } else {
       sanitized.couponCode = body.couponCode.trim().toUpperCase();
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    sanitized,
+  };
+};
+
+/**
+ * Validate customer order cancellation payload
+ * @param {object} body
+ * @returns {{ isValid: boolean, errors: string[], sanitized: { reason?: string } }}
+ */
+export const validateCancelOrder = (body = {}) => {
+  const errors = [];
+  const sanitized = {};
+
+  if (body && typeof body === 'object') {
+    if (body.reason !== undefined && body.reason !== null && body.reason !== '') {
+      if (typeof body.reason !== 'string') {
+        errors.push('Cancellation reason must be a string');
+      } else {
+        const trimmed = body.reason.trim();
+        if (trimmed.length > 500) {
+          errors.push('Cancellation reason cannot exceed 500 characters');
+        } else if (trimmed.length > 0) {
+          sanitized.reason = trimmed;
+        }
+      }
     }
   }
 

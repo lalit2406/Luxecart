@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../features/auth/hooks/useAuth';
 import { User, Mail, Lock, Phone, AlertCircle, ArrowRight, RefreshCw } from 'lucide-react';
 import SkipToContent from '../components/common/SkipToContent';
 import Logo from '../components/common/Logo';
 import GoogleSignInButton from '../components/auth/GoogleSignInButton';
+import { getSafeRedirectPath } from '../utils/navigation';
+import { useStoreSettings } from '../features/settings/context/useStoreSettings';
 
 export default function RegisterPage() {
+  const { settings } = useStoreSettings();
+  const storeName = settings?.storeName || 'LuxeCart';
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,6 +21,9 @@ export default function RegisterPage() {
 
   const { register, googleLogin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = getSafeRedirectPath(location.state?.from);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +49,7 @@ export default function RegisterPage() {
     setSubmitting(false);
 
     if (result.success) {
-      navigate('/', { replace: true });
+      navigate(from, { replace: true });
     } else {
       setErrorMessage(result.message);
     }
@@ -54,7 +62,7 @@ export default function RegisterPage() {
     setSubmitting(false);
 
     if (result.success) {
-      navigate('/', { replace: true });
+      navigate(from, { replace: true });
     } else {
       setErrorMessage(result.message);
     }
@@ -68,10 +76,10 @@ export default function RegisterPage() {
         <header className="max-w-md w-full mx-auto text-center">
           <Link
             to="/"
-            aria-label="LuxeCart Home"
+            aria-label={`${storeName} Home`}
             className="inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9A6A45] rounded-lg py-1"
           >
-            <Logo variant="light" className="h-10 sm:h-12 w-auto mx-auto" priority alt="LuxeCart" />
+            <Logo variant="light" className="h-10 sm:h-12 w-auto mx-auto" priority alt={storeName} />
           </Link>
         </header>
 
@@ -83,7 +91,7 @@ export default function RegisterPage() {
                 Create an Account
               </h1>
               <p className="text-sm text-[#6F6963]">
-                Join LuxeCart for a curated fashion experience
+                Join {storeName} for a curated fashion experience
               </p>
             </div>
 
@@ -241,6 +249,7 @@ export default function RegisterPage() {
                 Already have an account?{' '}
                 <Link
                   to="/login"
+                  state={{ from: location.state?.from }}
                   className="font-semibold text-[#9A6A45] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9A6A45] rounded"
                 >
                   Sign In
@@ -252,7 +261,7 @@ export default function RegisterPage() {
 
         {/* Footer */}
         <footer className="text-center text-xs text-[#6F6963]">
-          <p>LuxeCart &copy; 2026. Single-Vendor Fashion & Lifestyle.</p>
+          <p>{storeName} &copy; {new Date().getFullYear()}. Single-Vendor Fashion & Lifestyle.</p>
         </footer>
       </div>
     </>

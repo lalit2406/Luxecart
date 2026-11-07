@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, Suspense, lazy } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { productApi } from '../features/products/api/productApi';
@@ -14,6 +14,7 @@ import SEO from '../components/common/SEO';
 import { isWebGLSupported } from '../utils/webgl';
 import { getOptimizedImageUrl, LUXE_PLACEHOLDER_IMAGE } from '../utils/image';
 import ThreeErrorBoundary from '../components/home/three/ThreeErrorBoundary';
+import { useStoreSettings } from '../features/settings/context/useStoreSettings';
 import {
   Star,
   ShieldCheck,
@@ -42,6 +43,52 @@ export default function ProductDetailPage() {
   const { addItem: addToCart, loading: cartLoading } = useCart();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isWishlisted } = useWishlist();
   const { isAuthenticated, user } = useAuth();
+
+  let settings = null;
+  let refetchSettings = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const settingsContext = useStoreSettings();
+    settings = settingsContext?.settings;
+    refetchSettings = settingsContext?.refetch;
+  } catch {
+    settings = null;
+    refetchSettings = null;
+  }
+
+  const shippingMessage = useMemo(() => {
+    const shipping = settings?.shipping;
+    const standardFee =
+      typeof shipping?.standardFeeRupees === 'number' && shipping.standardFeeRupees >= 0
+        ? shipping.standardFeeRupees
+        : typeof shipping?.standardFeePaise === 'number' && shipping.standardFeePaise >= 0
+          ? shipping.standardFeePaise / 100
+          : 200;
+
+    const isThresholdEnabled = Boolean(shipping?.enableFreeShippingThreshold);
+    const thresholdRupees =
+      typeof shipping?.freeShippingThresholdRupees === 'number' && shipping.freeShippingThresholdRupees >= 0
+        ? shipping.freeShippingThresholdRupees
+        : typeof shipping?.freeShippingThresholdPaise === 'number' && shipping.freeShippingThresholdPaise >= 0
+          ? shipping.freeShippingThresholdPaise / 100
+          : 5000;
+
+    if (isThresholdEnabled) {
+      return `Inclusive of all taxes. Flat ₹${standardFee.toLocaleString('en-IN')} delivery fee per order (Free on orders above ₹${thresholdRupees.toLocaleString('en-IN')}).`;
+    }
+
+    if (standardFee === 0) {
+      return 'Inclusive of all taxes. Free standard delivery on all orders.';
+    }
+
+    return `Inclusive of all taxes. Flat ₹${standardFee.toLocaleString('en-IN')} delivery fee per order.`;
+  }, [settings?.shipping]);
+
+  const minDeliveryDays = settings?.shipping?.deliveryEstimateDays?.min || 3;
+  const maxDeliveryDays = settings?.shipping?.deliveryEstimateDays?.max || 7;
+  const isCodEnabled = settings?.payment?.isCodEnabled !== false;
+  const isReturnsEnabled = settings?.returns?.isReturnsEnabled !== false;
+  const returnWindowDays = settings?.returns?.returnWindowDays || 7;
 
   const [product, setProduct] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -79,9 +126,12 @@ export default function ProductDetailPage() {
       const res = await productApi.getProductBySlug(slug);
       const prod = res?.data?.product;
       setProduct(prod);
-      if (prod?.variants?.length > 0) {
-        const initialVariant = prod.variants.find((v) => (v.inventory?.stock || 0) > 0) || prod.variants[0];
+      const activeVars = (prod?.variants || []).filter((v) => v.isActive !== false);
+      if (activeVars.length > 0) {
+        const initialVariant = activeVars.find((v) => (v.inventory?.stock || 0) > 0) || activeVars[0];
         setSelectedVariant(initialVariant);
+      } else {
+        setSelectedVariant(null);
       }
       setSelectedImageIndex(0);
     } catch (err) {
@@ -148,7 +198,7 @@ export default function ProductDetailPage() {
 
   // Filter gallery images to the active colorway.
   // Computed unconditionally to preserve React Hook execution order.
-  const colorFilteredImages = React.useMemo(() => {
+  const colorFilteredImages = useMemo(() => {
     if (!product || !product.images || product.images.length === 0) {
       return [{ url: LUXE_PLACEHOLDER_IMAGE, alt: product?.name || 'LuxeCart' }];
     }
@@ -172,6 +222,27 @@ export default function ProductDetailPage() {
     }
     return product.images;
   }, [product, selectedColorName, selectedVariant?.images]);
+
+  // Only consider active variants for customer selection.
+  // Computed unconditionally to preserve React Hook execution order.
+  const activeVariants = useMemo(() => {
+    return (product?.variants || []).filter((v) => v.isActive !== false);
+  }, [product?.variants]);
+
+  const availableColors = useMemo(() => {
+    return Array.from(
+      new Set(activeVariants.map((v) => v.attributes?.color?.name).filter(Boolean))
+    ).map((name) => {
+      const v = activeVariants.find((item) => item.attributes?.color?.name === name);
+      return { name, hex: v?.attributes?.color?.hex || '#000000' };
+    });
+  }, [activeVariants]);
+
+  const availableSizes = useMemo(() => {
+    return Array.from(
+      new Set(activeVariants.map((v) => v.attributes?.size).filter(Boolean))
+    );
+  }, [activeVariants]);
 
   if (loading) {
     return (
@@ -209,31 +280,22 @@ export default function ProductDetailPage() {
   const images = colorFilteredImages;
   const activeImage = images[selectedImageIndex] || images[0];
 
+  const hasActiveVariants = activeVariants.length > 0;
+
   const currentPrice = selectedVariant ? selectedVariant.price : (product.priceSummary?.minPrice || 0);
   const currentMrp = selectedVariant ? selectedVariant.mrp : (product.priceSummary?.minMrp || currentPrice);
   const discountPercent = currentMrp > currentPrice
     ? Math.round(((currentMrp - currentPrice) / currentMrp) * 100)
     : 0;
 
-  const currentStock = selectedVariant?.inventory?.stock || 0;
-  const isOutOfStock = currentStock <= 0;
-  const isLowStock = currentStock > 0 && currentStock <= (selectedVariant?.inventory?.lowStockThreshold || 5);
-
-  const availableColors = Array.from(
-    new Set((product.variants || []).map((v) => v.attributes?.color?.name).filter(Boolean))
-  ).map((name) => {
-    const v = product.variants.find((item) => item.attributes?.color?.name === name);
-    return { name, hex: v?.attributes?.color?.hex || '#000000' };
-  });
-
-  const availableSizes = Array.from(
-    new Set((product.variants || []).map((v) => v.attributes?.size).filter(Boolean))
-  );
+  const currentStock = (hasActiveVariants && selectedVariant) ? (selectedVariant.inventory?.stock || 0) : 0;
+  const isOutOfStock = !hasActiveVariants || currentStock <= 0;
+  const isLowStock = hasActiveVariants && currentStock > 0 && currentStock <= (selectedVariant?.inventory?.lowStockThreshold || 5);
 
   const handleColorSelect = (colorName) => {
-    const matching = product.variants.find(
+    const matching = activeVariants.find(
       (v) => v.attributes?.color?.name === colorName && (selectedVariant ? v.attributes?.size === selectedVariant.attributes?.size : true)
-    ) || product.variants.find((v) => v.attributes?.color?.name === colorName);
+    ) || activeVariants.find((v) => v.attributes?.color?.name === colorName);
 
     if (matching) {
       setSelectedVariant(matching);
@@ -244,9 +306,9 @@ export default function ProductDetailPage() {
   };
 
   const handleSizeSelect = (sizeValue) => {
-    const matching = product.variants.find(
+    const matching = activeVariants.find(
       (v) => v.attributes?.size === sizeValue && (selectedVariant ? v.attributes?.color?.name === selectedVariant.attributes?.color?.name : true)
-    ) || product.variants.find((v) => v.attributes?.size === sizeValue);
+    ) || activeVariants.find((v) => v.attributes?.size === sizeValue);
 
     if (matching) {
       setSelectedVariant(matching);
@@ -255,7 +317,7 @@ export default function ProductDetailPage() {
   };
 
   const handleAddToCart = async () => {
-    if (!selectedVariant || isOutOfStock) return;
+    if (!hasActiveVariants || !selectedVariant || isOutOfStock) return;
     setActionError(null);
     setCartSuccess(false);
 
@@ -308,6 +370,12 @@ export default function ProductDetailPage() {
 
   const handleToggleWishlist = async () => {
     if (!selectedVariant) return;
+
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: location } });
+      return;
+    }
+
     setActionError(null);
     setActionMessage(null);
 
@@ -361,6 +429,11 @@ export default function ProductDetailPage() {
       ]);
     } catch (err) {
       setModalError(err?.response?.data?.message || err?.message || 'Failed to submit review');
+      if (err?.code === 'MAINTENANCE_MODE' || err?.statusCode === 503) {
+        if (typeof refetchSettings === 'function') {
+          refetchSettings();
+        }
+      }
     } finally {
       setModalLoading(false);
     }
@@ -448,19 +521,21 @@ export default function ProductDetailPage() {
     },
   ];
 
+  const storeName = settings?.storeName || 'LuxeCart';
   const pdpTitle =
-    product.seo?.metaTitle || `${product.name} | ${product.brand} — LuxeCart`;
+    product.seo?.metaTitle || `${product.name} | ${product.brand} — ${storeName}`;
   const pdpDescription =
     product.seo?.metaDescription ||
     product.shortDescription ||
     product.description?.substring(0, 160) ||
-    'Luxury handcrafted product at LuxeCart.';
+    `Luxury handcrafted product at ${storeName}.`;
 
   return (
     <div className="min-h-screen bg-[#F7F3EE] text-[#171513] flex flex-col justify-between">
       <SEO
         title={pdpTitle}
         description={pdpDescription}
+        keywords={product.seo?.keywords || settings?.seo?.keywords}
         canonical={`/products/${product.slug}`}
         image={activeImage?.url}
         type="product"
@@ -665,7 +740,7 @@ export default function ProductDetailPage() {
                 )}
               </div>
               <p className="text-[11px] text-[#6F6963]">
-                Inclusive of all taxes. Free shipping on all luxury orders.
+                {shippingMessage}
               </p>
             </div>
 
@@ -730,7 +805,11 @@ export default function ProductDetailPage() {
                 <label className="text-xs font-bold uppercase tracking-wider text-[#6F6963]">
                   Quantity
                 </label>
-                {isOutOfStock ? (
+                {!hasActiveVariants ? (
+                  <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-200">
+                    Currently Unavailable
+                  </span>
+                ) : isOutOfStock ? (
                   <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">
                     Out of Stock
                   </span>
@@ -749,7 +828,7 @@ export default function ProductDetailPage() {
                 <div className="flex items-center border border-[#E7DED5] rounded-xl bg-[#F7F3EE] p-1">
                   <button
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    disabled={quantity <= 1 || isOutOfStock}
+                    disabled={quantity <= 1 || isOutOfStock || !hasActiveVariants}
                     className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white text-[#2A211B] transition-colors disabled:opacity-30 cursor-pointer"
                     aria-label="Decrease quantity"
                   >
@@ -760,7 +839,7 @@ export default function ProductDetailPage() {
                   </span>
                   <button
                     onClick={() => setQuantity((q) => Math.min(currentStock, q + 1))}
-                    disabled={quantity >= currentStock || isOutOfStock}
+                    disabled={quantity >= currentStock || isOutOfStock || !hasActiveVariants}
                     className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white text-[#2A211B] transition-colors disabled:opacity-30 cursor-pointer"
                     aria-label="Increase quantity"
                   >
@@ -778,7 +857,7 @@ export default function ProductDetailPage() {
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-3">
               <button
                 onClick={handleAddToCart}
-                disabled={isOutOfStock || cartLoading}
+                disabled={!hasActiveVariants || isOutOfStock || cartLoading}
                 className="sm:col-span-8 py-3.5 px-6 rounded-2xl bg-[#2A211B] text-white hover:bg-[#9A6A45] transition-colors text-xs font-semibold flex items-center justify-center gap-2 shadow-xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {cartLoading ? (
@@ -786,7 +865,7 @@ export default function ProductDetailPage() {
                 ) : (
                   <ShoppingBag className="w-4 h-4" />
                 )}
-                <span>{isOutOfStock ? 'Currently Unavailable' : 'Add to Shopping Bag'}</span>
+                <span>{!hasActiveVariants || isOutOfStock ? 'Currently Unavailable' : 'Add to Shopping Bag'}</span>
               </button>
 
               <button
@@ -808,11 +887,21 @@ export default function ProductDetailPage() {
             <div className="grid grid-cols-2 gap-3 pt-4 border-t border-[#E7DED5] text-xs text-[#6F6963]">
               <div className="flex items-center gap-2">
                 <Truck className="w-4 h-4 text-[#9A6A45]" />
-                <span>Pan-India Cash on Delivery</span>
+                <span>Estimated delivery in {minDeliveryDays}–{maxDeliveryDays} days</span>
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#9A6A45]" />
                 <span>100% Certified Authentic</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Truck className="w-4 h-4 text-[#9A6A45]" />
+                <span>{isCodEnabled ? 'Cash on Delivery Available' : 'Cash on Delivery Unavailable'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <RefreshCw className={`w-4 h-4 ${isReturnsEnabled ? 'text-[#9A6A45]' : 'text-stone-400'}`} />
+                <span className={isReturnsEnabled ? '' : 'text-stone-400'}>
+                  {isReturnsEnabled ? `${returnWindowDays}-Day Return Policy` : 'Returns Currently Unavailable'}
+                </span>
               </div>
             </div>
           </div>

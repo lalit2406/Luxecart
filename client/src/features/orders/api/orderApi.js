@@ -36,6 +36,16 @@ export const orderApi = {
   },
 
   /**
+   * Cancel an order for the authenticated customer
+   * @param {string} orderIdentifier - orderNumber or order ID
+   * @param {object} [payload]
+   * @param {string} [payload.reason]
+   */
+  cancelOrder: async (orderIdentifier, payload = {}) => {
+    return api.post(`/orders/${orderIdentifier}/cancel`, payload);
+  },
+
+  /**
    * Fetch customer's paginated order history
    * @param {object} [params]
    */

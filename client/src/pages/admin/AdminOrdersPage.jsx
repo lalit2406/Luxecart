@@ -43,6 +43,7 @@ export default function AdminOrdersPage() {
   });
 
   const [selectedStatus, setSelectedStatus] = useState('ALL');
+  const [orderType, setOrderType] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [sortBy, setSortBy] = useState('createdAt');
@@ -68,6 +69,7 @@ export default function AdminOrdersPage() {
           page,
           limit: 20,
           status: selectedStatus !== 'ALL' ? selectedStatus : undefined,
+          orderType: orderType !== 'ALL' ? orderType : undefined,
           search: debouncedSearch.trim() || undefined,
           sortBy,
           sortOrder,
@@ -84,7 +86,7 @@ export default function AdminOrdersPage() {
         setLoading(false);
       }
     },
-    [selectedStatus, debouncedSearch, sortBy, sortOrder]
+    [selectedStatus, orderType, debouncedSearch, sortBy, sortOrder]
   );
 
   useEffect(() => {
@@ -194,23 +196,40 @@ export default function AdminOrdersPage() {
             />
           </div>
 
-          {/* Sort Selector */}
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-[#6F6963] font-medium hidden sm:inline">Sort:</span>
-            <select
-              value={`${sortBy}-${sortOrder}`}
-              onChange={(e) => {
-                const [sb, so] = e.target.value.split('-');
-                setSortBy(sb);
-                setSortOrder(so);
-              }}
-              className="px-3 py-2 rounded-xl bg-[#F7F3EE] border border-[#E7DED5] text-xs text-[#2A211B] font-medium focus:outline-hidden focus:border-[#9A6A45] cursor-pointer"
-            >
-              <option value="createdAt-desc">Newest First</option>
-              <option value="createdAt-asc">Oldest First</option>
-              <option value="orderNumber-asc">Order Number (A-Z)</option>
-              <option value="orderNumber-desc">Order Number (Z-A)</option>
-            </select>
+          {/* Top Controls: Filter Type and Sort */}
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Order Type Filter */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[#6F6963] font-medium hidden sm:inline">Type:</span>
+              <select
+                value={orderType}
+                onChange={(e) => setOrderType(e.target.value)}
+                className="px-3 py-2 rounded-xl bg-[#F7F3EE] border border-[#E7DED5] text-xs text-[#2A211B] font-medium focus:outline-hidden focus:border-[#9A6A45] cursor-pointer"
+              >
+                <option value="ALL">All (Live & Demo)</option>
+                <option value="LIVE">Live Orders Only</option>
+                <option value="DEMO">Demo Orders Only</option>
+              </select>
+            </div>
+
+            {/* Sort Selector */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[#6F6963] font-medium hidden sm:inline">Sort:</span>
+              <select
+                value={`${sortBy}-${sortOrder}`}
+                onChange={(e) => {
+                  const [sb, so] = e.target.value.split('-');
+                  setSortBy(sb);
+                  setSortOrder(so);
+                }}
+                className="px-3 py-2 rounded-xl bg-[#F7F3EE] border border-[#E7DED5] text-xs text-[#2A211B] font-medium focus:outline-hidden focus:border-[#9A6A45] cursor-pointer"
+              >
+                <option value="createdAt-desc">Newest First</option>
+                <option value="createdAt-asc">Oldest First</option>
+                <option value="orderNumber-asc">Order Number (A-Z)</option>
+                <option value="orderNumber-desc">Order Number (Z-A)</option>
+              </select>
+            </div>
           </div>
         </div>
 

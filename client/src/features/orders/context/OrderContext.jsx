@@ -11,7 +11,7 @@ export function OrderProvider({ children }) {
   const [error, setError] = useState(null);
 
   const placeCodOrder = useCallback(
-    async ({ addressId, idempotencyKey } = {}) => {
+    async ({ addressId, idempotencyKey, couponCode } = {}) => {
       if (!user) {
         throw new Error('Authentication required to place an order');
       }
@@ -20,7 +20,7 @@ export function OrderProvider({ children }) {
       setError(null);
 
       try {
-        const res = await orderApi.placeCodOrder({ addressId, idempotencyKey });
+        const res = await orderApi.placeCodOrder({ addressId, idempotencyKey, couponCode });
         const created = res?.data?.order;
         setCurrentOrder(created);
         return created;

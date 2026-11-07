@@ -5,8 +5,13 @@ import { Lock, Mail, AlertCircle, ArrowRight, RefreshCw } from 'lucide-react';
 import SkipToContent from '../components/common/SkipToContent';
 import Logo from '../components/common/Logo';
 import GoogleSignInButton from '../components/auth/GoogleSignInButton';
+import { getSafeRedirectPath } from '../utils/navigation';
+import { useStoreSettings } from '../features/settings/context/useStoreSettings';
 
 export default function LoginPage() {
+  const { settings } = useStoreSettings();
+  const storeName = settings?.storeName || 'LuxeCart';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -16,7 +21,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/';
+  const from = getSafeRedirectPath(location.state?.from);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,10 +64,10 @@ export default function LoginPage() {
         <header className="max-w-md w-full mx-auto text-center">
           <Link
             to="/"
-            aria-label="LuxeCart Home"
+            aria-label={`${storeName} Home`}
             className="inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9A6A45] rounded-lg py-1"
           >
-            <Logo variant="light" className="h-10 sm:h-12 w-auto mx-auto" priority alt="LuxeCart" />
+            <Logo variant="light" className="h-10 sm:h-12 w-auto mx-auto" priority alt={storeName} />
           </Link>
         </header>
 
@@ -74,7 +79,7 @@ export default function LoginPage() {
                 Welcome Back
               </h1>
               <p className="text-sm text-[#6F6963]">
-                Sign in to your LuxeCart account
+                Sign in to your {storeName} account
               </p>
             </div>
 
@@ -191,6 +196,7 @@ export default function LoginPage() {
               Don't have an account?{' '}
               <Link
                 to="/register"
+                state={{ from: location.state?.from }}
                 className="font-semibold text-[#9A6A45] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9A6A45] rounded"
               >
                 Create Account
@@ -201,7 +207,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <footer className="max-w-md w-full mx-auto text-center text-xs text-[#6F6963]">
-          &copy; 2026 LuxeCart. All rights reserved.
+          &copy; {new Date().getFullYear()} {storeName}. All rights reserved.
         </footer>
       </div>
     </>

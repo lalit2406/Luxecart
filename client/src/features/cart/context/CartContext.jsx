@@ -8,6 +8,8 @@ import {
   clearGuestCart,
 } from '../utils/guestCart';
 import { useAuth } from '../../auth/hooks/useAuth';
+import { useStoreSettings } from '../../settings/context/useStoreSettings';
+import { calculateEstimatedShippingRupees } from '../utils/shippingUtils';
 
 const CartContext = createContext(null);
 
@@ -24,6 +26,15 @@ const DEFAULT_SUMMARY = {
 };
 
 export const CartProvider = ({ children }) => {
+  let settings = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const settingsContext = useStoreSettings();
+    settings = settingsContext?.settings;
+  } catch {
+    settings = null;
+  }
+
   const { isAuthenticated, loading: authLoading } = useAuth();
   const [cart, setCart] = useState(null);
   const [guestItems, setGuestItems] = useState([]);
@@ -269,7 +280,12 @@ export const CartProvider = ({ children }) => {
       }
     );
     summary.totalSavings = Math.max(0, summary.totalMrp - summary.subtotal);
-    summary.grandTotal = summary.subtotal;
+    summary.estimatedShipping = calculateEstimatedShippingRupees(
+      summary.subtotal,
+      settings?.shipping,
+      guestItems.length
+    );
+    summary.grandTotal = summary.subtotal + summary.estimatedShipping;
     return summary;
   };
 

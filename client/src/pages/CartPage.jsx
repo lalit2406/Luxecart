@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { useAuth } from '../features/auth/hooks/useAuth';
 import { useCart } from '../features/cart/context/CartContext';
 import { couponApi } from '../features/coupons/api/couponApi';
 import CouponInput from '../components/coupons/CouponInput';
 import { LUXE_PLACEHOLDER_IMAGE } from '../utils/image';
+import { useStoreSettings } from '../features/settings/context/useStoreSettings';
+import { getFreeShippingProgress } from '../features/cart/utils/shippingUtils';
 import {
   ShoppingBag,
   Trash2,
@@ -20,12 +23,116 @@ import {
 
 export default function CartPage() {
   const { items, summary, loading, error, updateQuantity, removeItem, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
+  const { settings } = useStoreSettings();
+  const freeShipping = getFreeShippingProgress(summary.subtotal, settings?.shipping);
+  const minDeliveryDays = settings?.shipping?.deliveryEstimateDays?.min || 3;
+  const maxDeliveryDays = settings?.shipping?.deliveryEstimateDays?.max || 7;
+  const isReturnsEnabled = settings?.returns?.isReturnsEnabled !== false;
+  const returnWindowDays = settings?.returns?.returnWindowDays || 7;
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Coupon states
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState(null);
+  const [guestAuthRequired, setGuestAuthRequired] = useState(false);
+
+  // Empty Bag Confirmation Modal state
+  const [clearModalOpen, setClearModalOpen] = useState(false);
+  const [clearing, setClearing] = useState(false);
+
+  const clearModalRef = useRef(null);
+  const cancelClearBtnRef = useRef(null);
+  const emptyBagTriggerRef = useRef(null);
+  const prevActiveElementRef = useRef(null);
+
+  const handleOpenClearModal = () => {
+    setClearModalOpen(true);
+  };
+
+  const handleCancelClear = () => {
+    if (!clearing) {
+      setClearModalOpen(false);
+    }
+  };
+
+  const handleConfirmClear = async () => {
+    if (clearing) return;
+    setClearing(true);
+    try {
+      await clearCart();
+      setClearModalOpen(false);
+    } catch {
+      // Handled via context
+    } finally {
+      setClearing(false);
+    }
+  };
+
+  // Focus management, focus containment trap, and Escape key handling for Empty Bag Modal
+  useEffect(() => {
+    if (!clearModalOpen) return;
+
+    prevActiveElementRef.current = document.activeElement;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const timer = setTimeout(() => {
+      if (cancelClearBtnRef.current) {
+        cancelClearBtnRef.current.focus();
+      } else if (clearModalRef.current) {
+        const firstFocusable = clearModalRef.current.querySelector(
+          'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        firstFocusable?.focus();
+      }
+    }, 50);
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (!clearing) {
+          e.preventDefault();
+          setClearModalOpen(false);
+        }
+        return;
+      }
+
+      if (e.key === 'Tab' && clearModalRef.current) {
+        const focusables = clearModalRef.current.querySelectorAll(
+          'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+
+        const firstElement = focusables[0];
+        const lastElement = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || !clearModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement || !clearModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      if (prevActiveElementRef.current && typeof prevActiveElementRef.current.focus === 'function') {
+        prevActiveElementRef.current.focus();
+      }
+    };
+  }, [clearModalOpen, clearing]);
 
   const handleQuantityChange = async (item, delta) => {
     const newQty = item.quantity + delta;
@@ -37,9 +144,17 @@ export default function CartPage() {
   };
 
   const handleApplyCoupon = async (code) => {
+    setGuestAuthRequired(false);
+    setCouponError(null);
+
+    // Safeguard: Guest checkout attempts must not issue validation requests that fail with 401
+    if (!isAuthenticated) {
+      setGuestAuthRequired(true);
+      return;
+    }
+
     try {
       setCouponLoading(true);
-      setCouponError(null);
       const res = await couponApi.validateCoupon(code);
       const data = res?.data?.data || res?.data;
       setAppliedCoupon({
@@ -49,8 +164,14 @@ export default function CartPage() {
         discountAmount: data.discountPaise,
         description: data.coupon.description,
       });
+      setGuestAuthRequired(false);
     } catch (err) {
-      setCouponError(err?.response?.data?.message || err?.message || 'Invalid coupon code');
+      if (err?.response?.status === 401) {
+        setGuestAuthRequired(true);
+        setCouponError(null);
+      } else {
+        setCouponError(err?.response?.data?.message || err?.message || 'Invalid coupon code');
+      }
       setAppliedCoupon(null);
     } finally {
       setCouponLoading(false);
@@ -60,6 +181,7 @@ export default function CartPage() {
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null);
     setCouponError(null);
+    setGuestAuthRequired(false);
   };
 
   const handleProceedToCheckout = () => {
@@ -89,7 +211,8 @@ export default function CartPage() {
 
           {items.length > 0 && (
             <button
-              onClick={clearCart}
+              ref={emptyBagTriggerRef}
+              onClick={handleOpenClearModal}
               className="text-xs text-[#6F6963] hover:text-red-700 font-medium transition-colors self-start sm:self-auto cursor-pointer"
             >
               Empty Bag
@@ -274,8 +397,55 @@ export default function CartPage() {
                   Order Summary
                 </h2>
 
+                {/* Free Shipping Progress Indicator (rendered strictly when threshold is enabled) */}
+                {freeShipping.isEnabled && items.length > 0 && (
+                  <div
+                    className={`p-3.5 rounded-2xl border flex items-center gap-3 text-xs ${
+                      freeShipping.qualifies
+                        ? 'bg-emerald-50/80 border-emerald-200 text-emerald-900'
+                        : 'bg-amber-50/70 border-amber-200 text-amber-900'
+                    }`}
+                  >
+                    <div
+                      className={`p-2 rounded-xl shrink-0 ${
+                        freeShipping.qualifies
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : 'bg-amber-100 text-amber-800'
+                      }`}
+                    >
+                      <Truck className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 space-y-1.5">
+                      {freeShipping.qualifies ? (
+                        <p className="font-semibold text-emerald-800">
+                          You've unlocked Free Standard Delivery!
+                        </p>
+                      ) : (
+                        <p className="font-medium">
+                          Add <span className="font-bold text-[#2A211B]">₹{freeShipping.remainingRupees.toLocaleString('en-IN')}</span> more to qualify for <span className="font-bold text-emerald-800">Free Delivery</span>
+                        </p>
+                      )}
+                      <div
+                        className="w-full bg-black/10 rounded-full h-1.5 overflow-hidden"
+                        role="progressbar"
+                        aria-valuenow={freeShipping.percent}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-label="Free shipping progress"
+                      >
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            freeShipping.qualifies ? 'bg-emerald-600' : 'bg-[#9A6A45]'
+                          }`}
+                          style={{ width: `${freeShipping.percent}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Promo Coupon Widget */}
-                <div className="space-y-2 border-b border-[#E7DED5] pb-5">
+                <div className="space-y-3 border-b border-[#E7DED5] pb-5">
                   <label className="text-xs font-bold uppercase tracking-wider text-[#2A211B]">
                     Promotions & Coupons
                   </label>
@@ -287,6 +457,25 @@ export default function CartPage() {
                     error={couponError}
                     disabled={items.length === 0}
                   />
+
+                  {guestAuthRequired && (
+                    <div className="p-3.5 rounded-2xl bg-[#FAF7F2] border border-[#E7DED5] text-xs text-[#2A211B] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 animate-in fade-in">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#9A6A45] shrink-0" />
+                        <span className="text-[#6F6963]">
+                          Please sign in to apply promotional vouchers.
+                        </span>
+                      </div>
+                      <Link
+                        to="/login"
+                        state={{ from: location }}
+                        className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2A211B] text-white hover:bg-[#9A6A45] text-xs font-semibold uppercase tracking-wider transition-colors shrink-0"
+                      >
+                        <span>Sign In</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-3 text-xs text-[#6F6963]">
@@ -319,8 +508,16 @@ export default function CartPage() {
                   </div>
 
                   <div className="flex justify-between">
-                    <span>Delivery</span>
-                    <span className="font-semibold text-emerald-700 uppercase">FREE</span>
+                    <span>Estimated Delivery Fee</span>
+                    <span className="font-semibold text-[#2A211B]">
+                      {summary.estimatedShipping > 0 ? (
+                        `₹${summary.estimatedShipping.toLocaleString('en-IN')}`
+                      ) : items.length > 0 ? (
+                        <span className="text-emerald-700 uppercase">Free</span>
+                      ) : (
+                        '₹0'
+                      )}
+                    </span>
                   </div>
 
                   <div className="border-t border-[#E7DED5] pt-3 flex justify-between text-base font-bold text-[#2A211B]">
@@ -355,7 +552,13 @@ export default function CartPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Truck className="w-4 h-4 text-[#9A6A45]" />
-                    <span>Complimentary Express Delivery Pan-India</span>
+                    <span>Estimated delivery in {minDeliveryDays}–{maxDeliveryDays} days</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RefreshCw className={`w-4 h-4 ${isReturnsEnabled ? 'text-[#9A6A45]' : 'text-stone-400'}`} />
+                    <span className={isReturnsEnabled ? '' : 'text-stone-400'}>
+                      {isReturnsEnabled ? `${returnWindowDays}-Day Return Policy (from delivery)` : 'Returns Currently Unavailable'}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -363,6 +566,61 @@ export default function CartPage() {
           </div>
         )}
       </main>
+
+      {/* Empty Bag Confirmation Modal */}
+      {clearModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !clearing) {
+              setClearModalOpen(false);
+            }
+          }}
+        >
+          <div
+            ref={clearModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="clear-bag-modal-title"
+            aria-describedby="clear-bag-modal-desc"
+            className="bg-white border border-[#E7DED5] rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-xl text-center"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto">
+              <Trash2 className="w-6 h-6" />
+            </div>
+
+            <div>
+              <h3 id="clear-bag-modal-title" className="text-base font-serif font-bold text-[#2A211B]">
+                Empty Shopping Bag?
+              </h3>
+              <p id="clear-bag-modal-desc" className="text-xs text-[#6F6963] mt-1 leading-relaxed">
+                Are you sure you want to remove all items from your shopping bag? This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <button
+                ref={cancelClearBtnRef}
+                type="button"
+                disabled={clearing}
+                onClick={handleCancelClear}
+                className="w-1/2 py-2.5 rounded-xl border border-[#E7DED5] bg-white text-[#2A211B] hover:bg-[#F7F3EE] text-xs font-semibold cursor-pointer disabled:opacity-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={clearing}
+                onClick={handleConfirmClear}
+                className="w-1/2 py-2.5 rounded-xl bg-red-600 text-white hover:bg-red-700 text-xs font-semibold disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                {clearing && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
+                <span>{clearing ? 'Emptying...' : 'Empty Bag'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="max-w-7xl w-full mx-auto text-center border-t border-[#E7DED5] py-6 px-4">

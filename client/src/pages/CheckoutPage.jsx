@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useCart } from '../features/cart/context/CartContext';
 import { useAddress } from '../features/addresses/context/AddressContext';
 import { useCheckout } from '../features/checkout/context/CheckoutContext';
 import { useOrder } from '../features/orders/context/OrderContext';
+import { useStoreSettings } from '../features/settings/context/useStoreSettings';
 import CouponInput from '../components/coupons/CouponInput';
 import {
   MapPin,
@@ -21,6 +22,7 @@ import {
   ChevronRight,
   Info,
   Package,
+  Clock,
 } from 'lucide-react';
 
 export default function CheckoutPage() {
@@ -30,9 +32,84 @@ export default function CheckoutPage() {
   const { addresses, selectedAddressId, selectAddress, fetchAddresses } = useAddress();
   const { checkoutData, loading, error, warnings, prepareCheckout, clearCheckout } = useCheckout();
   const { placeCodOrder, placingOrder } = useOrder();
+  const { settings, refetch } = useStoreSettings();
+  const isMaintenanceMode = Boolean(settings?.maintenance?.isMaintenanceMode);
+  const maintenanceMessage =
+    settings?.maintenance?.maintenanceMessage ||
+    'The store is currently undergoing scheduled maintenance. Order placement is temporarily paused.';
+  const minDeliveryDays = settings?.shipping?.deliveryEstimateDays?.min || 3;
+  const maxDeliveryDays = settings?.shipping?.deliveryEstimateDays?.max || 7;
+  const maxCodRupees =
+    typeof settings?.payment?.maxCodOrderRupees === 'number' && settings.payment.maxCodOrderRupees >= 0
+      ? settings.payment.maxCodOrderRupees
+      : typeof settings?.payment?.maxCodOrderPaise === 'number' && settings.payment.maxCodOrderPaise >= 0
+        ? settings.payment.maxCodOrderPaise / 100
+        : 100000;
 
   const [addressModalOpen, setAddressModalOpen] = useState(false);
   const [submissionError, setSubmissionError] = useState(null);
+
+  const addressModalRef = useRef(null);
+  const prevActiveElementRef = useRef(null);
+
+  // Address modal focus management, trap, and Escape handling
+  useEffect(() => {
+    if (!addressModalOpen) return;
+
+    prevActiveElementRef.current = document.activeElement;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const timer = setTimeout(() => {
+      if (addressModalRef.current) {
+        const firstFocusable = addressModalRef.current.querySelector(
+          'button:not([disabled]), [role="button"], a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        firstFocusable?.focus();
+      }
+    }, 50);
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setAddressModalOpen(false);
+        return;
+      }
+
+      if (e.key === 'Tab' && addressModalRef.current) {
+        const focusables = addressModalRef.current.querySelectorAll(
+          'button:not([disabled]), [role="button"]:not([tabindex="-1"]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+
+        const firstElement = focusables[0];
+        const lastElement = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || !addressModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement || !addressModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      if (prevActiveElementRef.current && typeof prevActiveElementRef.current.focus === 'function') {
+        prevActiveElementRef.current.focus();
+      }
+    };
+  }, [addressModalOpen]);
 
   // Coupon state
   const [couponCode, setCouponCode] = useState(location.state?.couponCode || '');
@@ -43,6 +120,13 @@ export default function CheckoutPage() {
   useEffect(() => {
     fetchAddresses();
   }, [fetchAddresses]);
+
+  // If returning from address management with an explicit selected address
+  useEffect(() => {
+    if (location.state?.selectedAddressId) {
+      selectAddress(location.state.selectedAddressId);
+    }
+  }, [location.state?.selectedAddressId, selectAddress]);
 
   useEffect(() => {
     if (cart?.items?.length > 0) {
@@ -83,15 +167,46 @@ export default function CheckoutPage() {
     }
   };
 
+  // Derive checkout payload fingerprint (items, quantities, address, coupon)
+  const appliedCoupon = checkoutData?.summary?.coupon?.code || couponCode || '';
+  const cartFingerprint = (cart?.items || [])
+    .map((item) => `${item.productId || item.product?._id || ''}:${item.variantId || item.variant?._id || ''}:${item.quantity}`)
+    .sort()
+    .join('|');
+  const checkoutFingerprint = `${selectedAddressId || ''}::${appliedCoupon}::${cartFingerprint}`;
+
+  const idempotencyRef = useRef({
+    key: `idemp-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+    fingerprint: checkoutFingerprint,
+  });
+
+  // Rotate key when checkout payload changes
+  useEffect(() => {
+    if (idempotencyRef.current.fingerprint !== checkoutFingerprint) {
+      idempotencyRef.current = {
+        key: `idemp-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+        fingerprint: checkoutFingerprint,
+      };
+    }
+  }, [checkoutFingerprint]);
+
   const handlePlaceOrder = async () => {
-    if (!canPlaceOrder || placingOrder) return;
+    if (isMaintenanceMode || !canPlaceOrder || placingOrder) return;
     setSubmissionError(null);
 
+    // Ensure we have an active idempotency key for this fingerprint
+    if (!idempotencyRef.current.key || idempotencyRef.current.fingerprint !== checkoutFingerprint) {
+      idempotencyRef.current = {
+        key: `idemp-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+        fingerprint: checkoutFingerprint,
+      };
+    }
+    const currentIdempotencyKey = idempotencyRef.current.key;
+
     try {
-      const idempotencyKey = `idemp-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
       const created = await placeCodOrder({
         addressId: selectedAddressId,
-        idempotencyKey,
+        idempotencyKey: currentIdempotencyKey,
         couponCode: checkoutData?.summary?.coupon?.code || undefined,
       });
 
@@ -101,7 +216,32 @@ export default function CheckoutPage() {
 
       navigate(`/orders/success/${created.orderNumber}`);
     } catch (err) {
-      setSubmissionError(err.message || 'Failed to place order. Please review your cart.');
+      // Check if error is a confirmed client failure (guaranteeing no order was created)
+      const status = err.response?.status || err.statusCode;
+      const isConfirmedClientFailure = status >= 400 && status < 500 && status !== 408;
+
+      if (isConfirmedClientFailure) {
+        idempotencyRef.current = {
+          key: `idemp-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+          fingerprint: checkoutFingerprint,
+        };
+      }
+      // For network errors, timeouts (408, 504), or 5xx, the key is preserved in idempotencyRef.current
+      // so retrying the submission safely reuses the same idempotency key!
+
+      // Handle 503 MAINTENANCE_MODE specifically
+      if (err.code === 'MAINTENANCE_MODE' || err.code === 'MAINTENANCE_MODE_CHECK_FAILED' || status === 503) {
+        setSubmissionError(
+          err.message ||
+          settings?.maintenance?.maintenanceMessage ||
+          'The store is currently undergoing scheduled maintenance. Order placement is temporarily paused.'
+        );
+        if (typeof refetch === 'function') {
+          refetch();
+        }
+      } else {
+        setSubmissionError(err.message || 'Failed to place order. Please review your cart.');
+      }
     }
   };
 
@@ -131,13 +271,15 @@ export default function CheckoutPage() {
     );
   }
 
+  const fallbackShippingPaise = (cartSummary?.estimatedShipping || 0) * 100;
+  const fallbackSubtotalPaise = (cartSummary?.subtotal || 0) * 100;
   const summary = checkoutData?.summary || {
     totalMrp: (cartSummary?.totalMrp || 0) * 100,
     totalSavings: (cartSummary?.totalSavings || 0) * 100,
-    subtotal: (cartSummary?.subtotal || 0) * 100,
-    shipping: 0,
+    subtotal: fallbackSubtotalPaise,
+    shipping: fallbackShippingPaise,
     estimatedTax: 0,
-    grandTotal: (cartSummary?.subtotal || 0) * 100,
+    grandTotal: fallbackSubtotalPaise + fallbackShippingPaise,
   };
 
   const currentAddress = checkoutData?.address || null;
@@ -182,6 +324,25 @@ export default function CheckoutPage() {
           </div>
         </div>
 
+        {/* Maintenance Mode Warning */}
+        {isMaintenanceMode && (
+          <div
+            role="alert"
+            className="p-4 mb-6 bg-amber-50 border border-amber-300 rounded-2xl text-amber-900 text-xs space-y-1.5 shadow-2xs"
+          >
+            <div className="flex items-center gap-2 font-bold text-amber-950">
+              <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
+              <span>Store Maintenance Notice: Order Placement Paused</span>
+            </div>
+            <p className="leading-relaxed pl-6">
+              {maintenanceMessage}
+            </p>
+            <p className="text-[11px] text-amber-800 font-medium pl-6">
+              Your shopping bag, selected delivery address, and price breakdown are securely preserved. Order placement is temporarily unavailable while maintenance is underway.
+            </p>
+          </div>
+        )}
+
         {/* Global Warnings Banner */}
         {warnings && warnings.length > 0 && (
           <div className="p-4 mb-6 bg-amber-50 border border-amber-200 rounded-2xl text-amber-800 text-xs space-y-1">
@@ -209,6 +370,22 @@ export default function CheckoutPage() {
           <div className="py-24 flex flex-col items-center justify-center gap-3">
             <RefreshCw className="w-8 h-8 text-[#9A6A45] animate-spin" />
             <p className="text-xs text-[#6F6963]">Revalidating cart and live pricing...</p>
+          </div>
+        ) : !checkoutData ? (
+          <div className="py-24 flex flex-col items-center justify-center gap-4 text-center">
+            <AlertTriangle className="w-10 h-10 text-amber-600" />
+            <h2 className="text-lg font-serif font-bold text-[#2A211B]">
+              Unable to verify checkout pricing
+            </h2>
+            <p className="text-xs text-[#6F6963] max-w-md">
+              {error || 'We were unable to establish authoritative pricing with the server. Please refresh to recalculate your cart.'}
+            </p>
+            <button
+              onClick={() => prepareCheckout()}
+              className="px-6 py-2.5 rounded-xl bg-[#2A211B] text-white hover:bg-[#9A6A45] text-xs font-semibold transition-colors cursor-pointer"
+            >
+              Retry Checkout Review
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -261,12 +438,22 @@ export default function CheckoutPage() {
                 ) : (
                   <div className="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-800 flex items-center justify-between">
                     <span>No delivery address selected. Please add or select an address.</span>
-                    <button
-                      onClick={() => setAddressModalOpen(true)}
-                      className="px-3 py-1.5 rounded-xl bg-[#2A211B] text-white text-xs font-semibold"
-                    >
-                      Add Address
-                    </button>
+                    {addresses.length === 0 ? (
+                      <Link
+                        to="/account/addresses"
+                        state={{ returnTo: '/checkout' }}
+                        className="px-3 py-1.5 rounded-xl bg-[#2A211B] text-white text-xs font-semibold hover:bg-[#9A6A45] transition-colors"
+                      >
+                        Add Address
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => setAddressModalOpen(true)}
+                        className="px-3 py-1.5 rounded-xl bg-[#2A211B] text-white text-xs font-semibold"
+                      >
+                        Select Address
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -377,7 +564,11 @@ export default function CheckoutPage() {
 
                 <div className="space-y-3">
                   {/* Cash on Delivery (Active) */}
-                  <label className="flex items-start gap-3 p-4 rounded-2xl border-2 border-[#9A6A45] bg-[#F7F3EE]/50 cursor-pointer transition-all">
+                  <label className={`flex items-start gap-3 p-4 rounded-2xl border-2 transition-all ${
+                    checkoutData?.paymentMethods?.[0]?.available === false
+                      ? 'border-amber-400 bg-amber-50/50 cursor-not-allowed'
+                      : 'border-[#9A6A45] bg-[#F7F3EE]/50 cursor-pointer'
+                  }`}>
                     <input
                       type="radio"
                       name="paymentMethod"
@@ -388,13 +579,24 @@ export default function CheckoutPage() {
                     <div className="flex-1 space-y-0.5">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-[#2A211B]">Cash on Delivery (COD)</span>
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-                          Available
-                        </span>
+                        {checkoutData?.paymentMethods?.[0]?.available === false ? (
+                          <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">
+                            Limit Exceeded
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                            Available
+                          </span>
+                        )}
                       </div>
                       <p className="text-[11px] text-[#6F6963]">
-                        Pay in cash or via UPI to the delivery courier upon arrival.
+                        Pay in cash or via UPI to the delivery courier upon arrival. (Maximum COD order limit: ₹{maxCodRupees.toLocaleString('en-IN')})
                       </p>
+                      {checkoutData?.paymentMethods?.[0]?.available === false && checkoutData.paymentMethods[0].reason && (
+                        <p className="text-[11px] text-amber-700 font-medium pt-1">
+                          {checkoutData.paymentMethods[0].reason}
+                        </p>
+                      )}
                     </div>
                   </label>
 
@@ -466,7 +668,11 @@ export default function CheckoutPage() {
 
                   <div className="flex justify-between">
                     <span>Delivery Fee</span>
-                    <span className="font-semibold text-emerald-700 uppercase">Free</span>
+                    <span className="font-semibold text-[#2A211B]">
+                      {(summary.shipping || 0) > 0
+                        ? `₹${((summary.shipping || 0) / 100).toLocaleString('en-IN')}`
+                        : 'Free'}
+                    </span>
                   </div>
 
                   <div className="flex justify-between">
@@ -483,7 +689,7 @@ export default function CheckoutPage() {
                 {/* Final Action Button */}
                 <button
                   onClick={handlePlaceOrder}
-                  disabled={!canPlaceOrder || placingOrder}
+                  disabled={isMaintenanceMode || !canPlaceOrder || placingOrder}
                   className="w-full py-3.5 rounded-xl bg-[#2A211B] text-white hover:bg-[#9A6A45] disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold uppercase tracking-wider transition-colors shadow-xs cursor-pointer flex items-center justify-center gap-2"
                 >
                   {placingOrder ? (
@@ -491,6 +697,8 @@ export default function CheckoutPage() {
                       <RefreshCw className="w-4 h-4 animate-spin" />
                       <span>Placing Order...</span>
                     </>
+                  ) : isMaintenanceMode ? (
+                    <span>Order Placement Paused (Maintenance)</span>
                   ) : canPlaceOrder ? (
                     <span>Confirm & Place Order (COD)</span>
                   ) : (
@@ -498,7 +706,7 @@ export default function CheckoutPage() {
                   )}
                 </button>
 
-                {/* Trust Badges */}
+                {/* Trust Badges & Delivery Estimate */}
                 <div className="pt-2 border-t border-[#E7DED5] space-y-2 text-[11px] text-[#6F6963]">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-[#9A6A45]" />
@@ -506,7 +714,11 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Truck className="w-4 h-4 text-[#9A6A45]" />
-                    <span>Free Pan-India Delivery</span>
+                    <span>Standard Doorstep Delivery</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-[#9A6A45]" />
+                    <span>Estimated delivery in {minDeliveryDays}–{maxDeliveryDays} days after order confirmation.</span>
                   </div>
                 </div>
               </div>
@@ -517,20 +729,36 @@ export default function CheckoutPage() {
 
       {/* Address Selection Modal */}
       {addressModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white border border-[#E7DED5] rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-xl max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setAddressModalOpen(false);
+            }
+          }}
+        >
+          <div
+            ref={addressModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="address-selection-modal-title"
+            aria-describedby="address-selection-modal-desc"
+            className="bg-white border border-[#E7DED5] rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <div className="flex items-center justify-between border-b border-[#E7DED5] pb-4">
               <div>
-                <h2 className="text-lg font-serif font-bold text-[#2A211B]">
+                <h2 id="address-selection-modal-title" className="text-lg font-serif font-bold text-[#2A211B]">
                   Select Delivery Address
                 </h2>
-                <p className="text-xs text-[#6F6963] mt-0.5">
+                <p id="address-selection-modal-desc" className="text-xs text-[#6F6963] mt-0.5">
                   Choose a delivery destination for this checkout review.
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => setAddressModalOpen(false)}
-                className="text-xs font-semibold text-[#6F6963] hover:text-[#2A211B]"
+                aria-label="Close address selection"
+                className="text-xs font-semibold text-[#6F6963] hover:text-[#2A211B] p-1.5 rounded-lg hover:bg-[#F7F3EE] transition-colors cursor-pointer"
               >
                 Close
               </button>
@@ -541,6 +769,7 @@ export default function CheckoutPage() {
                 <p className="text-xs text-[#6F6963]">No addresses found.</p>
                 <Link
                   to="/account/addresses"
+                  state={{ returnTo: '/checkout' }}
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#2A211B] text-white text-xs font-semibold"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -556,7 +785,17 @@ export default function CheckoutPage() {
                   return (
                     <div
                       key={addrId}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Select address for ${addr.fullName}, ${addr.city}`}
+                      aria-pressed={isSelected}
                       onClick={() => handleSelectAddress(addrId)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          handleSelectAddress(addrId);
+                        }
+                      }}
                       className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start justify-between gap-3 ${
                         isSelected
                           ? 'border-[#9A6A45] bg-[#F7F3EE]/60 ring-2 ring-[#9A6A45]/20'
@@ -591,14 +830,16 @@ export default function CheckoutPage() {
             <div className="pt-4 border-t border-[#E7DED5] flex items-center justify-between">
               <Link
                 to="/account/addresses"
+                state={{ returnTo: '/checkout' }}
                 className="text-xs font-semibold text-[#9A6A45] hover:text-[#2A211B] flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Manage / Add Addresses</span>
               </Link>
               <button
+                type="button"
                 onClick={() => setAddressModalOpen(false)}
-                className="px-4 py-2 rounded-xl border border-[#E7DED5] text-xs font-semibold text-[#2A211B]"
+                className="px-4 py-2 rounded-xl border border-[#E7DED5] text-xs font-semibold text-[#2A211B] hover:bg-[#F7F3EE] transition-colors cursor-pointer"
               >
                 Done
               </button>

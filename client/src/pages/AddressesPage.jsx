@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useAddress } from '../features/addresses/context/AddressContext';
+import { getSafeRedirectPath } from '../utils/navigation';
 import {
   MapPin,
   Plus,
@@ -18,6 +19,7 @@ import {
   Phone,
   ShieldCheck,
   ArrowLeft,
+  ArrowRight,
   Check,
 } from 'lucide-react';
 
@@ -36,19 +38,170 @@ const INITIAL_FORM = {
 };
 
 export default function AddressesPage() {
-  const { addresses, loading, error, addAddress, editAddress, removeAddress, makeDefault } = useAddress();
+  const location = useLocation();
+  const rawReturnTo = location.state?.returnTo || location.state?.from;
+  const safeReturnPath = rawReturnTo ? getSafeRedirectPath(rawReturnTo, null) : null;
+  const isFromCheckout =
+    safeReturnPath === '/checkout' ||
+    (typeof safeReturnPath === 'string' && safeReturnPath.startsWith('/checkout'));
+
+  const {
+    addresses,
+    loading,
+    error,
+    addAddress,
+    editAddress,
+    removeAddress,
+    makeDefault,
+    selectAddress,
+  } = useAddress();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [formError, setFormError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [savedSuccess, setSavedSuccess] = useState(null);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [addressToDelete, setAddressToDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
+  const editModalRef = useRef(null);
+  const fullNameInputRef = useRef(null);
+  const prevActiveElementRef = useRef(null);
+
+  const deleteModalRef = useRef(null);
+  const cancelDeleteBtnRef = useRef(null);
+
+  // Focus management, focus trap, and Escape key for Add/Edit Address Modal
+  useEffect(() => {
+    if (!modalOpen) return;
+
+    prevActiveElementRef.current = document.activeElement;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const timer = setTimeout(() => {
+      if (fullNameInputRef.current) {
+        fullNameInputRef.current.focus();
+      } else if (editModalRef.current) {
+        const firstFocusable = editModalRef.current.querySelector(
+          'input:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        firstFocusable?.focus();
+      }
+    }, 50);
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (!submitting) {
+          e.preventDefault();
+          handleCloseModal();
+        }
+        return;
+      }
+
+      if (e.key === 'Tab' && editModalRef.current) {
+        const focusables = editModalRef.current.querySelectorAll(
+          'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+
+        const firstElement = focusables[0];
+        const lastElement = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || !editModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement || !editModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      if (prevActiveElementRef.current && typeof prevActiveElementRef.current.focus === 'function') {
+        prevActiveElementRef.current.focus();
+      }
+    };
+  }, [modalOpen, submitting]);
+
+  // Focus management, focus trap, and Escape key for Delete Confirmation Modal
+  useEffect(() => {
+    if (!deleteModalOpen) return;
+
+    prevActiveElementRef.current = document.activeElement;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const timer = setTimeout(() => {
+      if (cancelDeleteBtnRef.current) {
+        cancelDeleteBtnRef.current.focus();
+      } else if (deleteModalRef.current) {
+        const firstFocusable = deleteModalRef.current.querySelector(
+          'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        firstFocusable?.focus();
+      }
+    }, 50);
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (!deleting) {
+          e.preventDefault();
+          setDeleteModalOpen(false);
+        }
+        return;
+      }
+
+      if (e.key === 'Tab' && deleteModalRef.current) {
+        const focusables = deleteModalRef.current.querySelectorAll(
+          'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+
+        const firstElement = focusables[0];
+        const lastElement = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || !deleteModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement || !deleteModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      if (prevActiveElementRef.current && typeof prevActiveElementRef.current.focus === 'function') {
+        prevActiveElementRef.current.focus();
+      }
+    };
+  }, [deleteModalOpen, deleting]);
+
   const handleOpenAdd = () => {
+    setSavedSuccess(null);
     setEditingAddress(null);
     setFormData({
       ...INITIAL_FORM,
@@ -117,12 +270,20 @@ export default function AddressesPage() {
 
     setSubmitting(true);
     try {
+      let saved;
       if (editingAddress) {
-        await editAddress(editingAddress._id || editingAddress.id, formData);
+        saved = await editAddress(editingAddress._id || editingAddress.id, formData);
       } else {
-        await addAddress(formData);
+        saved = await addAddress(formData);
       }
       handleCloseModal();
+      if (saved) {
+        selectAddress(saved._id || saved.id);
+      }
+      setSavedSuccess({
+        address: saved,
+        isNew: !editingAddress,
+      });
     } catch (err) {
       setFormError(err.message || 'Failed to save address');
     } finally {
@@ -167,12 +328,24 @@ export default function AddressesPage() {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-1">
         {/* Breadcrumbs & Header */}
         <div className="space-y-4 mb-8">
-          <div className="flex items-center gap-2 text-xs text-[#6F6963]">
-            <Link to="/" className="hover:text-[#2A211B]">
-              Home
-            </Link>
-            <span>/</span>
-            <span className="text-[#2A211B] font-semibold">Saved Addresses</span>
+          <div className="flex items-center justify-between text-xs text-[#6F6963]">
+            <div className="flex items-center gap-2">
+              <Link to="/" className="hover:text-[#2A211B]">
+                Home
+              </Link>
+              <span>/</span>
+              <span className="text-[#2A211B] font-semibold">Saved Addresses</span>
+            </div>
+
+            {isFromCheckout && (
+              <Link
+                to={safeReturnPath}
+                className="inline-flex items-center gap-1.5 font-semibold text-[#9A6A45] hover:text-[#2A211B] transition-colors"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Return to Checkout</span>
+              </Link>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E7DED5] pb-6">
@@ -194,6 +367,36 @@ export default function AddressesPage() {
             </button>
           </div>
         </div>
+
+        {/* Saved Address Success Banner */}
+        {savedSuccess && (
+          <div className="mb-6 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-[#2A211B] flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in fade-in">
+            <div className="flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-bold text-emerald-900">
+                  Address {savedSuccess.isNew ? 'Added' : 'Updated'} Successfully
+                </p>
+                <p className="text-xs text-emerald-800 mt-0.5">
+                  {savedSuccess.address?.fullName
+                    ? `Delivery destination for ${savedSuccess.address.fullName} has been saved.`
+                    : 'Your delivery address has been saved.'}
+                </p>
+              </div>
+            </div>
+
+            {isFromCheckout && (
+              <Link
+                to={safeReturnPath}
+                state={{ selectedAddressId: savedSuccess.address?._id || savedSuccess.address?.id }}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#2A211B] text-white hover:bg-[#9A6A45] transition-colors text-xs font-semibold shrink-0 shadow-xs"
+              >
+                <span>Return to Checkout</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
+          </div>
+        )}
 
         {/* Global Error Banner */}
         {error && (
@@ -329,20 +532,37 @@ export default function AddressesPage() {
 
       {/* Add / Edit Address Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white border border-[#E7DED5] rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-xl max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !submitting) {
+              handleCloseModal();
+            }
+          }}
+        >
+          <div
+            ref={editModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="address-form-modal-title"
+            aria-describedby="address-form-modal-desc"
+            className="bg-white border border-[#E7DED5] rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <div className="flex items-center justify-between border-b border-[#E7DED5] pb-4">
               <div>
-                <h2 className="text-lg font-serif font-bold text-[#2A211B]">
+                <h2 id="address-form-modal-title" className="text-lg font-serif font-bold text-[#2A211B]">
                   {editingAddress ? 'Edit Delivery Address' : 'Add New Address'}
                 </h2>
-                <p className="text-xs text-[#6F6963] mt-0.5">
+                <p id="address-form-modal-desc" className="text-xs text-[#6F6963] mt-0.5">
                   Shipment delivery within India only.
                 </p>
               </div>
               <button
+                type="button"
                 onClick={handleCloseModal}
-                className="p-2 text-[#6F6963] hover:text-[#2A211B] rounded-xl hover:bg-[#F7F3EE]"
+                disabled={submitting}
+                aria-label="Close address form"
+                className="p-2 text-[#6F6963] hover:text-[#2A211B] rounded-xl hover:bg-[#F7F3EE] transition-colors cursor-pointer disabled:opacity-40"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -363,6 +583,7 @@ export default function AddressesPage() {
                     Full Name *
                   </label>
                   <input
+                    ref={fullNameInputRef}
                     type="text"
                     required
                     placeholder="e.g. Lalit Kumar"
@@ -546,29 +767,46 @@ export default function AddressesPage() {
 
       {/* Delete Confirmation Modal */}
       {deleteModalOpen && addressToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white border border-[#E7DED5] rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-xl text-center">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !deleting) {
+              setDeleteModalOpen(false);
+            }
+          }}
+        >
+          <div
+            ref={deleteModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-address-modal-title"
+            aria-describedby="delete-address-modal-desc"
+            className="bg-white border border-[#E7DED5] rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-xl text-center"
+          >
             <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto">
               <Trash2 className="w-6 h-6" />
             </div>
 
             <div>
-              <h3 className="text-base font-serif font-bold text-[#2A211B]">
+              <h3 id="delete-address-modal-title" className="text-base font-serif font-bold text-[#2A211B]">
                 Delete Address?
               </h3>
-              <p className="text-xs text-[#6F6963] mt-1">
-                Are you sure you want to delete the address for{' '}
-                <span className="font-semibold text-[#2A211B]">{addressToDelete.fullName}</span>?
-              </p>
-              {addressToDelete.isDefault && addresses.length > 1 && (
-                <p className="text-[11px] text-amber-700 bg-amber-50 p-2 rounded-xl border border-amber-200 mt-2 font-medium">
-                  This is your default address. Another saved address will automatically become the new default.
+              <div id="delete-address-modal-desc">
+                <p className="text-xs text-[#6F6963] mt-1">
+                  Are you sure you want to delete the address for{' '}
+                  <span className="font-semibold text-[#2A211B]">{addressToDelete.fullName}</span>?
                 </p>
-              )}
+                {addressToDelete.isDefault && addresses.length > 1 && (
+                  <p className="text-[11px] text-amber-700 bg-amber-50 p-2 rounded-xl border border-amber-200 mt-2 font-medium">
+                    This is your default address. Another saved address will automatically become the new default.
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center justify-center gap-3 pt-2">
               <button
+                ref={cancelDeleteBtnRef}
                 type="button"
                 onClick={() => setDeleteModalOpen(false)}
                 className="w-1/2 py-2.5 rounded-xl border border-[#E7DED5] bg-white text-[#2A211B] hover:bg-[#F7F3EE] text-xs font-semibold cursor-pointer"

@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import AdminLayout from '../../layouts/AdminLayout';
+import AdminLogisticsConsole from '../../features/logistics/components/AdminLogisticsConsole';
 import { adminOrderApi } from '../../features/admin/orders/api/adminOrderApi';
-import { getStatusConfig } from '../../features/orders/constants/orderStatus';
+import {
+  getStatusConfig,
+  getDeliveryEstimateMessage,
+  getFormattedConfirmedDate,
+} from '../../features/orders/constants/orderStatus';
 import {
   ArrowLeft,
   User,
@@ -104,6 +109,8 @@ export default function AdminOrderDetailPage() {
   const totalSavingsRupees = ((order?.pricing?.totalSavings || 0) / 100).toLocaleString('en-IN');
 
   const isTerminal = order?.status === 'DELIVERED' || order?.status === 'CANCELLED';
+  const adminDeliveryMessage = getDeliveryEstimateMessage(order?.status);
+  const confirmedDateFormatted = getFormattedConfirmedDate(order?.statusHistory);
 
   return (
     <AdminLayout>
@@ -132,6 +139,11 @@ export default function AdminOrderDetailPage() {
                   className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${statusConfig.colorClass}`}
                 >
                   {statusConfig.badgeText}
+                </span>
+              )}
+              {order && (order.isDemo || order.orderNumber?.startsWith('DEMO-') || order.orderNumber?.startsWith('TEST-')) && (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200">
+                  DEMO ORDER
                 </span>
               )}
             </div>
@@ -288,6 +300,26 @@ export default function AdminOrderDetailPage() {
                   <span>Order has been cancelled. Catalog inventory was atomically restored. (Terminal State)</span>
                 </div>
               )}
+            </div>
+
+            {/* Customer Delivery Expectation Notice */}
+            <div className="pt-3 border-t border-[#E7DED5] flex items-start gap-2.5 text-xs text-[#2A211B]">
+              <Clock className="w-4 h-4 text-[#9A6A45] shrink-0 mt-0.5" />
+              <div className="space-y-0.5">
+                <div>
+                  <span className="font-semibold text-[#2A211B]">Customer Delivery Expectation: </span>
+                  <span className="text-[#6F6963]">{adminDeliveryMessage}</span>
+                </div>
+                {confirmedDateFormatted ? (
+                  <p className="text-[11px] text-[#6F6963]">
+                    Confirmed on: {confirmedDateFormatted} (Order placed on {formattedDate})
+                  </p>
+                ) : (
+                  <p className="text-[11px] text-[#6F6963]">
+                    Order placed on: {formattedDate} (Confirmation date pending)
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -565,7 +597,11 @@ export default function AdminOrderDetailPage() {
 
                   <div className="flex justify-between">
                     <span>Delivery Fee</span>
-                    <span className="font-semibold text-emerald-700 uppercase">FREE</span>
+                    <span className={`font-semibold ${(order.pricing?.shipping || 0) > 0 ? 'text-[#2A211B]' : 'text-emerald-700 uppercase'}`}>
+                      {(order.pricing?.shipping || 0) > 0
+                        ? `₹${((order.pricing?.shipping || 0) / 100).toLocaleString('en-IN')}`
+                        : 'FREE'}
+                    </span>
                   </div>
 
                   <div className="flex justify-between">
@@ -586,6 +622,9 @@ export default function AdminOrderDetailPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Demo Logistics & Dispatch Management Console */}
+              <AdminLogisticsConsole order={order} onOrderUpdated={fetchOrder} />
             </div>
           </div>
         </div>
@@ -642,7 +681,7 @@ export default function AdminOrderDetailPage() {
               <textarea
                 value={statusNote}
                 onChange={(e) => setStatusNote(e.target.value.slice(0, 500))}
-                placeholder="e.g. Dispatched with BlueDart AWB #987654321..."
+                placeholder="e.g. Dispatched with courier partner, AWB #..."
                 rows={3}
                 className="w-full p-3 rounded-xl bg-[#F7F3EE] border border-[#E7DED5] text-xs text-[#2A211B] placeholder-[#6F6963] focus:outline-hidden focus:border-[#9A6A45] focus:bg-white resize-none"
               />

@@ -25,11 +25,14 @@ export function AddressProvider({ children }) {
       const list = res?.data?.addresses || [];
       setAddresses(list);
 
-      // Default selected address to isDefault address or first address
-      const defaultAddr = list.find((a) => a.isDefault) || list[0];
-      if (defaultAddr) {
-        setSelectedAddressId(defaultAddr._id || defaultAddr.id);
-      }
+      // Default selected address to existing selection, or isDefault address, or first address
+      setSelectedAddressId((prev) => {
+        if (prev && list.some((a) => (a._id || a.id) === prev)) {
+          return prev;
+        }
+        const defaultAddr = list.find((a) => a.isDefault) || list[0];
+        return defaultAddr ? (defaultAddr._id || defaultAddr.id) : null;
+      });
     } catch (err) {
       setError(err.message || 'Failed to fetch addresses');
       setAddresses([]);
@@ -46,8 +49,12 @@ export function AddressProvider({ children }) {
     setError(null);
     try {
       const res = await addressApi.createAddress(addressData);
+      const created = res?.data?.address;
       await fetchAddresses();
-      return res?.data?.address;
+      if (created?._id || created?.id) {
+        setSelectedAddressId(created._id || created.id);
+      }
+      return created;
     } catch (err) {
       setError(err.message || 'Failed to create address');
       throw err;

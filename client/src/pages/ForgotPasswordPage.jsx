@@ -4,8 +4,12 @@ import { useAuth } from '../features/auth/hooks/useAuth';
 import { Mail, ArrowRight, ArrowLeft, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 import SkipToContent from '../components/common/SkipToContent';
 import Logo from '../components/common/Logo';
+import { useStoreSettings } from '../features/settings/context/useStoreSettings';
 
 export default function ForgotPasswordPage() {
+  const { settings } = useStoreSettings();
+  const storeName = settings?.storeName || 'LuxeCart';
+
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -41,10 +45,10 @@ export default function ForgotPasswordPage() {
         <header className="max-w-md w-full mx-auto text-center">
           <Link
             to="/"
-            aria-label="LuxeCart Home"
+            aria-label={`${storeName} Home`}
             className="inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9A6A45] rounded-lg py-1"
           >
-            <Logo variant="light" className="h-10 sm:h-12 w-auto mx-auto" priority alt="LuxeCart" />
+            <Logo variant="light" className="h-10 sm:h-12 w-auto mx-auto" priority alt={storeName} />
           </Link>
         </header>
 
@@ -56,7 +60,7 @@ export default function ForgotPasswordPage() {
                 Forgot your password?
               </h1>
               <p className="text-sm text-[#6F6963]">
-                Enter the email address associated with your LuxeCart account.
+                Enter the email address associated with your {storeName} account.
               </p>
             </div>
 
@@ -160,7 +164,7 @@ export default function ForgotPasswordPage() {
 
         {/* Footer */}
         <footer className="max-w-md w-full mx-auto text-center text-xs text-[#6F6963]">
-          &copy; 2026 LuxeCart. All rights reserved.
+          &copy; {new Date().getFullYear()} {storeName}. All rights reserved.
         </footer>
       </div>
     </>

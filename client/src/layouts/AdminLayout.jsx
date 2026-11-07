@@ -17,6 +17,9 @@ import {
   X,
   LayoutTemplate,
   Shield,
+  Users,
+  Download,
+  Settings,
   ChevronLeft,
   ChevronRight,
   ChevronRight as BreadcrumbSeparator,
@@ -76,6 +79,7 @@ export default function AdminLayout({ children }) {
   const navItems = [
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { label: 'Orders & Fulfillment', path: '/admin/orders', icon: ShoppingBag },
+    { label: 'Customers', path: '/admin/customers', icon: Users },
     { label: 'Returns Management', path: '/admin/returns', icon: RotateCcw },
     { label: 'Customer Support', path: '/admin/support', icon: LifeBuoy },
     { label: 'Customer Reviews', path: '/admin/reviews', icon: MessageSquare },
@@ -84,6 +88,8 @@ export default function AdminLayout({ children }) {
     { label: 'Products', path: '/admin/products', icon: Package },
     { label: 'Bulk Import', path: '/admin/products/import', icon: UploadCloud },
     { label: 'Categories', path: '/admin/categories', icon: Layers },
+    { label: 'Data Exports', path: '/admin/exports', icon: Download },
+    { label: 'Store Settings', path: '/admin/settings', icon: Settings },
   ];
 
   const handleLogout = async () => {
@@ -122,6 +128,12 @@ export default function AdminLayout({ children }) {
       back = { label: 'Back to Orders', path: '/admin/orders' };
     } else if (p === '/admin/orders') {
       crumbs.push({ label: 'Orders & Fulfillment', path: null });
+    } else if (p.startsWith('/admin/customers/')) {
+      crumbs.push({ label: 'Customers', path: '/admin/customers' });
+      crumbs.push({ label: 'Customer Profile', path: null });
+      back = { label: 'Back to Customers', path: '/admin/customers' };
+    } else if (p === '/admin/customers') {
+      crumbs.push({ label: 'Customers', path: null });
     } else if (p.startsWith('/admin/returns/')) {
       const retNum = p.split('/admin/returns/')[1];
       crumbs.push({ label: 'Returns Management', path: '/admin/returns' });
@@ -144,6 +156,10 @@ export default function AdminLayout({ children }) {
       crumbs.push({ label: 'Content & CMS', path: null });
     } else if (p === '/admin/categories') {
       crumbs.push({ label: 'Categories', path: null });
+    } else if (p === '/admin/exports') {
+      crumbs.push({ label: 'Data Exports', path: null });
+    } else if (p === '/admin/settings') {
+      crumbs.push({ label: 'Store Settings', path: null });
     }
 
     return { breadcrumbs: crumbs, backLink: back };

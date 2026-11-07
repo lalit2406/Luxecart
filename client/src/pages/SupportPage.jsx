@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { supportApi } from '../features/support/api/supportApi';
+import { useStoreSettings } from '../features/settings/context/useStoreSettings';
+import {
+  isValidEmail,
+  isValidPhone,
+  formatAddress,
+} from '../features/settings/utils/contactUtils';
 import {
   LifeBuoy,
   Plus,
@@ -15,6 +21,9 @@ import {
   X,
   ChevronRight,
   ShieldAlert,
+  Mail,
+  Phone,
+  MapPin,
 } from 'lucide-react';
 
 const STATUS_CONFIG = {
@@ -37,6 +46,19 @@ const CATEGORY_LABELS = {
 };
 
 export default function SupportPage() {
+  const { settings } = useStoreSettings();
+  const storeName = settings?.storeName || 'LuxeCart';
+
+  // Safe contact attributes
+  const hasEmail = isValidEmail(settings?.supportEmail);
+  const hasPhone = isValidPhone(settings?.supportPhone);
+  const hasHours = Boolean(
+    settings?.operatingHours &&
+      typeof settings.operatingHours === 'string' &&
+      settings.operatingHours.trim()
+  );
+  const formattedAddress = formatAddress(settings?.address);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -55,6 +77,73 @@ export default function SupportPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [modalError, setModalError] = useState(null);
+
+  const ticketModalRef = useRef(null);
+  const subjectInputRef = useRef(null);
+  const prevActiveElementRef = useRef(null);
+
+  // Focus management, focus trap, and Escape key listener for Create Ticket Modal
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    prevActiveElementRef.current = document.activeElement;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const timer = setTimeout(() => {
+      if (subjectInputRef.current) {
+        subjectInputRef.current.focus();
+      } else if (ticketModalRef.current) {
+        const firstFocusable = ticketModalRef.current.querySelector(
+          'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        firstFocusable?.focus();
+      }
+    }, 50);
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (!submitting) {
+          e.preventDefault();
+          setIsModalOpen(false);
+        }
+        return;
+      }
+
+      if (e.key === 'Tab' && ticketModalRef.current) {
+        const focusables = ticketModalRef.current.querySelectorAll(
+          'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+
+        const firstElement = focusables[0];
+        const lastElement = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || !ticketModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement || !ticketModalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      if (prevActiveElementRef.current && typeof prevActiveElementRef.current.focus === 'function') {
+        prevActiveElementRef.current.focus();
+      }
+    };
+  }, [isModalOpen, submitting]);
 
   // Automatically open modal if orderNumber or returnNumber in URL params
   useEffect(() => {
@@ -159,7 +248,7 @@ export default function SupportPage() {
               </h1>
             </div>
             <p className="text-xs text-[#705E51] mt-1">
-              Have an issue with your luxury order, parcel delivery, or return? Create a support ticket and our concierge team will assist you.
+              Have an issue with your {storeName} order, parcel delivery, or return? Create a support ticket and our concierge team will assist you.
             </p>
           </div>
 
@@ -171,6 +260,66 @@ export default function SupportPage() {
             <span>Create New Ticket</span>
           </button>
         </div>
+
+        {/* Direct Contact & Concierge Information (rendered only when meaningful contact info exists) */}
+        {(hasEmail || hasPhone || hasHours || formattedAddress) && (
+          <div className="mb-8 p-4 sm:p-5 bg-white border border-[#E7DED5] rounded-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+            {hasEmail && (
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-[#F7F3EE] rounded-lg text-[#9A6A45] shrink-0">
+                  <Mail className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#171513]">Email Concierge</h4>
+                  <a
+                    href={`mailto:${settings.supportEmail.trim()}`}
+                    className="text-[#705E51] hover:text-[#9A6A45] transition-colors break-all"
+                  >
+                    {settings.supportEmail.trim()}
+                  </a>
+                </div>
+              </div>
+            )}
+            {hasPhone && (
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-[#F7F3EE] rounded-lg text-[#9A6A45] shrink-0">
+                  <Phone className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#171513]">Telephone</h4>
+                  <a
+                    href={`tel:${settings.supportPhone.trim()}`}
+                    className="text-[#705E51] hover:text-[#9A6A45] transition-colors"
+                  >
+                    {settings.supportPhone.trim()}
+                  </a>
+                </div>
+              </div>
+            )}
+            {hasHours && (
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-[#F7F3EE] rounded-lg text-[#9A6A45] shrink-0">
+                  <Clock className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#171513]">Hours</h4>
+                  <p className="text-[#705E51]">{settings.operatingHours.trim()}</p>
+                </div>
+              </div>
+            )}
+            {formattedAddress && (
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-[#F7F3EE] rounded-lg text-[#9A6A45] shrink-0">
+                  <MapPin className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#171513]">Flagship Location</h4>
+                  <p className="text-[#705E51]">{formattedAddress}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Status Filter Tabs */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 border-b border-[#E7DED5]">
@@ -319,17 +468,34 @@ export default function SupportPage() {
 
         {/* Create Ticket Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-            <div className="bg-white rounded-lg border border-[#E7DED5] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in"
+            onClick={(e) => {
+              if (e.target === e.currentTarget && !submitting) {
+                setIsModalOpen(false);
+              }
+            }}
+          >
+            <div
+              ref={ticketModalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="create-ticket-modal-title"
+              className="bg-white rounded-lg border border-[#E7DED5] max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto"
+            >
               <div className="flex items-center justify-between border-b border-[#E7DED5] pb-3">
                 <div className="flex items-center gap-2">
                   <LifeBuoy className="w-5 h-5 text-[#9A6A45]" />
-                  <h3 className="font-serif font-bold text-lg text-[#171513]">Create Support Ticket</h3>
+                  <h3 id="create-ticket-modal-title" className="font-serif font-bold text-lg text-[#171513]">
+                    Create Support Ticket
+                  </h3>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setIsModalOpen(false)}
                   disabled={submitting}
-                  className="text-[#705E51] hover:text-[#171513]"
+                  aria-label="Close support ticket dialog"
+                  className="text-[#705E51] hover:text-[#171513] p-1 rounded hover:bg-[#F7F3EE] transition-colors disabled:opacity-40 cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -347,6 +513,7 @@ export default function SupportPage() {
                     Subject *
                   </label>
                   <input
+                    ref={subjectInputRef}
                     type="text"
                     required
                     placeholder="e.g. Question regarding delivery timing for my order"

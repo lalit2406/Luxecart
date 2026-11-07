@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import RatingStars from './RatingStars';
 import { X, AlertTriangle, CheckCircle } from 'lucide-react';
+import { useStoreSettings } from '../../features/settings/context/useStoreSettings';
 
 export default function ReviewFormModal({
   isOpen = false,
@@ -16,6 +17,22 @@ export default function ReviewFormModal({
   const [comment, setComment] = useState('');
   const [formError, setFormError] = useState(null);
 
+  let settings = null;
+  try {
+    const settingsCtx = useStoreSettings();
+    settings = settingsCtx?.settings;
+  } catch {
+    settings = null;
+  }
+  const isMaintenanceMode = Boolean(settings?.maintenance?.isMaintenanceMode);
+  const maintenanceMessage =
+    settings?.maintenance?.maintenanceMessage ||
+    'The store is currently undergoing scheduled maintenance. Review submissions are temporarily paused.';
+
+  const modalRef = useRef(null);
+  const titleInputRef = useRef(null);
+  const prevActiveElementRef = useRef(null);
+
   useEffect(() => {
     if (initialData) {
       setRating(initialData.rating || 5);
@@ -29,10 +46,74 @@ export default function ReviewFormModal({
     setFormError(null);
   }, [initialData, isOpen]);
 
+  // Focus management, focus trap, and Escape key listener
+  useEffect(() => {
+    if (!isOpen) return;
+
+    prevActiveElementRef.current = document.activeElement;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const timer = setTimeout(() => {
+      if (titleInputRef.current) {
+        titleInputRef.current.focus();
+      } else if (modalRef.current) {
+        const firstFocusable = modalRef.current.querySelector(
+          'input, textarea, button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        firstFocusable?.focus();
+      }
+    }, 50);
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (!loading) {
+          e.preventDefault();
+          onClose();
+        }
+        return;
+      }
+
+      if (e.key === 'Tab' && modalRef.current) {
+        const focusables = modalRef.current.querySelectorAll(
+          'input:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+
+        const firstElement = focusables[0];
+        const lastElement = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || !modalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement || !modalRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      if (prevActiveElementRef.current && typeof prevActiveElementRef.current.focus === 'function') {
+        prevActiveElementRef.current.focus();
+      }
+    };
+  }, [isOpen, loading, onClose]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (isMaintenanceMode) return;
     setFormError(null);
 
     if (!rating || rating < 1 || rating > 5) {
@@ -68,27 +149,58 @@ export default function ReviewFormModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-      <div className="bg-white border border-[#E7DED5] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-xl space-y-6 relative">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !loading) {
+          onClose();
+        }
+      }}
+    >
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="review-modal-title"
+        aria-describedby="review-modal-desc"
+        className="bg-white border border-[#E7DED5] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-xl space-y-6 relative"
+      >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#E7DED5] pb-4">
           <div>
-            <h3 className="text-base font-serif font-bold text-[#2A211B]">
+            <h3 id="review-modal-title" className="text-base font-serif font-bold text-[#2A211B]">
               {isEdit ? 'Edit Your Review' : 'Write a Product Review'}
             </h3>
-            <p className="text-xs text-[#6F6963] mt-0.5">
+            <p id="review-modal-desc" className="text-xs text-[#6F6963] mt-0.5">
               Share your genuine experience with other connoisseurs.
             </p>
           </div>
 
           <button
+            type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-[#F7F3EE] hover:bg-[#E7DED5] flex items-center justify-center text-[#6F6963] hover:text-[#2A211B] transition-colors cursor-pointer"
+            disabled={loading}
+            className="w-8 h-8 rounded-full bg-[#F7F3EE] hover:bg-[#E7DED5] flex items-center justify-center text-[#6F6963] hover:text-[#2A211B] transition-colors cursor-pointer disabled:opacity-40"
             aria-label="Close modal"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
+
+        {/* Maintenance Notice */}
+        {isMaintenanceMode && (
+          <div
+            role="alert"
+            className="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs flex items-start gap-2.5"
+          >
+            <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+            <div className="space-y-0.5">
+              <p className="font-bold text-amber-950">Review Submissions Temporarily Paused</p>
+              <p className="text-[11px] leading-relaxed">{maintenanceMessage}</p>
+              <p className="text-[11px] text-amber-800">Your written review below has been preserved.</p>
+            </div>
+          </div>
+        )}
 
         {/* Error Alert */}
         {(formError || error) && (
@@ -137,6 +249,7 @@ export default function ReviewFormModal({
               </span>
             </div>
             <input
+              ref={titleInputRef}
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -178,10 +291,10 @@ export default function ReviewFormModal({
             </button>
             <button
               type="submit"
-              disabled={loading}
-              className="px-6 py-2.5 rounded-xl bg-[#2A211B] hover:bg-[#9A6A45] text-white text-xs font-semibold transition-colors shadow-xs cursor-pointer disabled:opacity-50"
+              disabled={loading || isMaintenanceMode}
+              className="px-6 py-2.5 rounded-xl bg-[#2A211B] hover:bg-[#9A6A45] text-white text-xs font-semibold transition-colors shadow-xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Submitting...' : isEdit ? 'Update Review' : 'Submit Review'}
+              {loading ? 'Submitting...' : isMaintenanceMode ? 'Submission Paused' : isEdit ? 'Update Review' : 'Submit Review'}
             </button>
           </div>
         </form>

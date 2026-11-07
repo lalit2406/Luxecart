@@ -38,7 +38,7 @@ export const ORDER_STATUS_CONFIG = {
   SHIPPED: {
     label: 'Dispatched & In Transit',
     badgeText: 'Shipped',
-    description: 'Your shipment is on its way with insured express delivery.',
+    description: 'Your shipment has been dispatched and is on its way to your address.',
     colorClass: 'bg-purple-50 text-purple-700 border-purple-200',
     dotColorClass: 'bg-purple-500',
     stepIndex: 3,
@@ -86,3 +86,62 @@ export const getStatusConfig = (status) => {
     }
   );
 };
+
+/**
+ * Safely extracts the confirmation event from order statusHistory.
+ * Does not fabricate a date or infer from createdAt.
+ * @param {Array} statusHistory
+ * @returns {object|null} The confirmation history event or null
+ */
+export const getConfirmedEvent = (statusHistory) => {
+  if (!Array.isArray(statusHistory)) return null;
+  return (
+    statusHistory.find(
+      (h) => h && typeof h === 'object' && h.status === 'CONFIRMED' && h.changedAt
+    ) || null
+  );
+};
+
+/**
+ * Formats the confirmation date if a valid confirmed event exists.
+ * Returns null if missing, invalid, or legacy order without confirmation history.
+ * @param {Array} statusHistory
+ * @returns {string|null}
+ */
+export const getFormattedConfirmedDate = (statusHistory) => {
+  const event = getConfirmedEvent(statusHistory);
+  if (!event || !event.changedAt) return null;
+  const date = new Date(event.changedAt);
+  if (isNaN(date.getTime())) return null;
+  return date.toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
+/**
+ * Returns the state-aware delivery estimate message for an order.
+ * @param {string} status - Current order status
+ * @returns {string} State-aware delivery estimate string
+ */
+export const getDeliveryEstimateMessage = (status) => {
+  const normalized = (status || '').toUpperCase();
+  switch (normalized) {
+    case 'PLACED':
+      return 'Awaiting store confirmation. Estimated delivery is within 7 business days after order confirmation.';
+    case 'CONFIRMED':
+      return 'Order confirmed. Estimated delivery within 7 business days after confirmation.';
+    case 'PROCESSING':
+      return 'Your order is being prepared. Estimated delivery within 7 business days after confirmation.';
+    case 'SHIPPED':
+      return 'Your order has been dispatched. Check available order updates for delivery progress.';
+    case 'DELIVERED':
+      return 'Your order has been delivered.';
+    case 'CANCELLED':
+      return 'Your order has been cancelled.';
+    default:
+      return 'Estimated delivery within 7 business days after order confirmation.';
+  }
+};
+

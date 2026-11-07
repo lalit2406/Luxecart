@@ -3,8 +3,10 @@ import {
   ORDER_STATUS_CONFIG,
   TIMELINE_STEPS,
   getStatusConfig,
+  getDeliveryEstimateMessage,
+  getFormattedConfirmedDate,
 } from '../../features/orders/constants/orderStatus';
-import { Check, XCircle, AlertCircle } from 'lucide-react';
+import { Check, XCircle, AlertCircle, Clock } from 'lucide-react';
 
 export default function OrderTimeline({ status, createdAt, statusHistory = [] }) {
   const currentConfig = getStatusConfig(status);
@@ -28,13 +30,15 @@ export default function OrderTimeline({ status, createdAt, statusHistory = [] })
           <h3 className="text-sm font-bold">Order Cancelled</h3>
         </div>
         <p className="text-xs text-red-600">
-          This order was cancelled. Reserved inventory was restored to the catalog.
+          Your order has been cancelled.
         </p>
       </div>
     );
   }
 
   const currentStepIndex = currentConfig.stepIndex >= 0 ? currentConfig.stepIndex : 0;
+  const deliveryMessage = getDeliveryEstimateMessage(status);
+  const confirmedDateFormatted = getFormattedConfirmedDate(statusHistory);
 
   return (
     <div className="bg-white border border-[#E7DED5] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs">
@@ -55,6 +59,23 @@ export default function OrderTimeline({ status, createdAt, statusHistory = [] })
           {currentConfig.badgeText}
         </span>
       </div>
+
+      {/* State-Aware Delivery Notice */}
+      {deliveryMessage && (
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F7F3EE] border border-[#E7DED5] flex items-start gap-3 text-xs">
+          <Clock className="w-4 h-4 text-[#9A6A45] shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-medium text-[#2A211B]">{deliveryMessage}</p>
+            {confirmedDateFormatted &&
+              ((status || '').toUpperCase() === 'CONFIRMED' ||
+                (status || '').toUpperCase() === 'PROCESSING') && (
+                <p className="text-[11px] text-[#6F6963]">
+                  Confirmed on: {confirmedDateFormatted}
+                </p>
+              )}
+          </div>
+        </div>
+      )}
 
       {/* Visual Step Timeline */}
       <div className="relative pt-2">

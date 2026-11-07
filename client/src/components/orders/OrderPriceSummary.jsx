@@ -8,6 +8,8 @@ export default function OrderPriceSummary({ pricing, payment }) {
   const totalSavingsRupees = ((pricing.totalSavings || 0) / 100).toLocaleString('en-IN');
   const subtotalRupees = ((pricing.subtotal || 0) / 100).toLocaleString('en-IN');
   const grandTotalRupees = ((pricing.grandTotal || 0) / 100).toLocaleString('en-IN');
+  const hasShipping = (pricing.shipping || 0) > 0;
+  const shippingRupees = ((pricing.shipping || 0) / 100).toLocaleString('en-IN');
 
   return (
     <div className="bg-white border border-[#E7DED5] rounded-3xl p-6 space-y-6 shadow-xs">
@@ -35,7 +37,9 @@ export default function OrderPriceSummary({ pricing, payment }) {
 
         <div className="flex justify-between">
           <span>Delivery Fee</span>
-          <span className="font-semibold text-emerald-700 uppercase">FREE</span>
+          <span className={`font-semibold ${hasShipping ? 'text-[#2A211B]' : 'text-emerald-700 uppercase'}`}>
+            {hasShipping ? `₹${shippingRupees}` : 'FREE'}
+          </span>
         </div>
 
         <div className="flex justify-between">
@@ -73,7 +77,7 @@ export default function OrderPriceSummary({ pricing, payment }) {
         </div>
         <div className="flex items-center gap-2">
           <Truck className="w-4 h-4 text-[#9A6A45]" />
-          <span>Complimentary Express Shipping</span>
+          <span>{hasShipping ? 'Standard Doorstep Delivery' : 'Standard Delivery'}</span>
         </div>
       </div>
     </div>

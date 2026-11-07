@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { orderApi } from '../features/orders/api/orderApi';
 import { useOrder } from '../features/orders/context/OrderContext';
+import { useStoreSettings } from '../features/settings/context/useStoreSettings';
 import {
   CheckCircle2,
   Package,
@@ -14,16 +15,26 @@ import {
   RefreshCw,
   AlertTriangle,
   ShoppingBag,
+  Clock,
 } from 'lucide-react';
 
 export default function OrderSuccessPage() {
   const { orderNumber } = useParams();
   const { currentOrder } = useOrder();
+  const { settings } = useStoreSettings();
   const [order, setOrder] = useState(
     currentOrder && currentOrder.orderNumber === orderNumber ? currentOrder : null
   );
   const [loading, setLoading] = useState(!order);
   const [error, setError] = useState(null);
+
+  const minDeliveryDays = settings?.shipping?.deliveryEstimateDays?.min || 3;
+  const maxDeliveryDays = settings?.shipping?.deliveryEstimateDays?.max || 7;
+  const deliveryEstimateText =
+    order?.deliveryEstimate ||
+    (order?.estimatedDeliveryDate
+      ? `by ${new Date(order.estimatedDeliveryDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+      : `in ${minDeliveryDays}–${maxDeliveryDays} days after order confirmation`);
 
   useEffect(() => {
     if (!order && orderNumber) {
@@ -88,13 +99,15 @@ export default function OrderSuccessPage() {
 
               <div>
                 <span className="text-[11px] uppercase font-bold tracking-widest text-[#9A6A45]">
-                  Order Confirmed
+                  {order.status && order.status !== 'PLACED' && order.status !== 'CANCELLED'
+                    ? 'Order Confirmed'
+                    : 'Order Placed'}
                 </span>
                 <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2A211B] mt-1">
                   Thank You for Your Order
                 </h1>
                 <p className="text-xs text-[#6F6963] mt-2 max-w-md mx-auto">
-                  Your luxury items have been reserved. We are preparing your shipment for express delivery.
+                  Your order has been received. Estimated delivery is {deliveryEstimateText}.
                 </p>
               </div>
 
@@ -113,6 +126,14 @@ export default function OrderSuccessPage() {
                   <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold uppercase">
                     Pending Handover
                   </span>
+                </div>
+              </div>
+
+              {/* Delivery Estimate Box */}
+              <div>
+                <div className="inline-flex items-center gap-2 bg-[#F7F3EE] border border-[#E7DED5] px-5 py-2.5 rounded-2xl text-xs text-[#6F6963]">
+                  <Clock className="w-4 h-4 text-[#9A6A45] shrink-0" />
+                  <span>Estimated delivery: <strong className="text-[#2A211B]">{deliveryEstimateText.charAt(0).toUpperCase() + deliveryEstimateText.slice(1)}</strong></span>
                 </div>
               </div>
             </div>
@@ -244,7 +265,11 @@ export default function OrderSuccessPage() {
 
                     <div className="flex justify-between">
                       <span>Delivery Fee</span>
-                      <span className="font-semibold text-emerald-700 uppercase">FREE</span>
+                      <span className={`font-semibold ${(order.pricing?.shipping || 0) > 0 ? 'text-[#2A211B]' : 'text-emerald-700 uppercase'}`}>
+                        {(order.pricing?.shipping || 0) > 0
+                          ? `₹${((order.pricing?.shipping || 0) / 100).toLocaleString('en-IN')}`
+                          : 'FREE'}
+                      </span>
                     </div>
 
                     <div className="flex justify-between">
@@ -300,7 +325,7 @@ export default function OrderSuccessPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Truck className="w-4 h-4 text-[#9A6A45]" />
-                      <span>Express Insured Shipping</span>
+                      <span>Standard Doorstep Delivery</span>
                     </div>
                   </div>
                 </div>

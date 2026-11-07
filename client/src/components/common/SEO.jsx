@@ -1,40 +1,62 @@
 import { useEffect } from 'react';
+import { useStoreSettings } from '../../features/settings/context/useStoreSettings';
+import {
+  isValidHttpUrl,
+  formatTitle,
+  buildCanonicalUrl,
+  resolveMetaImage,
+  resolveMetaKeywords,
+  updateFavicon,
+} from '../../features/settings/utils/seoUtils';
+
+export {
+  isValidHttpUrl,
+  formatTitle,
+  buildCanonicalUrl,
+  resolveMetaImage,
+  resolveMetaKeywords,
+  updateFavicon,
+};
 
 /**
  * Reusable SEO & Document Head Management Component
  * Dynamically updates document title, standard meta tags, OpenGraph, Twitter cards,
- * canonical links, and Schema.org JSON-LD structured data.
+ * canonical links, dynamic favicon, and Schema.org JSON-LD structured data.
  */
 export default function SEO({
   title,
   description,
+  keywords,
   canonical,
   image,
   type = 'website',
   robots = 'index, follow',
   structuredData = null,
 }) {
+  let settings = null;
+  try {
+    const settingsContext = useStoreSettings();
+    settings = settingsContext?.settings;
+  } catch {
+    settings = null;
+  }
+
   useEffect(() => {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
-    const defaultTitle = 'LuxeCart — Premium Fashion & Luxury Lifestyle';
+    const storeName = settings?.storeName || 'LuxeCart';
+    const defaultTitle = settings?.seo?.metaTitle || `${storeName} — Curated Luxury Fashion & Lifestyle`;
     const defaultDescription =
-      'Explore curated Indian and international designer apparel, handcrafted luxury footwear, and signature lifestyle essentials at LuxeCart.';
+      settings?.seo?.metaDescription ||
+      `Explore curated luxury fashion, handcrafted footwear, and signature lifestyle essentials at ${storeName}.`;
     const defaultImage = 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1200';
     const siteUrl = window.location.origin;
 
-    const fullTitle = title
-      ? title.includes('LuxeCart')
-        ? title
-        : `${title} | LuxeCart`
-      : defaultTitle;
+    const fullTitle = formatTitle(title, storeName, defaultTitle);
     const metaDescription = description || defaultDescription;
-    const metaImage = image || defaultImage;
-    const canonicalUrl = canonical
-      ? canonical.startsWith('http')
-        ? canonical
-        : `${siteUrl}${canonical}`
-      : window.location.href;
+    const metaImage = resolveMetaImage(image, settings?.logoUrlLight, defaultImage);
+    const metaKeywords = resolveMetaKeywords(keywords, settings?.seo?.keywords);
+    const canonicalUrl = buildCanonicalUrl(canonical, siteUrl);
 
     // 1. Update Title
     document.title = fullTitle;
@@ -54,6 +76,9 @@ export default function SEO({
     // 2. Standard Meta Tags
     setMetaTag('name', 'description', metaDescription);
     setMetaTag('name', 'robots', robots);
+    if (metaKeywords) {
+      setMetaTag('name', 'keywords', metaKeywords);
+    }
 
     // 3. Open Graph Tags
     setMetaTag('property', 'og:title', fullTitle);
@@ -61,7 +86,7 @@ export default function SEO({
     setMetaTag('property', 'og:image', metaImage);
     setMetaTag('property', 'og:url', canonicalUrl);
     setMetaTag('property', 'og:type', type);
-    setMetaTag('property', 'og:site_name', 'LuxeCart');
+    setMetaTag('property', 'og:site_name', storeName);
 
     // 4. Twitter Card Tags
     setMetaTag('name', 'twitter:card', 'summary_large_image');
@@ -78,7 +103,10 @@ export default function SEO({
     }
     canonicalElement.setAttribute('href', canonicalUrl);
 
-    // 6. JSON-LD Structured Data
+    // 6. Dynamic Favicon Update
+    updateFavicon(settings?.faviconUrl);
+
+    // 7. JSON-LD Structured Data
     const scriptId = 'luxecart-structured-data';
     let scriptElement = document.getElementById(scriptId);
 
@@ -97,7 +125,7 @@ export default function SEO({
     return () => {
       // Cleanup on unmount if needed
     };
-  }, [title, description, canonical, image, type, robots, structuredData]);
+  }, [title, description, keywords, canonical, image, type, robots, structuredData, settings]);
 
   return null;
 }

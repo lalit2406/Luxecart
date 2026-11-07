@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { StoreSettingsProvider } from './features/settings/context/StoreSettingsContext';
 import { AuthProvider } from './features/auth/hooks/useAuth';
 import { CartProvider } from './features/cart/context/CartContext';
 import { WishlistProvider } from './features/wishlist/context/WishlistContext';
@@ -8,6 +9,7 @@ import { CheckoutProvider } from './features/checkout/context/CheckoutContext';
 import { OrderProvider } from './features/orders/context/OrderContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import PageLoader from './components/common/PageLoader';
+import MaintenanceNotice from './components/common/MaintenanceNotice';
 
 // Customer Pages (Lazy-Loaded for Fast Storefront Paint)
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -31,6 +33,8 @@ const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'));
 const AdminOrdersPage = lazy(() => import('./pages/admin/AdminOrdersPage'));
 const AdminOrderDetailPage = lazy(() => import('./pages/admin/AdminOrderDetailPage'));
+const AdminCustomersPage = lazy(() => import('./pages/admin/AdminCustomersPage'));
+const AdminCustomerDetailPage = lazy(() => import('./pages/admin/AdminCustomerDetailPage'));
 const AdminReviewsPage = lazy(() => import('./pages/admin/AdminReviewsPage'));
 const AdminCouponsPage = lazy(() => import('./pages/admin/AdminCouponsPage'));
 const AdminReturnsPage = lazy(() => import('./pages/admin/AdminReturnsPage'));
@@ -43,16 +47,20 @@ const AdminProductEditPage = lazy(() => import('./pages/admin/AdminProductEditPa
 const AdminProductImportPage = lazy(() => import('./pages/admin/AdminProductImportPage'));
 const AdminCategoriesPage = lazy(() => import('./pages/admin/AdminCategoriesPage'));
 const AdminContentPage = lazy(() => import('./pages/admin/AdminContentPage'));
+const AdminExportsPage = lazy(() => import('./pages/admin/AdminExportsPage'));
+const AdminSettingsPage = lazy(() => import('./pages/admin/AdminSettingsPage'));
 
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <CartProvider>
+      <StoreSettingsProvider>
+        <AuthProvider>
+          <CartProvider>
           <WishlistProvider>
             <AddressProvider>
               <CheckoutProvider>
                 <OrderProvider>
+                  <MaintenanceNotice />
                   <Suspense fallback={<PageLoader />}>
                     <Routes>
                       {/* Storefront Customer Routes */}
@@ -144,6 +152,22 @@ export default function App() {
                         element={
                           <ProtectedRoute requiredRole="ADMIN">
                             <AdminOrderDetailPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/admin/customers"
+                        element={
+                          <ProtectedRoute requiredRole="ADMIN">
+                            <AdminCustomersPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/admin/customers/:id"
+                        element={
+                          <ProtectedRoute requiredRole="ADMIN">
+                            <AdminCustomerDetailPage />
                           </ProtectedRoute>
                         }
                       />
@@ -243,6 +267,22 @@ export default function App() {
                           </ProtectedRoute>
                         }
                       />
+                      <Route
+                        path="/admin/exports"
+                        element={
+                          <ProtectedRoute requiredRole="ADMIN">
+                            <AdminExportsPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/admin/settings"
+                        element={
+                          <ProtectedRoute requiredRole="ADMIN">
+                            <AdminSettingsPage />
+                          </ProtectedRoute>
+                        }
+                      />
                     </Routes>
                   </Suspense>
                 </OrderProvider>
@@ -251,6 +291,7 @@ export default function App() {
           </WishlistProvider>
         </CartProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </StoreSettingsProvider>
+  </BrowserRouter>
   );
 }

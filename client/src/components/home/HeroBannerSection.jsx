@@ -1,31 +1,21 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ArrowRight, ChevronLeft, ChevronRight, Box } from 'lucide-react';
-import { isWebGLSupported } from '../../utils/webgl';
-import ThreeErrorBoundary from './three/ThreeErrorBoundary';
-
-// Lazy-load the Three.js canvas so initial page load does not parse 3D dependencies synchronously
-const LuxuryHeroCanvas = lazy(() => import('./three/LuxuryHeroCanvas'));
+import { Sparkles, ArrowRight, ChevronLeft, ChevronRight, ShieldCheck, Truck, RotateCcw } from 'lucide-react';
 
 export default function HeroBannerSection({ heroBanners = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [webglSupported, setWebglSupported] = useState(false);
-  const [show3D, setShow3D] = useState(true);
 
-  useEffect(() => {
-    setWebglSupported(isWebGLSupported());
-  }, []);
-
-  // Default fallback hero if no admin banner configured
+  // Reliable, verified local campaign hero asset
   const defaultBanner = {
-    title: 'Elevated Fashion & Timeless Lifestyle',
-    subtitle: 'Explore curated Indian and international designer apparel, handcrafted leather footwear, and signature lifestyle essentials.',
-    imageUrl: '',
-    ctaText: 'Browse Full Catalog',
+    title: 'The Autumn / Winter Haute Collection',
+    subtitle:
+      'Curated designer silhouettes, tailored apparel, handcrafted leather footwear, and signature lifestyle essentials.',
+    imageUrl: '/images/hero-campaign.jpg',
+    ctaText: 'Shop Collection',
     ctaLink: '/shop',
   };
 
-  const banners = heroBanners.length > 0 ? heroBanners : [defaultBanner];
+  const banners = heroBanners && heroBanners.length > 0 ? heroBanners : [defaultBanner];
 
   useEffect(() => {
     if (banners.length <= 1) return;
@@ -36,6 +26,7 @@ export default function HeroBannerSection({ heroBanners = [] }) {
   }, [banners.length]);
 
   const currentBanner = banners[currentIndex] || banners[0];
+  const activeImageUrl = currentBanner.imageUrl || '/images/hero-campaign.jpg';
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
@@ -48,115 +39,118 @@ export default function HeroBannerSection({ heroBanners = [] }) {
   return (
     <section
       role="region"
-      aria-label="Featured Hero Showcase"
-      className="relative rounded-3xl bg-[#2A211B] text-white p-8 sm:p-14 overflow-hidden shadow-lg min-h-[380px] sm:min-h-[440px] flex items-center justify-between"
+      aria-label="Editorial Campaign Hero"
+      className="relative rounded-3xl bg-[#171513] text-white overflow-hidden shadow-xl min-h-[340px] sm:min-h-[400px] lg:min-h-[440px] flex items-center border border-[#3D3128]"
     >
-      {/* 1. Static Background Image with Dark Gradient Overlay (Always available) */}
-      {currentBanner.imageUrl && (
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <picture>
-            {currentBanner.mobileImageUrl && (
-              <source media="(max-width: 640px)" srcSet={currentBanner.mobileImageUrl} />
-            )}
-            <img
-              src={currentBanner.imageUrl}
-              alt={currentBanner.title}
-              loading="eager"
-              decoding="async"
-              className="w-full h-full object-cover object-center opacity-30 transition-opacity duration-700 ease-in-out"
-            />
-          </picture>
-        </div>
-      )}
+      {/* 1. Real High-Fashion Campaign Image with Balanced Contrast Scrim */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={activeImageUrl}
+          alt={currentBanner.title || 'LuxeCart Fashion Campaign'}
+          loading="eager"
+          decoding="async"
+          onError={(e) => {
+            // Graceful fallback to verified local campaign asset if dynamic URL fails
+            if (e.currentTarget.src !== window.location.origin + '/images/hero-campaign.jpg') {
+              e.currentTarget.src = '/images/hero-campaign.jpg';
+            }
+          }}
+          className="w-full h-full object-cover object-center lg:object-right opacity-65 scale-100 transition-all duration-1000 ease-out"
+        />
+        {/* Directional Scrim: solid readable background for text on the left, clear natural fashion photo on the right */}
+        <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-[#171513] via-[#171513]/80 sm:via-[#171513]/65 to-black/20 z-1" />
+      </div>
 
-      {/* Gradient vignette protecting text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#171513] via-[#2A211B]/95 to-transparent z-0 pointer-events-none" />
-
-      {/* 2. Interactive 3D Canvas Layer (Lazy-Loaded, Isolated, WebGL-Guarded) */}
-      {webglSupported && show3D && (
-        <div className="absolute inset-0 lg:left-1/3 z-1 flex items-center justify-center pointer-events-auto opacity-90 transition-opacity duration-1000">
-          <ThreeErrorBoundary fallback={null}>
-            <Suspense fallback={null}>
-              <LuxuryHeroCanvas />
-            </Suspense>
-          </ThreeErrorBoundary>
-        </div>
-      )}
-
-      {/* 3. Hero Content Overlay (Semantic, High-contrast, Server-authoritative) */}
-      <div className="relative z-10 max-w-2xl space-y-4 pointer-events-auto">
-        <div className="flex items-center gap-2 flex-wrap">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#9A6A45]/30 border border-[#9A6A45]/40 text-[#E7DED5] text-xs font-semibold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-[#9A6A45]" />
-            <span>LuxeCart Signature Haute-Horlogerie</span>
+      {/* 2. Editorial Content Showcase */}
+      <div className="relative z-10 max-w-xl px-6 py-8 sm:px-10 sm:py-12 lg:px-14 lg:py-12 space-y-4 sm:space-y-5">
+        {/* Curated Campaign Tag */}
+        <div className="flex items-center gap-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#9A6A45]/30 border border-[#9A6A45]/50 text-[#E7DED5] text-[10px] sm:text-[11px] font-bold uppercase tracking-widest shadow-xs">
+            <Sparkles className="w-3 h-3 text-[#E7DED5]" />
+            <span>Seasonal Campaign</span>
           </div>
-
-          {webglSupported && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-[11px] text-[#E7DED5] font-mono">
-              <Box className="w-3 h-3 text-[#9A6A45]" />
-              <span>3D Interactive</span>
-            </span>
-          )}
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-serif font-bold tracking-tight leading-tight text-[#F7F3EE]">
-          {currentBanner.title}
-        </h1>
+        {/* Editorial Headline */}
+        <div className="space-y-2 sm:space-y-2.5">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight leading-[1.15] text-[#F7F3EE]">
+            {currentBanner.title || 'The Autumn / Winter Haute Collection'}
+          </h1>
 
-        {currentBanner.subtitle && (
-          <p className="text-sm sm:text-base text-[#E7DED5] max-w-lg leading-relaxed">
-            {currentBanner.subtitle}
+          <p className="text-xs sm:text-sm text-[#D5CAC0] max-w-lg leading-relaxed">
+            {currentBanner.subtitle ||
+              'Explore curated designer silhouettes, tailored apparel, handcrafted leather footwear, and signature lifestyle essentials.'}
           </p>
-        )}
+        </div>
 
-        <div className="pt-2 flex flex-wrap items-center gap-4">
+        {/* Action CTAs */}
+        <div className="pt-1 flex flex-wrap items-center gap-3">
           <Link
             to={currentBanner.ctaLink || '/shop'}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-[#2A211B] hover:bg-[#F7F3EE] transition-colors text-sm font-semibold shadow-xs"
+            className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-[#F7F3EE] text-[#171513] hover:bg-white transition-all text-xs sm:text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
           >
-            <span>{currentBanner.ctaText || 'Browse Collection'}</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>{currentBanner.ctaText || 'Shop Collection'}</span>
+            <ArrowRight className="w-4 h-4 text-[#9A6A45]" />
           </Link>
 
           <Link
             to="/shop?isNewArrival=true"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-white/20 text-white hover:bg-white/10 transition-colors text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-[#F7F3EE] transition-all text-xs sm:text-sm font-semibold backdrop-blur-xs"
           >
             <span>New Arrivals</span>
           </Link>
         </div>
+
+        {/* Verified Brand Assurance Badges in Hero */}
+        <div className="pt-3 border-t border-white/10 flex flex-wrap items-center gap-4 sm:gap-6 text-[10px] sm:text-[11px] text-[#A8988B]">
+          <span className="flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#9A6A45]" />
+            <span>Curated Designer Labels</span>
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Truck className="w-3.5 h-3.5 text-[#9A6A45]" />
+            <span>Delivery Across India</span>
+          </span>
+          <span className="flex items-center gap-1.5">
+            <RotateCcw className="w-3.5 h-3.5 text-[#9A6A45]" />
+            <span>7-Day Return Policy</span>
+          </span>
+        </div>
       </div>
 
-      {/* 4. Slider Controls (if multiple banners) */}
+      {/* 3. Slider Controls (Visible when CMS has multiple banners) */}
       {banners.length > 1 && (
-        <div className="absolute bottom-6 right-6 z-20 flex items-center gap-2 pointer-events-auto">
+        <div className="absolute bottom-5 right-5 z-20 flex items-center gap-2">
           <button
+            type="button"
             onClick={handlePrev}
-            className="p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors border border-white/10"
+            className="p-1.5 sm:p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors border border-white/20"
             title="Previous Banner"
             aria-label="Previous Banner"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <div className="flex items-center gap-1.5 px-2">
             {banners.map((_, idx) => (
               <button
                 key={idx}
+                type="button"
                 onClick={() => setCurrentIndex(idx)}
-                aria-label={`Slide ${idx + 1}`}
+                aria-label={`Go to slide ${idx + 1}`}
                 className={`h-1.5 rounded-full transition-all ${
-                  idx === currentIndex ? 'w-6 bg-[#9A6A45]' : 'w-2 bg-white/40'
+                  idx === currentIndex ? 'w-5 sm:w-6 bg-[#9A6A45]' : 'w-2 bg-white/40'
                 }`}
               />
             ))}
           </div>
           <button
+            type="button"
             onClick={handleNext}
-            className="p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors border border-white/10"
+            className="p-1.5 sm:p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors border border-white/20"
             title="Next Banner"
             aria-label="Next Banner"
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
       )}

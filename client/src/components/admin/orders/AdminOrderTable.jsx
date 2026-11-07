@@ -51,8 +51,13 @@ export default function AdminOrderTable({ orders = [] }) {
                 >
                   {/* Order Column */}
                   <td className="py-4 px-4 sm:px-6 space-y-0.5">
-                    <div className="font-mono font-bold text-[#2A211B] tracking-wider">
-                      {order.orderNumber}
+                    <div className="font-mono font-bold text-[#2A211B] tracking-wider flex items-center gap-1.5">
+                      <span>{order.orderNumber}</span>
+                      {(order.isDemo || order.orderNumber?.startsWith('DEMO-') || order.orderNumber?.startsWith('TEST-')) && (
+                        <span className="px-1.5 py-0.5 rounded-md bg-purple-100 text-purple-800 text-[10px] font-bold uppercase tracking-wider">
+                          Demo
+                        </span>
+                      )}
                     </div>
                     <div className="text-[11px] text-[#6F6963]">{formattedDate}</div>
                   </td>

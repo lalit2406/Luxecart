@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useWishlist } from '../features/wishlist/context/WishlistContext';
 import { useAuth } from '../features/auth/hooks/useAuth';
@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function WishlistPage() {
+  const location = useLocation();
   const { items, itemCount, loading, error, removeItem, clearWishlist, moveToCart } = useWishlist();
   const { isAuthenticated } = useAuth();
   const [actionSuccess, setActionSuccess] = useState(null);
@@ -106,6 +107,7 @@ export default function WishlistPage() {
             </div>
             <Link
               to="/login"
+              state={{ from: location }}
               className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-2xl bg-[#2A211B] text-white hover:bg-[#9A6A45] transition-colors text-xs font-semibold"
             >
               <LogIn className="w-4 h-4" />

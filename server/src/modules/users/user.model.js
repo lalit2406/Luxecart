@@ -19,6 +19,32 @@ const refreshTokenSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const userStatusHistoryEventSchema = new mongoose.Schema(
+  {
+    status: {
+      type: String,
+      required: true,
+      enum: ['ACTIVE', 'INACTIVE', 'SUSPENDED'],
+    },
+    changedAt: {
+      type: Date,
+      default: Date.now,
+      required: true,
+    },
+    changedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+    note: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+  },
+  { _id: true }
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -89,6 +115,11 @@ const userSchema = new mongoose.Schema(
       default: [],
       select: false, // Never return refresh tokens by default
     },
+    statusHistory: {
+      type: [userStatusHistoryEventSchema],
+      default: [],
+      select: false, // Never return statusHistory to customer-facing queries by default
+    },
   },
   {
     timestamps: true,
@@ -101,11 +132,14 @@ const userSchema = new mongoose.Schema(
         delete ret.refreshTokens;
         delete ret.resetPasswordTokenHash;
         delete ret.resetPasswordExpires;
+        delete ret.statusHistory;
         return ret;
       },
     },
   }
 );
+
+userSchema.index({ role: 1, createdAt: -1 });
 
 /**
  * Compare plaintext password with stored password hash

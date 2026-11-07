@@ -6,11 +6,20 @@ let server;
 
 async function startServer() {
   try {
-    // Attempt database connection if URI is configured
-    if (config.mongoUri) {
-      await connectDB(config.mongoUri);
+    if (config.isProduction) {
+      if (!config.mongoUri) {
+        throw new Error('[Startup Error] MONGODB_URI is strictly required in production.');
+      }
+      console.log('[Server] Connecting to production database before starting HTTP listener...');
+      await connectDB(config.mongoUri, { isProduction: true });
+      console.log('[Server] Production database connected successfully.');
     } else {
-      console.warn('[Database] MONGODB_URI is not configured in environment.');
+      // Development / Test workflow
+      if (config.mongoUri) {
+        await connectDB(config.mongoUri, { isProduction: false });
+      } else {
+        console.warn('[Database] MONGODB_URI is not configured in environment.');
+      }
     }
 
     server = app.listen(config.port, () => {

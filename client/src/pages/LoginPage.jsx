@@ -4,6 +4,7 @@ import { useAuth } from '../features/auth/hooks/useAuth';
 import { Lock, Mail, AlertCircle, ArrowRight, RefreshCw } from 'lucide-react';
 import SkipToContent from '../components/common/SkipToContent';
 import Logo from '../components/common/Logo';
+import SEO from '../components/common/SEO';
 import GoogleSignInButton from '../components/auth/GoogleSignInButton';
 import { getSafeRedirectPath } from '../utils/navigation';
 import { useStoreSettings } from '../features/settings/context/useStoreSettings';
@@ -58,6 +59,12 @@ export default function LoginPage() {
 
   return (
     <>
+      <SEO
+        title="Sign In"
+        description={`Sign in to your ${storeName} customer account.`}
+        canonical="/login"
+        robots="noindex, nofollow"
+      />
       <SkipToContent targetId="main-content" />
       <div className="min-h-screen bg-[#F7F3EE] flex flex-col justify-between p-6 sm:p-10">
         {/* Header */}

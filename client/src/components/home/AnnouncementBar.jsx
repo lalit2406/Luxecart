@@ -40,8 +40,8 @@ export default function AnnouncementBar({ announcements = [] }) {
   const defaultAnnouncements = [
     {
       title: isReturnsEnabled
-        ? `Flat ₹${standardFee} Delivery Across India (${minDays}–${maxDays} Days) • ${returnWindowDays}-Day Return Policy`
-        : `Flat ₹${standardFee} Delivery Across India (${minDays}–${maxDays} Days)`,
+        ? `Portfolio Demo • Simulated ₹${standardFee} Delivery (${minDays}–${maxDays} Days) • ${returnWindowDays}-Day Return Simulation`
+        : `Portfolio Demo • Simulated ₹${standardFee} Delivery (${minDays}–${maxDays} Days)`,
       ctaText: 'Customer Support',
       ctaLink: '/support',
     },

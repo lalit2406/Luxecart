@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import SEO from '../components/common/SEO';
 import { useWishlist } from '../features/wishlist/context/WishlistContext';
 import { useAuth } from '../features/auth/hooks/useAuth';
 import {
@@ -51,6 +52,12 @@ export default function WishlistPage() {
 
   return (
     <div className="min-h-screen bg-[#F7F3EE] text-[#171513] flex flex-col justify-between">
+      <SEO
+        title="My Wishlist"
+        description="View and manage curated pieces saved to your wishlist."
+        canonical="/wishlist"
+        robots="noindex, nofollow"
+      />
       <Navbar />
 
       <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">

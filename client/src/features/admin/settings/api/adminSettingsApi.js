@@ -57,13 +57,14 @@ export const validateSettingsForm = (form) => {
     errors.faviconUrl = 'Favicon URL cannot exceed 500 characters';
   }
 
-  // Support Email
-  if (!form.supportEmail || !form.supportEmail.trim()) {
-    errors.supportEmail = 'Support email is required';
-  } else if (!EMAIL_REGEX.test(form.supportEmail.trim())) {
-    errors.supportEmail = 'Please provide a valid email address';
-  } else if (form.supportEmail.trim().length > 150) {
-    errors.supportEmail = 'Support email cannot exceed 150 characters';
+  // Support Email (optional; validate format & length only when non-empty)
+  const trimmedSupportEmail = typeof form.supportEmail === 'string' ? form.supportEmail.trim() : '';
+  if (trimmedSupportEmail) {
+    if (!EMAIL_REGEX.test(trimmedSupportEmail)) {
+      errors.supportEmail = 'Please provide a valid email address';
+    } else if (trimmedSupportEmail.length > 150) {
+      errors.supportEmail = 'Support email cannot exceed 150 characters';
+    }
   }
 
   // Support Phone
@@ -180,7 +181,7 @@ export const buildSettingsPatchPayload = (form) => {
       city: form.address?.city?.trim() || '',
       state: form.address?.state?.trim() || '',
       postalCode: form.address?.postalCode?.trim() || '',
-      country: form.address?.country?.trim() || 'India',
+      country: form.address?.country?.trim() || '',
     },
     shipping: {
       standardFeePaise: rupeesToPaise(form.shipping?.standardFeeRupees),
@@ -239,15 +240,15 @@ export const mapSettingsToForm = (settings = {}) => {
     logoUrlLight: settings.logoUrlLight || '',
     logoUrlDark: settings.logoUrlDark || '',
     faviconUrl: settings.faviconUrl || '',
-    supportEmail: settings.supportEmail || 'support@luxecart.com',
-    supportPhone: settings.supportPhone || '+91 98765 43210',
-    operatingHours: settings.operatingHours || 'Mon - Sat: 10:00 AM - 7:00 PM IST',
+    supportEmail: settings.supportEmail || '',
+    supportPhone: settings.supportPhone || '',
+    operatingHours: settings.operatingHours || '',
     address: {
       street: settings.address?.street || '',
       city: settings.address?.city || '',
       state: settings.address?.state || '',
       postalCode: settings.address?.postalCode || '',
-      country: settings.address?.country || 'India',
+      country: settings.address?.country || '',
     },
     shipping: {
       standardFeeRupees: paiseToRupees(settings.shipping?.standardFeePaise ?? 20000),

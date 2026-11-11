@@ -11,6 +11,8 @@ import ReviewSummary from '../components/reviews/ReviewSummary';
 import ReviewCard from '../components/reviews/ReviewCard';
 import ReviewFormModal from '../components/reviews/ReviewFormModal';
 import SEO from '../components/common/SEO';
+import PortfolioFooter from '../components/common/PortfolioFooter';
+import { buildProductBreadcrumbs, buildProductStructuredData } from '../features/settings/utils/seoUtils';
 import { isWebGLSupported } from '../utils/webgl';
 import { getOptimizedImageUrl, LUXE_PLACEHOLDER_IMAGE } from '../utils/image';
 import ThreeErrorBoundary from '../components/home/three/ThreeErrorBoundary';
@@ -247,6 +249,10 @@ export default function ProductDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F3EE] flex flex-col justify-between">
+        <SEO
+          title="Curated Piece"
+          canonical={slug ? `/products/${slug}` : '/shop'}
+        />
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4">
           <RefreshCw className="w-8 h-8 text-[#9A6A45] animate-spin" />
@@ -259,19 +265,33 @@ export default function ProductDetailPage() {
   if (error || !product) {
     return (
       <div className="min-h-screen bg-[#F7F3EE] flex flex-col justify-between">
+        <SEO
+          title="Product Not Found"
+          description="The requested product is unavailable or could not be found in our catalog."
+          robots="noindex, nofollow"
+          canonical={false}
+        />
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4 text-center max-w-md mx-auto">
           <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
             <AlertTriangle className="w-6 h-6" />
           </div>
-          <h2 className="text-base font-serif font-bold text-[#2A211B]">Product Unavailable</h2>
+          <h1 className="text-xl font-serif font-bold text-[#2A211B]">Product Unavailable</h1>
           <p className="text-xs text-[#6F6963]">{error || 'The requested product could not be located in our catalog.'}</p>
-          <Link
-            to="/shop"
-            className="px-6 py-2.5 rounded-xl bg-[#2A211B] text-white hover:bg-[#9A6A45] text-xs font-semibold transition-colors"
-          >
-            Explore Catalog
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/"
+              className="px-5 py-2.5 rounded-xl bg-[#F7F3EE] border border-[#E7DED5] text-[#2A211B] hover:border-[#9A6A45] text-xs font-semibold transition-colors"
+            >
+              Return Home
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-2.5 rounded-xl bg-[#2A211B] text-white hover:bg-[#9A6A45] text-xs font-semibold transition-colors"
+            >
+              Explore Catalog
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -456,70 +476,9 @@ export default function ProductDetailPage() {
     }
   };
 
-  // Structured Data Schema.org Product & BreadcrumbList
-  const pdpStructuredData = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: product.name,
-      description: product.description,
-      image: images.map((img) => img.url),
-      brand: {
-        '@type': 'Brand',
-        name: product.brand,
-      },
-      sku: selectedVariant?.sku || product.variants?.[0]?.sku || `SKU-${product._id || product.id}`,
-      offers: {
-        '@type': 'Offer',
-        price: ((selectedVariant?.price ?? product.priceSummary?.minPrice ?? 0) / 100).toFixed(2),
-        priceCurrency: 'INR',
-        availability: isOutOfStock
-          ? 'https://schema.org/OutOfStock'
-          : 'https://schema.org/InStock',
-        url: window.location.href,
-        itemCondition: 'https://schema.org/NewCondition',
-      },
-      ...(product.ratings?.count > 0
-        ? {
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: product.ratings.average,
-              reviewCount: product.ratings.count,
-            },
-          }
-        : {}),
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://luxecart.com/' },
-        { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://luxecart.com/shop' },
-        ...(product.category?.ancestors || []).map((anc, idx) => ({
-          '@type': 'ListItem',
-          position: 3 + idx,
-          name: anc.name,
-          item: `https://luxecart.com/shop?category=${anc.slug || anc._id}`,
-        })),
-        ...(product.category
-          ? [
-              {
-                '@type': 'ListItem',
-                position: 3 + (product.category.ancestors?.length || 0),
-                name: product.category.name,
-                item: `https://luxecart.com/shop?category=${product.category.slug || product.category._id}`,
-              },
-            ]
-          : []),
-        {
-          '@type': 'ListItem',
-          position: 4 + (product.category?.ancestors?.length || 0),
-          name: product.name,
-          item: `https://luxecart.com/products/${product.slug}`,
-        },
-      ],
-    },
-  ];
+  // Structured Data Schema.org Product & BreadcrumbList (whole-Rupee pricing & centralized origin)
+  const pdpStructuredData = buildProductStructuredData(product, selectedVariant, images, isOutOfStock);
+  const { items: productBreadcrumbs } = buildProductBreadcrumbs(product);
 
   const storeName = settings?.storeName || 'LuxeCart';
   const pdpTitle =
@@ -545,23 +504,28 @@ export default function ProductDetailPage() {
       <Navbar />
 
       <main id="main-content" className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-1.5 text-xs text-[#6F6963] overflow-x-auto">
-          <Link to="/" className="hover:text-[#2A211B]">Home</Link>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <Link to="/shop" className="hover:text-[#2A211B]">Shop</Link>
-          {product.category?.ancestors?.map((anc) => (
-            <React.Fragment key={anc._id}>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="hover:text-[#2A211B]">{anc.name}</span>
-            </React.Fragment>
-          ))}
-          {product.category && (
-            <>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-[#2A211B] font-semibold">{product.category.name}</span>
-            </>
-          )}
+        {/* Breadcrumb Navigation (Synced 1:1 with BreadcrumbList JSON-LD) */}
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center gap-1.5 text-xs text-[#6F6963] overflow-x-auto"
+        >
+          {productBreadcrumbs.map((crumb, idx) => {
+            const isLast = idx === productBreadcrumbs.length - 1;
+            return (
+              <React.Fragment key={`${crumb.to}-${idx}`}>
+                {idx > 0 && <ChevronRight className="w-3.5 h-3.5 shrink-0 text-[#B3A89D]" aria-hidden="true" />}
+                {isLast ? (
+                  <span aria-current="page" className="text-[#2A211B] font-semibold truncate">
+                    {crumb.label}
+                  </span>
+                ) : (
+                  <Link to={crumb.to} className="hover:text-[#2A211B] transition-colors shrink-0">
+                    {crumb.label}
+                  </Link>
+                )}
+              </React.Fragment>
+            );
+          })}
         </nav>
 
         {/* Global Action Messages */}
@@ -1114,12 +1078,7 @@ export default function ProductDetailPage() {
         error={modalError}
       />
 
-      {/* Footer */}
-      <footer className="max-w-7xl w-full mx-auto text-center border-t border-[#E7DED5] py-6 px-4">
-        <p className="text-xs text-[#6F6963]">
-          LuxeCart &copy; 2026. Single-Vendor Fashion & Lifestyle.
-        </p>
-      </footer>
+      <PortfolioFooter />
     </div>
   );
 }

@@ -1,3 +1,7 @@
+# LuxeCart Robots Policy
+# Note: Disallow controls crawling of private/admin paths.
+# Utility/auth pages meant to stay out of search results (/cart, /wishlist, /login, /register)
+# remain crawlable so search engines can inspect page-level noindex directives.
 User-agent: *
 Allow: /
 Disallow: /admin
@@ -10,4 +14,4 @@ Disallow: /orders
 Disallow: /orders/
 Disallow: /api/
 
-Sitemap: https://luxecart.com/sitemap.xml
+Sitemap: https://luxecart-rouge.vercel.app/sitemap.xml

@@ -25,7 +25,13 @@ import HeroBannerSection from '../components/home/HeroBannerSection';
 import PromoBannerSection from '../components/home/PromoBannerSection';
 import ProductCard from '../components/ProductCard';
 import SEO from '../components/common/SEO';
+import { buildHomepageStructuredData } from '../features/settings/utils/seoUtils';
 import Logo from '../components/common/Logo';
+import {
+  CONTACT_NAV_LINK,
+  POLICY_NAV_LINKS,
+  PortfolioNoticeStrip,
+} from '../components/common/PortfolioFooter';
 import { contentApi } from '../features/content/api/contentApi';
 import { categoryApi } from '../features/categories/api/categoryApi';
 import { productApi } from '../features/products/api/productApi';
@@ -230,29 +236,11 @@ export default function HomePage() {
       .finally(() => setLoadingFeatured(false));
   }, []);
 
-  const originUrl = typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://luxecart.com';
-
-  const homepageStructuredData = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      name: storeName,
-      url: originUrl,
-      logo: settings?.logoUrlLight || `${originUrl}/luxecart-logo.png`,
-      description: tagline,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: storeName,
-      url: originUrl,
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: `${originUrl}/shop?search={search_term_string}`,
-        'query-input': 'required name=search_term_string',
-      },
-    },
-  ];
+  const homepageStructuredData = buildHomepageStructuredData({
+    storeName,
+    tagline,
+    logoUrl: settings?.logoUrlLight,
+  });
 
   return (
     <div className="min-h-screen bg-[#F7F3EE] text-[#171513] flex flex-col justify-between">
@@ -509,10 +497,10 @@ export default function HomePage() {
             </div>
             <div>
               <h3 className="text-xs font-bold text-[#2A211B] uppercase tracking-wide">
-                Verified Designer Labels
+                Portfolio Catalog Showcase
               </h3>
               <p className="text-[11px] text-[#705E51] mt-1 leading-relaxed">
-                Carefully curated selections from established designer brands and fashion houses.
+                Non-commercial portfolio demonstration featuring curated multi-variant fashion and lifestyle items.
               </p>
             </div>
           </div>
@@ -523,10 +511,10 @@ export default function HomePage() {
             </div>
             <div>
               <h3 className="text-xs font-bold text-[#2A211B] uppercase tracking-wide">
-                Doorstep Delivery
+                Simulated COD Delivery
               </h3>
               <p className="text-[11px] text-[#705E51] mt-1 leading-relaxed">
-                Flat ₹{standardFeeRupees} delivery fee per order with Cash on Delivery (Delivery in {minDeliveryDays}–{maxDeliveryDays} days).
+                Simulated flat ₹{standardFeeRupees} delivery flow with Cash on Delivery demo checkout ({minDeliveryDays}–{maxDeliveryDays} days estimate).
               </p>
             </div>
           </div>
@@ -537,12 +525,12 @@ export default function HomePage() {
             </div>
             <div>
               <h3 className="text-xs font-bold text-[#2A211B] uppercase tracking-wide">
-                {isReturnsEnabled ? `${returnWindowDays}-Day Return Policy` : 'Returns Currently Paused'}
+                {isReturnsEnabled ? `${returnWindowDays}-Day Return Simulation` : 'Returns Currently Paused'}
               </h3>
               <p className="text-[11px] text-[#705E51] mt-1 leading-relaxed">
                 {isReturnsEnabled
-                  ? `Convenient doorstep pickup and verified return processing within ${returnWindowDays} days of delivery via our customer portal.`
-                  : 'Returns are currently unavailable. Contact concierge care for product inquiries.'}
+                  ? `Interactive post-delivery return request simulation within a ${returnWindowDays}-day demo window via the customer portal.`
+                  : 'Simulated returns are currently unavailable in store settings.'}
               </p>
             </div>
           </div>
@@ -716,48 +704,57 @@ export default function HomePage() {
               </ul>
             </div>
 
-            {/* Column 5: Trust & Policies */}
+            {/* Column 5: Portfolio Policies & Legal Disclosures */}
             <div className="space-y-3">
               <h4 className="font-semibold text-[#F7F3EE] text-xs uppercase tracking-wider">
-                Policies & Trust
+                Policies &amp; Transparency
               </h4>
-              <ul className="space-y-2 text-[#A8988B]">
-                <li>
-                  <span className="text-[#A8988B]">Authenticity Guarantee</span>
-                </li>
-                <li>
-                  <span className="text-[#A8988B]">{isCodEnabled ? 'Cash on Delivery Available' : 'Cash on Delivery Unavailable'}</span>
-                </li>
-                <li>
-                  <span className="text-[#A8988B]">{isReturnsEnabled ? `${returnWindowDays}-Day Returns Policy` : 'Returns Currently Unavailable'}</span>
-                </li>
-                <li>
-                  <Link to="/support" className="hover:text-white transition-colors">
-                    Customer Grievance Officer
-                  </Link>
-                </li>
-                <li>
-                  <span className="text-[#8C7A6D] text-[10px]">DPDP Act 2023 Compliant</span>
-                </li>
-              </ul>
+              <nav aria-label="Policies & Legal Disclosures">
+                <ul className="space-y-2 text-[#A8988B]">
+                  <li>
+                    <Link to={CONTACT_NAV_LINK.to} className="hover:text-white transition-colors">
+                      {CONTACT_NAV_LINK.label}
+                    </Link>
+                  </li>
+                  {POLICY_NAV_LINKS.map((item) => (
+                    <li key={item.to}>
+                      <Link to={item.to} className="hover:text-white transition-colors">
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <span className="text-[#8C7A6D] text-[11px]">
+                      {isReturnsEnabled ? `${returnWindowDays}-Day Return Simulation` : 'Returns Currently Unavailable'}
+                    </span>
+                  </li>
+                  <li>
+                    <span className="text-[#8C7A6D] text-[11px]">
+                      {isCodEnabled ? 'Simulated Cash on Delivery' : 'Cash on Delivery Unavailable'}
+                    </span>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
+
+          <PortfolioNoticeStrip variant="dark" />
 
           {/* Bottom Copyright & Security Strip */}
           <div className="border-t border-[#2A211B] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#705E51]">
             <p>
-              &copy; {new Date().getFullYear()} {storeName}. All rights reserved.
+              &copy; {new Date().getFullYear()} {storeName} — Non-Commercial Portfolio Demo. All rights reserved.
             </p>
 
-            <div className="flex items-center gap-4 text-[#8C7A6D]">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[#8C7A6D]">
               <span className="flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#9A6A45]" />
-                <span>256-Bit SSL Encryption</span>
+                <span>Portfolio Demonstration</span>
               </span>
               <span>•</span>
-              <span>Cash on Delivery Available</span>
+              <span>Simulated Cash on Delivery</span>
               <span>•</span>
-              <span>Doorstep Delivery Available</span>
+              <span>No Real Financial Transactions</span>
             </div>
           </div>
         </div>

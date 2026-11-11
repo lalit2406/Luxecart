@@ -4,6 +4,7 @@ import { useAuth } from '../features/auth/hooks/useAuth';
 import { Lock, Eye, EyeOff, CheckCircle2, AlertCircle, ArrowRight, RefreshCw, KeyRound } from 'lucide-react';
 import SkipToContent from '../components/common/SkipToContent';
 import Logo from '../components/common/Logo';
+import SEO from '../components/common/SEO';
 import { useStoreSettings } from '../features/settings/context/useStoreSettings';
 
 export default function ResetPasswordPage() {
@@ -55,6 +56,12 @@ export default function ResetPasswordPage() {
 
   return (
     <>
+      <SEO
+        title="Reset Password"
+        description={`Set a new password for your ${storeName} account.`}
+        canonical="/reset-password"
+        robots="noindex, nofollow"
+      />
       <SkipToContent targetId="main-content" />
       <div className="min-h-screen bg-[#F7F3EE] flex flex-col justify-between p-6 sm:p-10">
         {/* Header */}

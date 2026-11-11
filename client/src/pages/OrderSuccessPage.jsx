@@ -321,11 +321,11 @@ export default function OrderSuccessPage() {
                   <div className="pt-2 border-t border-[#E7DED5] space-y-2 text-[11px] text-[#6F6963]">
                     <div className="flex items-center gap-2">
                       <ShieldCheck className="w-4 h-4 text-[#9A6A45]" />
-                      <span>Authenticity Guaranteed</span>
+                      <span>Simulated Portfolio Order (No Real Payment)</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Truck className="w-4 h-4 text-[#9A6A45]" />
-                      <span>Standard Doorstep Delivery</span>
+                      <span>Cash on Delivery Demonstration Flow</span>
                     </div>
                   </div>
                 </div>

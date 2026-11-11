@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import SEO from '../components/common/SEO';
 import { useAuth } from '../features/auth/hooks/useAuth';
 import { useCart } from '../features/cart/context/CartContext';
 import { couponApi } from '../features/coupons/api/couponApi';
@@ -195,6 +196,12 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-[#F7F3EE] text-[#171513] flex flex-col justify-between">
+      <SEO
+        title="Shopping Bag"
+        description="Review selected items in your shopping bag before checkout."
+        canonical="/cart"
+        robots="noindex, nofollow"
+      />
       <Navbar />
 
       <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">

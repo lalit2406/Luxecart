@@ -4,6 +4,7 @@ import { useAuth } from '../features/auth/hooks/useAuth';
 import { Mail, ArrowRight, ArrowLeft, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 import SkipToContent from '../components/common/SkipToContent';
 import Logo from '../components/common/Logo';
+import SEO from '../components/common/SEO';
 import { useStoreSettings } from '../features/settings/context/useStoreSettings';
 
 export default function ForgotPasswordPage() {
@@ -39,6 +40,12 @@ export default function ForgotPasswordPage() {
 
   return (
     <>
+      <SEO
+        title="Forgot Password"
+        description={`Request a password reset link for your ${storeName} account.`}
+        canonical="/forgot-password"
+        robots="noindex, nofollow"
+      />
       <SkipToContent targetId="main-content" />
       <div className="min-h-screen bg-[#F7F3EE] flex flex-col justify-between p-6 sm:p-10">
         {/* Header */}

@@ -528,7 +528,7 @@ export default function AdminSettingsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-xs font-semibold text-[#171513] uppercase tracking-wider mb-2">
-                      Support Email Address <span className="text-rose-500">*</span>
+                      Support Email Address
                     </label>
                     <input
                       type="email"

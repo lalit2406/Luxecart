@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
 import SEO from '../components/common/SEO';
+import PortfolioFooter from '../components/common/PortfolioFooter';
+import {
+  buildShopBreadcrumbs,
+  findActiveCategoryInTree,
+  formatShopHeading,
+} from '../features/settings/utils/seoUtils';
 import { useStoreSettings } from '../features/settings/context/useStoreSettings';
 import { productApi } from '../features/products/api/productApi';
 import { categoryApi } from '../features/categories/api/categoryApi';
@@ -175,12 +181,9 @@ export default function ShopPage() {
     setSearchParams({});
   };
 
-  // Find active category object (matches by ObjectId or slug)
+  // Find active category object recursively across all tree levels (matches by ObjectId or slug)
   const activeCategoryObj = useMemo(() => {
-    if (!currentCategory) return null;
-    return categories.find(
-      (c) => (c.id || c._id) === currentCategory || c.slug === currentCategory.toLowerCase()
-    );
+    return findActiveCategoryInTree(categories, currentCategory);
   }, [categories, currentCategory]);
 
   const shopTitle = activeCategoryObj
@@ -194,24 +197,20 @@ export default function ShopPage() {
     : settings?.seo?.metaDescription ||
       `Discover handcrafted luxury apparel, artisanal footwear, cosmetics, and lifestyle essentials at ${storeName}.`;
 
-  const shopStructuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: 'https://luxecart.com/',
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Shop',
-        item: 'https://luxecart.com/shop',
-      },
-    ],
-  };
+  const { items: shopBreadcrumbs, jsonLd: shopStructuredData } = useMemo(
+    () => buildShopBreadcrumbs(categories, currentCategory),
+    [categories, currentCategory]
+  );
+  const { heading: shopHeading, subtitle: shopSubtitle } = formatShopHeading({
+    activeCategory: activeCategoryObj,
+    categoryParam: currentCategory,
+    search: currentSearch,
+    gender: currentGender,
+    isNewArrival: currentIsNewArrival,
+    isFeatured: currentIsFeatured,
+  });
+
+  const canonicalCategorySlug = activeCategoryObj ? activeCategoryObj.slug || currentCategory : '';
 
   return (
     <div className="min-h-screen bg-[#F7F3EE] text-[#171513] flex flex-col justify-between">
@@ -219,21 +218,45 @@ export default function ShopPage() {
         title={shopTitle}
         description={shopDescription}
         keywords={settings?.seo?.keywords}
-        canonical={currentCategory ? `/shop?category=${currentCategory}` : '/shop'}
+        canonical={canonicalCategorySlug ? `/shop?category=${encodeURIComponent(canonicalCategorySlug)}` : '/shop'}
         structuredData={shopStructuredData}
       />
 
       <Navbar />
 
       <main id="main-content" className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
+        {/* Visible Accessible Breadcrumb Navigation */}
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center gap-1.5 text-xs text-[#6F6963] overflow-x-auto pb-4"
+        >
+          {shopBreadcrumbs.map((crumb, idx) => {
+            const isLast = idx === shopBreadcrumbs.length - 1;
+            return (
+              <React.Fragment key={crumb.to}>
+                {idx > 0 && <ChevronRight className="w-3.5 h-3.5 shrink-0 text-[#B3A89D]" aria-hidden="true" />}
+                {isLast ? (
+                  <span aria-current="page" className="text-[#2A211B] font-semibold truncate">
+                    {crumb.label}
+                  </span>
+                ) : (
+                  <Link to={crumb.to} className="hover:text-[#2A211B] transition-colors shrink-0">
+                    {crumb.label}
+                  </Link>
+                )}
+              </React.Fragment>
+            );
+          })}
+        </nav>
+
         {/* Header Title & Search Row */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E7DED5] pb-6 mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2A211B]">
-              Fashion & Lifestyle Catalog
+              {shopHeading}
             </h1>
             <p className="text-xs sm:text-sm text-[#6F6963] mt-1">
-              Curated luxury apparel, footwear, accessories, and beauty collections
+              {shopSubtitle}
             </p>
           </div>
 
@@ -560,12 +583,7 @@ export default function ShopPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="max-w-7xl w-full mx-auto text-center border-t border-[#E7DED5] py-6 px-4">
-        <p className="text-xs text-[#6F6963]">
-          LuxeCart &copy; 2026. Single-Vendor Fashion & Lifestyle E-Commerce.
-        </p>
-      </footer>
+      <PortfolioFooter />
     </div>
   );
 }

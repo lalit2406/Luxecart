@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useStoreSettings } from '../../features/settings/context/useStoreSettings';
 import {
+  DEFAULT_SITE_ORIGIN,
+  getCanonicalSiteOrigin,
   isValidHttpUrl,
   formatTitle,
   buildCanonicalUrl,
@@ -10,6 +12,8 @@ import {
 } from '../../features/settings/utils/seoUtils';
 
 export {
+  DEFAULT_SITE_ORIGIN,
+  getCanonicalSiteOrigin,
   isValidHttpUrl,
   formatTitle,
   buildCanonicalUrl,
@@ -49,8 +53,8 @@ export default function SEO({
     const defaultDescription =
       settings?.seo?.metaDescription ||
       `Explore curated luxury fashion, handcrafted footwear, and signature lifestyle essentials at ${storeName}.`;
-    const defaultImage = 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1200';
-    const siteUrl = window.location.origin;
+    const siteUrl = getCanonicalSiteOrigin();
+    const defaultImage = `${siteUrl}/images/hero-campaign.jpg`;
 
     const fullTitle = formatTitle(title, storeName, defaultTitle);
     const metaDescription = description || defaultDescription;
@@ -94,14 +98,24 @@ export default function SEO({
     setMetaTag('name', 'twitter:description', metaDescription);
     setMetaTag('name', 'twitter:image', metaImage);
 
-    // 5. Canonical Link
+    // 5. Canonical Link (explicitly remove stale canonical when suppressed with canonical={false})
     let canonicalElement = document.querySelector('link[rel="canonical"]');
-    if (!canonicalElement) {
-      canonicalElement = document.createElement('link');
-      canonicalElement.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonicalElement);
+    if (canonical === false || !canonicalUrl) {
+      if (canonicalElement) {
+        canonicalElement.remove();
+      }
+      const staleOgUrl = document.querySelector('meta[property="og:url"]');
+      if (staleOgUrl) {
+        staleOgUrl.remove();
+      }
+    } else {
+      if (!canonicalElement) {
+        canonicalElement = document.createElement('link');
+        canonicalElement.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonicalElement);
+      }
+      canonicalElement.setAttribute('href', canonicalUrl);
     }
-    canonicalElement.setAttribute('href', canonicalUrl);
 
     // 6. Dynamic Favicon Update
     updateFavicon(settings?.faviconUrl);

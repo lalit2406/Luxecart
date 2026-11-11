@@ -110,17 +110,20 @@ export function validateStoreSettingsUpdate(payload) {
   }
 
   if (payload.supportEmail !== undefined) {
-    if (
-      typeof payload.supportEmail !== 'string' ||
-      !EMAIL_REGEX.test(payload.supportEmail.trim()) ||
-      payload.supportEmail.trim().length > 150
-    ) {
+    if (typeof payload.supportEmail !== 'string') {
       const error = new Error('supportEmail must be a valid email address up to 150 characters');
       error.statusCode = 400;
       error.code = 'VALIDATION_ERROR';
       throw error;
     }
-    validated.supportEmail = payload.supportEmail.trim().toLowerCase();
+    const trimmedEmail = payload.supportEmail.trim();
+    if (trimmedEmail && (!EMAIL_REGEX.test(trimmedEmail) || trimmedEmail.length > 150)) {
+      const error = new Error('supportEmail must be a valid email address up to 150 characters');
+      error.statusCode = 400;
+      error.code = 'VALIDATION_ERROR';
+      throw error;
+    }
+    validated.supportEmail = trimmedEmail.toLowerCase();
   }
 
   if (payload.supportPhone !== undefined) {

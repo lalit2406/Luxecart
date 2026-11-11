@@ -28,6 +28,12 @@ const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const ShippingPolicyPage = lazy(() => import('./pages/ShippingPolicyPage'));
+const ReturnsPolicyPage = lazy(() => import('./pages/ReturnsPolicyPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // Admin Pages (Isolated into Dedicated Lazy Admin Bundle)
 const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'));
@@ -67,6 +73,11 @@ export default function App() {
                       <Route path="/" element={<HomePage />} />
                       <Route path="/shop" element={<ShopPage />} />
                       <Route path="/products/:slug" element={<ProductDetailPage />} />
+                      <Route path="/contact" element={<ContactPage />} />
+                      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                      <Route path="/terms" element={<TermsPage />} />
+                      <Route path="/shipping-policy" element={<ShippingPolicyPage />} />
+                      <Route path="/returns-policy" element={<ReturnsPolicyPage />} />
                       <Route path="/cart" element={<CartPage />} />
                       <Route path="/wishlist" element={<WishlistPage />} />
                       <Route
@@ -283,6 +294,9 @@ export default function App() {
                           </ProtectedRoute>
                         }
                       />
+
+                      {/* Custom 404 Catch-All Route */}
+                      <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                   </Suspense>
                 </OrderProvider>

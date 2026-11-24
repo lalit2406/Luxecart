@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef, Suspense, lazy } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { productApi } from '../features/products/api/productApi';
@@ -99,6 +99,7 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [notFound, setNotFound] = useState(false);
 
   const [cartSuccess, setCartSuccess] = useState(false);
   const [actionMessage, setActionMessage] = useState(null);
@@ -121,12 +122,28 @@ export default function ProductDetailPage() {
   const [modalError, setModalError] = useState(null);
   const [deletingReview, setDeletingReview] = useState(false);
 
+  const currentRequestRef = useRef(0);
+
   const fetchProduct = useCallback(async () => {
+    const requestId = ++currentRequestRef.current;
+    const requestSlug = slug;
+
     try {
       setLoading(true);
       setError(null);
-      const res = await productApi.getProductBySlug(slug);
+      setNotFound(false);
+      const res = await productApi.getProductBySlug(requestSlug);
+
+      if (requestId !== currentRequestRef.current || requestSlug !== slug) {
+        return;
+      }
+
       const prod = res?.data?.product;
+      if (!prod) {
+        setNotFound(false);
+        setError('Failed to retrieve product details');
+        return;
+      }
       setProduct(prod);
       const activeVars = (prod?.variants || []).filter((v) => v.isActive !== false);
       if (activeVars.length > 0) {
@@ -137,9 +154,25 @@ export default function ProductDetailPage() {
       }
       setSelectedImageIndex(0);
     } catch (err) {
-      setError(err?.response?.data?.message || err?.message || 'Failed to load product details');
+      if (requestId !== currentRequestRef.current || requestSlug !== slug) {
+        return;
+      }
+
+      const statusCode = err?.statusCode || err?.response?.status;
+      const errorCode = err?.code || err?.response?.data?.error?.code || err?.response?.data?.code;
+      const isConfirmedNotFound = statusCode === 404 && errorCode === 'PRODUCT_NOT_FOUND';
+
+      if (isConfirmedNotFound) {
+        setNotFound(true);
+        setError(err?.message || err?.response?.data?.message || 'The requested product could not be located in our catalog.');
+      } else {
+        setNotFound(false);
+        setError(err?.message || err?.response?.data?.message || 'Failed to load product details');
+      }
     } finally {
-      setLoading(false);
+      if (requestId === currentRequestRef.current && requestSlug === slug) {
+        setLoading(false);
+      }
     }
   }, [slug]);
 
@@ -186,6 +219,9 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     fetchProduct();
+    return () => {
+      currentRequestRef.current += 1;
+    };
   }, [fetchProduct]);
 
   useEffect(() => {
@@ -246,7 +282,13 @@ export default function ProductDetailPage() {
     );
   }, [activeVariants]);
 
-  if (loading) {
+  // Synchronous route-slug alignment guard:
+  // Guarantees that a product belonging to a previous slug is never displayed under a newly navigated slug,
+  // even on the very first synchronous render pass before useEffect executes.
+  const isCurrentProduct = Boolean(product && product.slug === slug);
+  const isPageLoading = loading || (!isCurrentProduct && !notFound && !error);
+
+  if (isPageLoading) {
     return (
       <div className="min-h-screen bg-[#F7F3EE] flex flex-col justify-between">
         <SEO
@@ -262,7 +304,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  if (error || !product) {
+  if (notFound) {
     return (
       <div className="min-h-screen bg-[#F7F3EE] flex flex-col justify-between">
         <SEO
@@ -288,6 +330,44 @@ export default function ProductDetailPage() {
             <Link
               to="/shop"
               className="px-6 py-2.5 rounded-xl bg-[#2A211B] text-white hover:bg-[#9A6A45] text-xs font-semibold transition-colors"
+            >
+              Explore Catalog
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !isCurrentProduct) {
+    return (
+      <div className="min-h-screen bg-[#F7F3EE] flex flex-col justify-between">
+        <SEO
+          title="Product Temporarily Unavailable"
+          description="We are experiencing temporary connectivity issues retrieving this product. Please try again shortly."
+          canonical={slug ? `/products/${slug}` : '/shop'}
+          robots="index, follow"
+        />
+        <Navbar />
+        <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4 text-center max-w-md mx-auto">
+          <div className="w-12 h-12 rounded-full bg-amber-50 text-[#9A6A45] border border-[#E7DED5] flex items-center justify-center">
+            <RefreshCw className="w-6 h-6" />
+          </div>
+          <h2 className="text-xl font-serif font-bold text-[#2A211B]">Product Temporarily Unavailable</h2>
+          <p className="text-xs text-[#6F6963]">
+            {error || 'Unable to connect to the catalog server. Please try again in a moment.'}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={fetchProduct}
+              className="px-6 py-2.5 rounded-xl bg-[#2A211B] text-white hover:bg-[#9A6A45] text-xs font-semibold transition-colors cursor-pointer"
+            >
+              Try Again
+            </button>
+            <Link
+              to="/shop"
+              className="px-5 py-2.5 rounded-xl bg-[#F7F3EE] border border-[#E7DED5] text-[#2A211B] hover:border-[#9A6A45] text-xs font-semibold transition-colors"
             >
               Explore Catalog
             </Link>
